@@ -29,10 +29,10 @@
     }
     
     header {
-      background: linear-gradient(135deg, #2d2d2d, #1a1a1a);
+      background: var(--header-bg);
       padding: 2rem 1rem 1.5rem;
       margin-bottom: 1rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       color: white;
       text-align: center;
     }
@@ -41,6 +41,27 @@
       margin: 0 0 1.2rem;
       font-size: 2.5rem;
       text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Tabs Styles */
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .tabs button {
+      background: var(--card-bg);
+      border: 1px solid #444;
+      color: var(--font-color);
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .tabs button.active {
+      background: var(--primary-color);
+      color: #fff;
     }
     
     .search-controls {
@@ -69,6 +90,14 @@
     .search-controls input:focus,
     .search-controls select:focus {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+    
+    .search-controls label {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 1rem;
+      color: var(--font-color);
     }
     
     /* Advanced Filters: Only printing year and foil checkbox */
@@ -505,7 +534,14 @@
   
   <header>
     <div class="header-content">
-      <h1>My Charizard Collection</h1>
+      <h1>The Charizard Collection</h1>
+      <!-- Tabs for each Pokemon -->
+      <div class="tabs">
+        <button class="tab active" data-collection="charizard">Charizard</button>
+        <button class="tab" data-collection="cubone">Cubone</button>
+        <button class="tab" data-collection="psyduck">Psyduck</button>
+        <button class="tab" data-collection="pikachu">Pikachu</button>
+      </div>
       <div class="search-controls">
         <input type="text" id="search-input" placeholder="Search by name, set, rarity..." />
         <select id="filter-select">
@@ -519,7 +555,11 @@
           <option value="set">Sort by Set (A-Z)</option>
           <option value="number">Sort by Card Number (Asc)</option>
           <option value="rarity">Sort by Rarity (A-Z)</option>
+          <option value="printYear">Sort by Print Year</option>
         </select>
+        <label>
+          <input type="checkbox" id="reverse-checkbox" /> Reverse Order
+        </label>
       </div>
       <!-- Advanced Filters: Only Printing Year and Foil -->
       <div class="advanced-filters">
@@ -547,7 +587,8 @@
   </div>
   
   <script>
-    // Local storage keys
+    // Global Variables
+    let currentCollection = 'charizard';
     const STORAGE_KEY_BOUGHT = 'boughtCards';
     const STORAGE_KEY_NOTES = 'cardNotes';
     const STORAGE_KEY_FAVORITES = 'favoriteCards';
@@ -584,7 +625,7 @@
       title.textContent = card.name;
       cardDiv.appendChild(title);
 
-      // Info: number, set, rarity, and printing year (extracted from set.releaseDate)
+      // Info: number, set, rarity, and printing year
       const info = document.createElement('div');
       info.className = 'info';
       const releaseYear = card.set && card.set.releaseDate ? card.set.releaseDate.split('/')[0] : '';
@@ -646,7 +687,7 @@
 
       cardDiv.appendChild(cardActions);
 
-      // Make card clickable (ignore clicks on controls)
+      // Make card clickable (ignoring control clicks)
       cardDiv.addEventListener('click', (e) => {
         const isControlClick = e.target.type === 'checkbox' || 
                                e.target.tagName === 'LABEL' ||
@@ -671,7 +712,6 @@
       const searchQuery = document.getElementById('search-input').value.toLowerCase();
       const filterValue = document.getElementById('filter-select').value;
       const sortValue = document.getElementById('sort-select').value;
-      // For printing year, extract year from set.releaseDate
       const yearFilter = document.getElementById('year-input').value.toLowerCase();
       const foilFilter = document.getElementById('foil-checkbox').checked;
       
@@ -679,7 +719,6 @@
       cardsContainer.innerHTML = '';
 
       let filteredCards = allCards.filter((card) => {
-        // Basic search on name, set name, number, rarity
         const matchesSearch =
           (card.name && card.name.toLowerCase().includes(searchQuery)) ||
           (card.set?.name && card.set.name.toLowerCase().includes(searchQuery)) ||
@@ -687,26 +726,17 @@
           (card.rarity && card.rarity.toLowerCase().includes(searchQuery));
         if (!matchesSearch) return false;
         
-        // Printing Year filter: extract year from card.set.releaseDate
         const releaseYear = card.set && card.set.releaseDate ? card.set.releaseDate.split('/')[0] : '';
         if (yearFilter && (!releaseYear || !releaseYear.toLowerCase().includes(yearFilter))) {
           return false;
         }
-        // Foil filter: check if card.rarity contains "holo"
         if (foilFilter && (!card.rarity || !card.rarity.toLowerCase().includes('holo'))) {
           return false;
         }
         
-        // Filter by bought or favorites
-        if (filterValue === 'bought' && !boughtCards[card.id]) {
-          return false;
-        }
-        if (filterValue === 'notBought' && boughtCards[card.id]) {
-          return false;
-        }
-        if (filterValue === 'favorites' && !favoriteCards[card.id]) {
-          return false;
-        }
+        if (filterValue === 'bought' && !boughtCards[card.id]) return false;
+        if (filterValue === 'notBought' && boughtCards[card.id]) return false;
+        if (filterValue === 'favorites' && !favoriteCards[card.id]) return false;
         return true;
       });
 
@@ -721,10 +751,20 @@
             return (parseInt(a.number) || 0) - (parseInt(b.number) || 0);
           case 'rarity':
             return (a.rarity || '').localeCompare(b.rarity || '');
+          case 'printYear': {
+            const yearA = parseInt(a.set?.releaseDate ? a.set.releaseDate.split('/')[0] : '0', 10);
+            const yearB = parseInt(b.set?.releaseDate ? b.set.releaseDate.split('/')[0] : '0', 10);
+            return yearA - yearB;
+          }
           default:
             return 0;
         }
       });
+
+      // Reverse sort order if checkbox is checked
+      if (document.getElementById('reverse-checkbox').checked) {
+        filteredCards.reverse();
+      }
 
       if (filteredCards.length === 0) {
         const noResults = document.createElement('div');
@@ -767,7 +807,6 @@
       modalBody.innerHTML = '';
       document.body.style.overflow = 'hidden';
 
-      // Image section
       const imageSection = document.createElement('div');
       imageSection.className = 'modal-image';
       const img = document.createElement('img');
@@ -775,7 +814,6 @@
       img.alt = card.name;
       imageSection.appendChild(img);
       
-      // Details section
       const detailsSection = document.createElement('div');
       detailsSection.className = 'modal-details';
       
@@ -783,7 +821,6 @@
       title.textContent = card.name;
       detailsSection.appendChild(title);
 
-      // Basic Info Section (including printing year)
       const basicInfoSection = document.createElement('div');
       basicInfoSection.className = 'info-section';
       const basicInfoTitle = document.createElement('h3');
@@ -803,14 +840,12 @@
       basicInfoSection.appendChild(infoPara);
       detailsSection.appendChild(basicInfoSection);
 
-      // Pricing Information Section
       const pricingSection = document.createElement('div');
       pricingSection.className = 'info-section';
       const pricingTitle = document.createElement('h3');
       pricingTitle.textContent = 'Pricing Information';
       pricingSection.appendChild(pricingTitle);
 
-      // TCGplayer Pricing Block
       if (card.tcgplayer?.prices) {
         const priceType = Object.keys(card.tcgplayer.prices)[0];
         if (priceType && card.tcgplayer.prices[priceType]) {
@@ -844,7 +879,6 @@
           });
           tcgPriceBlock.appendChild(tcgPriceDetail);
 
-          // External link button for TCGplayer
           const tcgLink = document.createElement('a');
           tcgLink.className = 'external-link-btn';
           tcgLink.href = card.tcgplayer.url || 'https://www.tcgplayer.com';
@@ -857,7 +891,6 @@
         }
       }
 
-      // Cardmarket Pricing Block
       if (card.cardmarket?.prices) {
         const cmPrices = card.cardmarket.prices;
         const cmPriceBlock = document.createElement('div');
@@ -889,7 +922,6 @@
         });
         cmPriceBlock.appendChild(cmPriceDetail);
 
-        // External link button for Cardmarket
         const cmLink = document.createElement('a');
         cmLink.className = 'external-link-btn';
         cmLink.href = card.cardmarket.url || 'https://www.cardmarket.com';
@@ -909,7 +941,6 @@
       
       detailsSection.appendChild(pricingSection);
 
-      // Notes Section
       const notesSection = document.createElement('div');
       notesSection.className = 'info-section';
       const notesTitle = document.createElement('h3');
@@ -939,21 +970,23 @@
       modal.style.display = 'block';
     };
 
-    // Load cards with loading indicator
+    // Load cards with loading indicator based on active tab
     const loadCards = async () => {
       const loadingIndicator = document.getElementById('loading-indicator');
       loadingIndicator.style.display = 'flex';
+      const query = 'name:' + currentCollection;
+      const cacheKey = 'cachedCards_' + currentCollection;
       try {
         const response = await fetch(
-          'https://api.pokemontcg.io/v2/cards?q=name:charizard'
+          'https://api.pokemontcg.io/v2/cards?q=' + encodeURIComponent(query)
         );
         const { data } = await response.json();
         allCards = data;
         renderCards();
-        localStorage.setItem('cachedCards', JSON.stringify(allCards));
+        localStorage.setItem(cacheKey, JSON.stringify(allCards));
       } catch (error) {
         console.error('Error fetching cards:', error);
-        const cached = localStorage.getItem('cachedCards');
+        const cached = localStorage.getItem(cacheKey);
         if (cached) {
           allCards = JSON.parse(cached);
           renderCards();
@@ -966,10 +999,22 @@
       }
     };
 
+    // Tab functionality for each Pokemon
+    const tabs = document.querySelectorAll('.tabs .tab');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentCollection = tab.getAttribute('data-collection');
+        loadCards();
+      });
+    });
+
     // Event listeners for filter inputs
     document.getElementById('search-input').addEventListener('input', renderCards);
     document.getElementById('filter-select').addEventListener('change', renderCards);
     document.getElementById('sort-select').addEventListener('change', renderCards);
+    document.getElementById('reverse-checkbox').addEventListener('change', renderCards);
     document.getElementById('year-input').addEventListener('input', renderCards);
     document.getElementById('foil-checkbox').addEventListener('change', renderCards);
 
