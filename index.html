@@ -47,8 +47,11 @@
     .tabs {
       display: flex;
       justify-content: center;
-      gap: 1rem;
+      gap: 0.5rem;
       margin-bottom: 1rem;
+      max-width: 800px; /* Adjust the max-width as needed */
+      margin: 0 auto;   /* Centers the tabs container */
+      flex-wrap: wrap;
     }
     .tabs button {
       background: var(--card-bg);
@@ -58,6 +61,10 @@
       border-radius: 5px;
       cursor: pointer;
       transition: background 0.2s;
+      flex: 1 1 auto;
+      min-width: 100px;
+      margin: 0.2rem;
+
     }
     .tabs button.active {
       background: var(--primary-color);
