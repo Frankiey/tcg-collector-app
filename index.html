@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Charizard Collection</title>
+  <title>The Pokemon Collection</title>
   <style>
     /* Dark theme CSS Variables */
     :root {
@@ -12,8 +12,8 @@
       --card-border: #333;
       --shadow-color: rgba(0, 0, 0, 0.6);
       --font-color: #e0e0e0;
-      --primary-color: #ff8a65;
-      --primary-hover: #ff7043;
+      --primary-color: #b3401e;
+      --primary-hover: #9b2502;
       --bought-bg: #2e7d32;
       --success-color: #66bb6a;
       --header-bg: linear-gradient(135deg, #424242, #212121);
@@ -62,6 +62,21 @@
     .tabs button.active {
       background: var(--primary-color);
       color: #fff;
+    }
+
+    /* Refresh Button */
+    #refresh-btn {
+      padding: 0.5rem 1rem;
+      background: var(--primary-color);
+      border: none;
+      border-radius: 25px;
+      color: #fff;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.2s;
+    }
+    #refresh-btn:hover {
+      background: var(--primary-hover);
     }
     
     .search-controls {
@@ -534,7 +549,7 @@
   
   <header>
     <div class="header-content">
-      <h1>The Charizard Collection</h1>
+      <h1>The Pokemon Collection</h1>
       <!-- Tabs for each Pokemon -->
       <div class="tabs">
         <button class="tab active" data-collection="charizard">Charizard</button>
@@ -542,6 +557,7 @@
         <button class="tab" data-collection="psyduck">Psyduck</button>
         <button class="tab" data-collection="pikachu">Pikachu</button>
       </div>
+      <!-- Refresh Button to get latest cards -->
       <div class="search-controls">
         <input type="text" id="search-input" placeholder="Search by name, set, rarity..." />
         <select id="filter-select">
@@ -567,7 +583,9 @@
         <label>
           <input type="checkbox" id="foil-checkbox" /> Foil
         </label>
+        <button id="refresh-btn">Get Latest Cards</button>
       </div>
+
     </div>
   </header>
   
@@ -970,12 +988,25 @@
       modal.style.display = 'block';
     };
 
-    // Load cards with loading indicator based on active tab
+    // Load cards with caching (cache expires after 1 day)
     const loadCards = async () => {
       const loadingIndicator = document.getElementById('loading-indicator');
       loadingIndicator.style.display = 'flex';
-      const query = 'name:' + currentCollection;
       const cacheKey = 'cachedCards_' + currentCollection;
+      const cacheTimestampKey = 'cacheTimestamp_' + currentCollection;
+      const now = Date.now();
+      const oneDay = 24 * 60 * 60 * 1000;
+      const cachedData = localStorage.getItem(cacheKey);
+      const cachedTimestamp = localStorage.getItem(cacheTimestampKey);
+
+      if (cachedData && cachedTimestamp && (now - parseInt(cachedTimestamp)) < oneDay) {
+        allCards = JSON.parse(cachedData);
+        renderCards();
+        loadingIndicator.style.display = 'none';
+        return;
+      }
+
+      const query = 'name:' + currentCollection;
       try {
         const response = await fetch(
           'https://api.pokemontcg.io/v2/cards?q=' + encodeURIComponent(query)
@@ -984,6 +1015,7 @@
         allCards = data;
         renderCards();
         localStorage.setItem(cacheKey, JSON.stringify(allCards));
+        localStorage.setItem(cacheTimestampKey, now);
       } catch (error) {
         console.error('Error fetching cards:', error);
         const cached = localStorage.getItem(cacheKey);
@@ -1008,6 +1040,15 @@
         currentCollection = tab.getAttribute('data-collection');
         loadCards();
       });
+    });
+
+    // Refresh button functionality to clear cache and get latest cards
+    document.getElementById('refresh-btn').addEventListener('click', () => {
+      const cacheKey = 'cachedCards_' + currentCollection;
+      const cacheTimestampKey = 'cacheTimestamp_' + currentCollection;
+      localStorage.removeItem(cacheKey);
+      localStorage.removeItem(cacheTimestampKey);
+      loadCards();
     });
 
     // Event listeners for filter inputs
