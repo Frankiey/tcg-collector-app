@@ -82,7 +82,33 @@
       padding: 0 1rem 2rem;
     }
 
-    /* Cards Grid with improved styling */
+    /* Loading Indicator Styles */
+    #loading-indicator {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1500;
+      align-items: center;
+      justify-content: center;
+    }
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid var(--primary-color);
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Cards Grid */
     #cards-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -182,7 +208,27 @@
       cursor: pointer;
     }
 
-    /* Enhanced Modal Styles */
+    /* External Link Button */
+    .external-link-btn {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--primary-color);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .external-link-btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+    .external-link-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* Modal Styles */
     #modal {
       display: none;
       position: fixed;
@@ -221,20 +267,25 @@
       }
     }
     
+    /* Improved Close Button */
     #modal .close {
-      color: #ccc;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+      padding: 5px 10px;
       position: absolute;
       top: 15px;
       right: 20px;
-      font-size: 28px;
+      font-size: 32px;
       font-weight: bold;
       cursor: pointer;
-      transition: color 0.2s;
+      transition: background 0.2s, transform 0.2s;
       z-index: 10;
     }
     
     #modal .close:hover {
-      color: #fff;
+      background: var(--primary-hover);
+      transform: scale(1.1);
     }
     
     #modal-body {
@@ -407,7 +458,6 @@
         padding: 1.5rem 1rem 1.2rem;
       }
 
-      /* Adjust the grid to show smaller cards on very small screens */
       #cards-container {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       }
@@ -415,9 +465,14 @@
   </style>
 </head>
 <body>
+  <!-- Loading Indicator -->
+  <div id="loading-indicator">
+    <div class="spinner"></div>
+  </div>
+
   <header>
     <div class="header-content">
-      <h1>The Charizard Collection</h1>
+      <h1>My Charizard Collection</h1>
       <div class="search-controls">
         <input type="text" id="search-input" placeholder="Search by name, set, rarity..." />
         <select id="filter-select">
@@ -497,7 +552,6 @@
 
       // Make the entire card clickable for details
       cardDiv.addEventListener('click', (e) => {
-        // Don't open modal if clicking on checkbox or its label
         const isCheckboxClick = e.target.type === 'checkbox' || 
                                 e.target.tagName === 'LABEL' ||
                                 e.target.closest('.bought-wrapper');
@@ -508,7 +562,7 @@
       const cardActions = document.createElement('div');
       cardActions.className = 'card-actions';
 
-      // Bought checkbox and label in its own wrapper
+      // Bought checkbox and label
       const boughtWrapper = document.createElement('div');
       boughtWrapper.className = 'bought-wrapper';
       const checkbox = document.createElement('input');
@@ -516,7 +570,7 @@
       checkbox.id = `bought-${card.id}`;
       checkbox.checked = !!boughtCards[card.id];
       checkbox.addEventListener('change', (e) => {
-        e.stopPropagation(); // Prevent opening modal
+        e.stopPropagation();
         boughtCards[card.id] = checkbox.checked;
         saveToLocalStorage(STORAGE_KEY_BOUGHT, boughtCards);
         cardDiv.classList.toggle('bought', checkbox.checked);
@@ -538,9 +592,7 @@
 
     // Render cards based on search, filter, and sort criteria
     const renderCards = () => {
-      const searchQuery = document
-        .getElementById('search-input')
-        .value.toLowerCase();
+      const searchQuery = document.getElementById('search-input').value.toLowerCase();
       const filterValue = document.getElementById('filter-select').value;
       const sortValue = document.getElementById('sort-select').value;
       const cardsContainer = document.getElementById('cards-container');
@@ -548,14 +600,10 @@
 
       let filteredCards = allCards.filter((card) => {
         const matchesSearch =
-          (card.name &&
-            card.name.toLowerCase().includes(searchQuery)) ||
-          (card.set?.name &&
-            card.set.name.toLowerCase().includes(searchQuery)) ||
-          (card.number &&
-            card.number.toString().includes(searchQuery)) ||
-          (card.rarity &&
-            card.rarity.toLowerCase().includes(searchQuery));
+          (card.name && card.name.toLowerCase().includes(searchQuery)) ||
+          (card.set?.name && card.set.name.toLowerCase().includes(searchQuery)) ||
+          (card.number && card.number.toString().includes(searchQuery)) ||
+          (card.rarity && card.rarity.toLowerCase().includes(searchQuery));
         let matchesFilter = true;
         if (filterValue === 'bought') {
           matchesFilter = !!boughtCards[card.id];
@@ -622,16 +670,15 @@
       modalBody.innerHTML = '';
       document.body.style.overflow = 'hidden';
 
-      // Create image section
+      // Image section
       const imageSection = document.createElement('div');
       imageSection.className = 'modal-image';
-      
       const img = document.createElement('img');
       img.src = card.images.large || card.images.small;
       img.alt = card.name;
       imageSection.appendChild(img);
       
-      // Create details section
+      // Details section
       const detailsSection = document.createElement('div');
       detailsSection.className = 'modal-details';
       
@@ -639,13 +686,12 @@
       title.textContent = card.name;
       detailsSection.appendChild(title);
 
+      // Card Information
       const basicInfoSection = document.createElement('div');
       basicInfoSection.className = 'info-section';
-      
       const basicInfoTitle = document.createElement('h3');
       basicInfoTitle.textContent = 'Card Information';
       basicInfoSection.appendChild(basicInfoTitle);
-      
       const infoPara = document.createElement('p');
       infoPara.innerHTML = `
         <strong>Number:</strong> ${card.number || 'N/A'}<br>
@@ -658,97 +704,101 @@
       basicInfoSection.appendChild(infoPara);
       detailsSection.appendChild(basicInfoSection);
 
+      // Pricing Information
       const pricingSection = document.createElement('div');
       pricingSection.className = 'info-section';
-      
       const pricingTitle = document.createElement('h3');
       pricingTitle.textContent = 'Pricing Information';
       pricingSection.appendChild(pricingTitle);
 
+      // TCGplayer Pricing Block
       if (card.tcgplayer?.prices) {
         const priceType = Object.keys(card.tcgplayer.prices)[0];
         if (priceType && card.tcgplayer.prices[priceType]) {
           const priceData = card.tcgplayer.prices[priceType];
-          
           const tcgPriceBlock = document.createElement('div');
           tcgPriceBlock.className = 'price-block';
-          
           const tcgPriceTitle = document.createElement('div');
           tcgPriceTitle.className = 'price-title';
           tcgPriceTitle.textContent = `TCGplayer (${priceType.charAt(0).toUpperCase() + priceType.slice(1)})`;
           tcgPriceBlock.appendChild(tcgPriceTitle);
-          
           const tcgPriceDetail = document.createElement('div');
           tcgPriceDetail.className = 'price-detail';
-          
           const priceItems = [
             { label: 'Low', value: formatPrice(priceData.low) },
             { label: 'Mid', value: formatPrice(priceData.mid) },
             { label: 'High', value: formatPrice(priceData.high) },
             { label: 'Market', value: formatPrice(priceData.market) }
           ];
-          
           priceItems.forEach(item => {
             const priceItem = document.createElement('div');
             priceItem.className = 'price-item';
-            
             const priceLabel = document.createElement('div');
             priceLabel.className = 'price-label';
             priceLabel.textContent = item.label;
             priceItem.appendChild(priceLabel);
-            
             const priceValue = document.createElement('div');
             priceValue.className = 'price-value';
             priceValue.textContent = item.value;
             priceItem.appendChild(priceValue);
-            
             tcgPriceDetail.appendChild(priceItem);
           });
-          
           tcgPriceBlock.appendChild(tcgPriceDetail);
+
+          // External link button for TCGplayer
+          const tcgLink = document.createElement('a');
+          tcgLink.className = 'external-link-btn';
+          tcgLink.href = card.tcgplayer.url || 'https://www.tcgplayer.com';
+          tcgLink.target = '_blank';
+          tcgLink.rel = 'noopener noreferrer';
+          tcgLink.textContent = 'View on TCGplayer';
+          tcgPriceBlock.appendChild(tcgLink);
+
           pricingSection.appendChild(tcgPriceBlock);
         }
       }
 
+      // Cardmarket Pricing Block
       if (card.cardmarket?.prices) {
         const cmPrices = card.cardmarket.prices;
-        
         const cmPriceBlock = document.createElement('div');
         cmPriceBlock.className = 'price-block';
-        
         const cmPriceTitle = document.createElement('div');
         cmPriceTitle.className = 'price-title';
         cmPriceTitle.textContent = 'Cardmarket';
         cmPriceBlock.appendChild(cmPriceTitle);
-        
         const cmPriceDetail = document.createElement('div');
         cmPriceDetail.className = 'price-detail';
-        
         const priceItems = [
           { label: 'Avg Sell', value: formatPrice(cmPrices.averageSellPrice) },
           { label: 'Low', value: formatPrice(cmPrices.lowPrice) },
           { label: 'Trend', value: formatPrice(cmPrices.trendPrice) },
           { label: '30d Avg', value: formatPrice(cmPrices.avg30) }
         ];
-        
         priceItems.forEach(item => {
           const priceItem = document.createElement('div');
           priceItem.className = 'price-item';
-          
           const priceLabel = document.createElement('div');
           priceLabel.className = 'price-label';
           priceLabel.textContent = item.label;
           priceItem.appendChild(priceLabel);
-          
           const priceValue = document.createElement('div');
           priceValue.className = 'price-value';
           priceValue.textContent = item.value;
           priceItem.appendChild(priceValue);
-          
           cmPriceDetail.appendChild(priceItem);
         });
-        
         cmPriceBlock.appendChild(cmPriceDetail);
+
+        // External link button for Cardmarket
+        const cmLink = document.createElement('a');
+        cmLink.className = 'external-link-btn';
+        cmLink.href = card.cardmarket.url || 'https://www.cardmarket.com';
+        cmLink.target = '_blank';
+        cmLink.rel = 'noopener noreferrer';
+        cmLink.textContent = 'View on Cardmarket';
+        cmPriceBlock.appendChild(cmLink);
+
         pricingSection.appendChild(cmPriceBlock);
       }
       
@@ -760,25 +810,22 @@
       
       detailsSection.appendChild(pricingSection);
 
+      // Notes Section
       const notesSection = document.createElement('div');
       notesSection.className = 'info-section';
-      
       const notesTitle = document.createElement('h3');
       notesTitle.textContent = 'Personal Notes';
       notesSection.appendChild(notesTitle);
-      
       const noteTextarea = document.createElement('textarea');
       noteTextarea.placeholder = "Add your notes about this card here...";
       noteTextarea.value = cardNotes[card.id] || '';
       notesSection.appendChild(noteTextarea);
-      
       const saveNoteBtn = document.createElement('button');
       saveNoteBtn.className = 'save-note';
       saveNoteBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Save Note';
       saveNoteBtn.addEventListener('click', () => {
         cardNotes[card.id] = noteTextarea.value;
         saveToLocalStorage(STORAGE_KEY_NOTES, cardNotes);
-        
         saveNoteBtn.textContent = 'Saved!';
         setTimeout(() => {
           saveNoteBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Save Note';
@@ -793,7 +840,10 @@
       modal.style.display = 'block';
     };
 
+    // Load cards with loading indicator
     const loadCards = async () => {
+      const loadingIndicator = document.getElementById('loading-indicator');
+      loadingIndicator.style.display = 'flex';
       try {
         const response = await fetch(
           'https://api.pokemontcg.io/v2/cards?q=name:charizard'
@@ -812,18 +862,14 @@
           const cardsContainer = document.getElementById('cards-container');
           cardsContainer.innerHTML = '<div style="text-align: center; grid-column: 1/-1; padding: 2rem;">Failed to load cards. Please check your internet connection and try again.</div>';
         }
+      } finally {
+        loadingIndicator.style.display = 'none';
       }
     };
 
-    document
-      .getElementById('search-input')
-      .addEventListener('input', renderCards);
-    document
-      .getElementById('filter-select')
-      .addEventListener('change', renderCards);
-    document
-      .getElementById('sort-select')
-      .addEventListener('change', renderCards);
+    document.getElementById('search-input').addEventListener('input', renderCards);
+    document.getElementById('filter-select').addEventListener('change', renderCards);
+    document.getElementById('sort-select').addEventListener('change', renderCards);
 
     window.addEventListener('DOMContentLoaded', loadCards);
   </script>
