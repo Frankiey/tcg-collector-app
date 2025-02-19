@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Charizard Collection</title>
   <style>
-    /* CSS Variables for enhanced theme */
+    /* Dark theme CSS Variables */
     :root {
-      --bg-color: #f5f5f7;
-      --card-bg: #fff;
-      --card-border: #e0e0e0;
-      --shadow-color: rgba(0, 0, 0, 0.12);
-      --font-color: #333;
-      --primary-color: #ff5722;
-      --primary-hover: #e64a19;
-      --bought-bg: #e8f5e9;
-      --success-color: #4caf50;
-      --header-bg: linear-gradient(135deg, #ff7043 0%, #ff3d00 100%);
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --card-border: #333;
+      --shadow-color: rgba(0, 0, 0, 0.6);
+      --font-color: #e0e0e0;
+      --primary-color: #ff8a65;
+      --primary-hover: #ff7043;
+      --bought-bg: #2e7d32;
+      --success-color: #66bb6a;
+      --header-bg: linear-gradient(135deg, #424242, #212121);
     }
 
     /* Global Styles */
@@ -32,7 +32,7 @@
       background: var(--header-bg);
       padding: 2rem 1rem 1.5rem;
       margin-bottom: 2rem;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       color: white;
     }
     
@@ -45,7 +45,7 @@
     h1 {
       margin: 0 0 1.2rem;
       font-size: 2.5rem;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
     }
     
     .search-controls {
@@ -61,9 +61,11 @@
     .search-controls select {
       padding: 0.7rem 1rem;
       border-radius: 25px;
-      border: none;
+      border: 1px solid #444;
       font-size: 1rem;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background: #2a2a2a;
+      color: var(--font-color);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
       outline: none;
       flex-grow: 1;
       max-width: 300px;
@@ -71,7 +73,7 @@
     
     .search-controls input:focus,
     .search-controls select:focus {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
 
     main {
@@ -101,7 +103,7 @@
     
     .card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
     }
     
     .card.bought {
@@ -128,7 +130,7 @@
     
     .card .info {
       font-size: 0.9rem;
-      color: #666;
+      color: #aaa;
       margin-bottom: 0.8rem;
       line-height: 1.4;
     }
@@ -151,9 +153,9 @@
       -webkit-appearance: none;
       width: 1.2rem;
       height: 1.2rem;
-      border: 2px solid #ddd;
+      border: 2px solid #555;
       border-radius: 4px;
-      background-color: white;
+      background-color: #1e1e1e;
       cursor: pointer;
       position: relative;
       transition: all 0.2s;
@@ -176,7 +178,7 @@
     
     .bought-wrapper label {
       font-size: 0.95rem;
-      color: #555;
+      color: #ccc;
       cursor: pointer;
     }
 
@@ -190,21 +192,22 @@
       width: 100%;
       height: 100%;
       overflow: auto;
-      background-color: rgba(0, 0, 0, 0.6);
+      background-color: rgba(0, 0, 0, 0.8);
       backdrop-filter: blur(5px);
       transition: all 0.3s ease;
     }
     
     #modal .modal-content {
-      background-color: #fff;
+      background-color: var(--card-bg);
       margin: 5% auto;
       padding: 2rem;
       border-radius: 16px;
       width: 90%;
       max-width: 700px;
       position: relative;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
       animation: modalIn 0.4s ease;
+      color: var(--font-color);
     }
     
     @keyframes modalIn {
@@ -219,7 +222,7 @@
     }
     
     #modal .close {
-      color: #999;
+      color: #ccc;
       position: absolute;
       top: 15px;
       right: 20px;
@@ -231,7 +234,7 @@
     }
     
     #modal .close:hover {
-      color: #333;
+      color: #fff;
     }
     
     #modal-body {
@@ -253,14 +256,14 @@
       max-width: 100%;
       height: auto;
       border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     }
     
     #modal h2 {
       color: var(--primary-color);
       margin-top: 0;
       font-size: 1.8rem;
-      border-bottom: 2px solid #f0f0f0;
+      border-bottom: 2px solid #333;
       padding-bottom: 0.5rem;
     }
     
@@ -270,7 +273,7 @@
     
     #modal .info-section h3 {
       margin-bottom: 0.5rem;
-      color: #555;
+      color: #ccc;
       font-size: 1.2rem;
     }
     
@@ -282,7 +285,7 @@
     }
     
     #modal .price-block {
-      background-color: #f9f9f9;
+      background-color: #2a2a2a;
       padding: 0.8rem;
       border-radius: 8px;
       margin-bottom: 1rem;
@@ -290,7 +293,7 @@
     
     #modal .price-title {
       font-weight: bold;
-      color: #555;
+      color: #ccc;
       margin-bottom: 0.5rem;
     }
     
@@ -301,10 +304,10 @@
     }
     
     #modal .price-item {
-      background: white;
+      background: #333;
       padding: 0.5rem;
       border-radius: 5px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
       flex: 1;
       min-width: 80px;
       text-align: center;
@@ -312,7 +315,7 @@
     
     #modal .price-label {
       font-size: 0.8rem;
-      color: #777;
+      color: #bbb;
     }
     
     #modal .price-value {
@@ -326,10 +329,12 @@
       margin: 0.5rem 0 1rem;
       font-size: 0.95rem;
       padding: 0.8rem;
-      border: 1px solid #ddd;
+      border: 1px solid #444;
       border-radius: 8px;
       resize: vertical;
       font-family: inherit;
+      background: #2a2a2a;
+      color: var(--font-color);
       transition: border 0.2s;
     }
     
@@ -354,7 +359,7 @@
     }
     
     #modal button.save-note:hover {
-      background-color: #3d8b40;
+      background-color: #4caf50;
       transform: translateY(-1px);
     }
     
@@ -401,13 +406,18 @@
       header {
         padding: 1.5rem 1rem 1.2rem;
       }
+
+      /* Adjust the grid to show smaller cards on very small screens */
+      #cards-container {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      }
     }
   </style>
 </head>
 <body>
   <header>
     <div class="header-content">
-      <h1>My Charizard Collection</h1>
+      <h1>The Charizard Collection</h1>
       <div class="search-controls">
         <input type="text" id="search-input" placeholder="Search by name, set, rarity..." />
         <select id="filter-select">
@@ -562,7 +572,6 @@
           case 'set':
             return (a.set?.name || '').localeCompare(b.set?.name || '');
           case 'number':
-            // Convert to numbers for proper numerical sorting
             return (parseInt(a.number) || 0) - (parseInt(b.number) || 0);
           case 'rarity':
             return (a.rarity || '').localeCompare(b.rarity || '');
@@ -577,7 +586,7 @@
         noResults.style.textAlign = 'center';
         noResults.style.gridColumn = '1 / -1';
         noResults.style.padding = '2rem';
-        noResults.style.color = '#666';
+        noResults.style.color = '#aaa';
         cardsContainer.appendChild(noResults);
         return;
       }
@@ -602,7 +611,6 @@
       if (event.target === modal) closeModal();
     });
     
-    // Close modal with ESC key
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && modal.style.display === 'block') {
         closeModal();
@@ -612,13 +620,12 @@
     // Open modal with card details
     const openModal = (card) => {
       modalBody.innerHTML = '';
-      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+      document.body.style.overflow = 'hidden';
 
       // Create image section
       const imageSection = document.createElement('div');
       imageSection.className = 'modal-image';
       
-      // Card image (prefer large image if available)
       const img = document.createElement('img');
       img.src = card.images.large || card.images.small;
       img.alt = card.name;
@@ -628,12 +635,10 @@
       const detailsSection = document.createElement('div');
       detailsSection.className = 'modal-details';
       
-      // Title
       const title = document.createElement('h2');
       title.textContent = card.name;
       detailsSection.appendChild(title);
 
-      // Basic Info Section
       const basicInfoSection = document.createElement('div');
       basicInfoSection.className = 'info-section';
       
@@ -653,7 +658,6 @@
       basicInfoSection.appendChild(infoPara);
       detailsSection.appendChild(basicInfoSection);
 
-      // Pricing Information Section
       const pricingSection = document.createElement('div');
       pricingSection.className = 'info-section';
       
@@ -661,9 +665,8 @@
       pricingTitle.textContent = 'Pricing Information';
       pricingSection.appendChild(pricingTitle);
 
-      // TCGPlayer Pricing
       if (card.tcgplayer?.prices) {
-        const priceType = Object.keys(card.tcgplayer.prices)[0]; // Get first available price type
+        const priceType = Object.keys(card.tcgplayer.prices)[0];
         if (priceType && card.tcgplayer.prices[priceType]) {
           const priceData = card.tcgplayer.prices[priceType];
           
@@ -678,7 +681,6 @@
           const tcgPriceDetail = document.createElement('div');
           tcgPriceDetail.className = 'price-detail';
           
-          // Create price items
           const priceItems = [
             { label: 'Low', value: formatPrice(priceData.low) },
             { label: 'Mid', value: formatPrice(priceData.mid) },
@@ -708,7 +710,6 @@
         }
       }
 
-      // Cardmarket Pricing
       if (card.cardmarket?.prices) {
         const cmPrices = card.cardmarket.prices;
         
@@ -723,7 +724,6 @@
         const cmPriceDetail = document.createElement('div');
         cmPriceDetail.className = 'price-detail';
         
-        // Create price items
         const priceItems = [
           { label: 'Avg Sell', value: formatPrice(cmPrices.averageSellPrice) },
           { label: 'Low', value: formatPrice(cmPrices.lowPrice) },
@@ -760,7 +760,6 @@
       
       detailsSection.appendChild(pricingSection);
 
-      // Notes Section
       const notesSection = document.createElement('div');
       notesSection.className = 'info-section';
       
@@ -780,7 +779,6 @@
         cardNotes[card.id] = noteTextarea.value;
         saveToLocalStorage(STORAGE_KEY_NOTES, cardNotes);
         
-        // Visual feedback
         saveNoteBtn.textContent = 'Saved!';
         setTimeout(() => {
           saveNoteBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Save Note';
@@ -789,14 +787,12 @@
       notesSection.appendChild(saveNoteBtn);
       detailsSection.appendChild(notesSection);
 
-      // Add the sections to the modal body
       modalBody.appendChild(imageSection);
       modalBody.appendChild(detailsSection);
 
       modal.style.display = 'block';
     };
 
-    // Load cards from API with caching fallback
     const loadCards = async () => {
       try {
         const response = await fetch(
@@ -819,7 +815,6 @@
       }
     };
 
-    // Event listeners for search, filter, and sort
     document
       .getElementById('search-input')
       .addEventListener('input', renderCards);
