@@ -31,14 +31,9 @@
     header {
       background: var(--header-bg);
       padding: 2rem 1rem 1.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
       color: white;
-    }
-    
-    .header-content {
-      max-width: 1200px;
-      margin: 0 auto;
       text-align: center;
     }
     
@@ -75,21 +70,44 @@
     .search-controls select:focus {
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
-
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1rem 2rem;
+    
+    /* Advanced Filters: Only printing year and foil checkbox */
+    .advanced-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    .advanced-filters input {
+      padding: 0.7rem 1rem;
+      border-radius: 25px;
+      border: 1px solid #444;
+      max-width: 200px;
+      background: #2a2a2a;
+      color: var(--font-color);
+    }
+    .advanced-filters label {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      color: #ccc;
+      font-size: 0.95rem;
     }
 
-    /* Loading Indicator Styles */
+    /* Collection Summary */
+    #collection-summary {
+      text-align: center;
+      padding: 1rem;
+      color: #ccc;
+      font-size: 1rem;
+    }
+
+    /* Loading Indicator */
     #loading-indicator {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(0, 0, 0, 0.8);
       z-index: 1500;
       align-items: center;
@@ -113,6 +131,9 @@
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 1.5rem;
+      padding: 0 1rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     
     .card {
@@ -163,9 +184,9 @@
     
     .card-actions {
       display: flex;
-      justify-content: space-around;
-      margin-top: 1rem;
       align-items: center;
+      justify-content: space-between;
+      margin-top: 1rem;
     }
     
     .bought-wrapper {
@@ -206,6 +227,18 @@
       font-size: 0.95rem;
       color: #ccc;
       cursor: pointer;
+    }
+
+    /* Favorite Star */
+    .favorite-star {
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: #555;
+      transition: color 0.2s;
+      margin-left: 0.5rem;
+    }
+    .favorite-star.favorited {
+      color: gold;
     }
 
     /* External Link Button */
@@ -417,8 +450,8 @@
     #modal button.save-note:active {
       transform: translateY(1px);
     }
-
-    /* Mobile adjustments */
+    
+    /* Responsive Adjustments */
     @media (max-width: 768px) {
       h1 {
         font-size: 2rem;
@@ -457,7 +490,7 @@
       header {
         padding: 1.5rem 1rem 1.2rem;
       }
-
+      
       #cards-container {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       }
@@ -469,7 +502,7 @@
   <div id="loading-indicator">
     <div class="spinner"></div>
   </div>
-
+  
   <header>
     <div class="header-content">
       <h1>My Charizard Collection</h1>
@@ -479,6 +512,7 @@
           <option value="all">All Cards</option>
           <option value="bought">Bought</option>
           <option value="notBought">Not Bought</option>
+          <option value="favorites">Favorites</option>
         </select>
         <select id="sort-select">
           <option value="name">Sort by Name (A-Z)</option>
@@ -487,39 +521,52 @@
           <option value="rarity">Sort by Rarity (A-Z)</option>
         </select>
       </div>
+      <!-- Advanced Filters: Only Printing Year and Foil -->
+      <div class="advanced-filters">
+        <input type="text" id="year-input" placeholder="Filter by Printing Year" />
+        <label>
+          <input type="checkbox" id="foil-checkbox" /> Foil
+        </label>
+      </div>
     </div>
   </header>
-
+  
+  <!-- Collection Summary -->
+  <div id="collection-summary"></div>
+  
   <main>
     <div id="cards-container"></div>
   </main>
-
-  <!-- Modal for detailed info -->
+  
+  <!-- Modal for Detailed Card Info -->
   <div id="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
       <div id="modal-body"></div>
     </div>
   </div>
-
+  
   <script>
-    // Constants and local storage keys
+    // Local storage keys
     const STORAGE_KEY_BOUGHT = 'boughtCards';
     const STORAGE_KEY_NOTES = 'cardNotes';
+    const STORAGE_KEY_FAVORITES = 'favoriteCards';
     let boughtCards = JSON.parse(localStorage.getItem(STORAGE_KEY_BOUGHT)) || {};
     let cardNotes = JSON.parse(localStorage.getItem(STORAGE_KEY_NOTES)) || {};
+    let favoriteCards = JSON.parse(localStorage.getItem(STORAGE_KEY_FAVORITES)) || {};
     let allCards = [];
 
-    // Helper function to save data to localStorage
-    const saveToLocalStorage = (key, data) =>
+    // Helper: save to localStorage
+    const saveToLocalStorage = (key, data) => {
       localStorage.setItem(key, JSON.stringify(data));
+    };
 
-    // Format price with proper handling of undefined values
+    // Format price
     const formatPrice = (price) => {
       return price ? `$${parseFloat(price).toFixed(2)}` : 'N/A';
     };
 
-    // Create a card element
+    // Create a card element for the grid
     const createCardElement = (card) => {
       const cardDiv = document.createElement('div');
       cardDiv.classList.add('card');
@@ -537,28 +584,20 @@
       title.textContent = card.name;
       cardDiv.appendChild(title);
 
-      // Info: number, set, and rarity
+      // Info: number, set, rarity, and printing year (extracted from set.releaseDate)
       const info = document.createElement('div');
       info.className = 'info';
+      const releaseYear = card.set && card.set.releaseDate ? card.set.releaseDate.split('/')[0] : '';
       const details = [
         card.number ? `No. ${card.number}` : '',
         card.set?.name ? `Set: ${card.set.name}` : '',
-        card.rarity ? `Rarity: ${card.rarity}` : ''
-      ]
-        .filter(Boolean)
-        .join(' • ');
+        card.rarity ? `Rarity: ${card.rarity}` : '',
+        releaseYear ? `Year: ${releaseYear}` : ''
+      ].filter(Boolean).join(' • ');
       info.textContent = details;
       cardDiv.appendChild(info);
 
-      // Make the entire card clickable for details
-      cardDiv.addEventListener('click', (e) => {
-        const isCheckboxClick = e.target.type === 'checkbox' || 
-                                e.target.tagName === 'LABEL' ||
-                                e.target.closest('.bought-wrapper');
-        if (!isCheckboxClick) openModal(card);
-      });
-
-      // Card actions div
+      // Card actions
       const cardActions = document.createElement('div');
       cardActions.className = 'card-actions';
 
@@ -583,36 +622,95 @@
       label.textContent = 'Bought';
       label.addEventListener('click', (e) => e.stopPropagation());
       boughtWrapper.appendChild(label);
-      
       cardActions.appendChild(boughtWrapper);
+
+      // Favorite star icon
+      const favoriteStar = document.createElement('span');
+      favoriteStar.className = 'favorite-star';
+      favoriteStar.innerHTML = '★';
+      if (favoriteCards[card.id]) {
+        favoriteStar.classList.add('favorited');
+      }
+      favoriteStar.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (favoriteCards[card.id]) {
+          delete favoriteCards[card.id];
+          favoriteStar.classList.remove('favorited');
+        } else {
+          favoriteCards[card.id] = true;
+          favoriteStar.classList.add('favorited');
+        }
+        localStorage.setItem(STORAGE_KEY_FAVORITES, JSON.stringify(favoriteCards));
+      });
+      cardActions.appendChild(favoriteStar);
+
       cardDiv.appendChild(cardActions);
+
+      // Make card clickable (ignore clicks on controls)
+      cardDiv.addEventListener('click', (e) => {
+        const isControlClick = e.target.type === 'checkbox' || 
+                               e.target.tagName === 'LABEL' ||
+                               e.target.classList.contains('favorite-star');
+        if (!isControlClick) openModal(card);
+      });
 
       return cardDiv;
     };
 
-    // Render cards based on search, filter, and sort criteria
+    // Update collection summary
+    function updateCollectionSummary() {
+      const total = allCards.length;
+      const boughtCount = Object.keys(boughtCards).filter(id => boughtCards[id]).length;
+      const favoriteCount = Object.keys(favoriteCards).filter(id => favoriteCards[id]).length;
+      const summaryDiv = document.getElementById('collection-summary');
+      summaryDiv.innerHTML = `Total Cards: ${total} | Bought: ${boughtCount} | Favorites: ${favoriteCount}`;
+    }
+
+    // Render cards with filtering and sorting
     const renderCards = () => {
       const searchQuery = document.getElementById('search-input').value.toLowerCase();
       const filterValue = document.getElementById('filter-select').value;
       const sortValue = document.getElementById('sort-select').value;
+      // For printing year, extract year from set.releaseDate
+      const yearFilter = document.getElementById('year-input').value.toLowerCase();
+      const foilFilter = document.getElementById('foil-checkbox').checked;
+      
       const cardsContainer = document.getElementById('cards-container');
       cardsContainer.innerHTML = '';
 
       let filteredCards = allCards.filter((card) => {
+        // Basic search on name, set name, number, rarity
         const matchesSearch =
           (card.name && card.name.toLowerCase().includes(searchQuery)) ||
           (card.set?.name && card.set.name.toLowerCase().includes(searchQuery)) ||
           (card.number && card.number.toString().includes(searchQuery)) ||
           (card.rarity && card.rarity.toLowerCase().includes(searchQuery));
-        let matchesFilter = true;
-        if (filterValue === 'bought') {
-          matchesFilter = !!boughtCards[card.id];
-        } else if (filterValue === 'notBought') {
-          matchesFilter = !boughtCards[card.id];
+        if (!matchesSearch) return false;
+        
+        // Printing Year filter: extract year from card.set.releaseDate
+        const releaseYear = card.set && card.set.releaseDate ? card.set.releaseDate.split('/')[0] : '';
+        if (yearFilter && (!releaseYear || !releaseYear.toLowerCase().includes(yearFilter))) {
+          return false;
         }
-        return matchesSearch && matchesFilter;
+        // Foil filter: check if card.rarity contains "holo"
+        if (foilFilter && (!card.rarity || !card.rarity.toLowerCase().includes('holo'))) {
+          return false;
+        }
+        
+        // Filter by bought or favorites
+        if (filterValue === 'bought' && !boughtCards[card.id]) {
+          return false;
+        }
+        if (filterValue === 'notBought' && boughtCards[card.id]) {
+          return false;
+        }
+        if (filterValue === 'favorites' && !favoriteCards[card.id]) {
+          return false;
+        }
+        return true;
       });
 
+      // Sorting
       filteredCards.sort((a, b) => {
         switch (sortValue) {
           case 'name':
@@ -636,12 +734,14 @@
         noResults.style.padding = '2rem';
         noResults.style.color = '#aaa';
         cardsContainer.appendChild(noResults);
+        updateCollectionSummary();
         return;
       }
 
       filteredCards.forEach((card) => {
         cardsContainer.appendChild(createCardElement(card));
       });
+      updateCollectionSummary();
     };
 
     // Modal functionality
@@ -658,14 +758,11 @@
     window.addEventListener('click', (event) => {
       if (event.target === modal) closeModal();
     });
-    
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.style.display === 'block') {
-        closeModal();
-      }
+      if (e.key === 'Escape' && modal.style.display === 'block') closeModal();
     });
 
-    // Open modal with card details
+    // Open modal to show detailed card info
     const openModal = (card) => {
       modalBody.innerHTML = '';
       document.body.style.overflow = 'hidden';
@@ -686,17 +783,19 @@
       title.textContent = card.name;
       detailsSection.appendChild(title);
 
-      // Card Information
+      // Basic Info Section (including printing year)
       const basicInfoSection = document.createElement('div');
       basicInfoSection.className = 'info-section';
       const basicInfoTitle = document.createElement('h3');
       basicInfoTitle.textContent = 'Card Information';
       basicInfoSection.appendChild(basicInfoTitle);
+      const releaseYear = card.set && card.set.releaseDate ? card.set.releaseDate.split('/')[0] : 'N/A';
       const infoPara = document.createElement('p');
       infoPara.innerHTML = `
         <strong>Number:</strong> ${card.number || 'N/A'}<br>
         <strong>Set:</strong> ${card.set?.name || 'N/A'}<br>
         <strong>Rarity:</strong> ${card.rarity || 'N/A'}<br>
+        <strong>Printing Year:</strong> ${releaseYear}<br>
         <strong>Types:</strong> ${(card.types || []).join(', ') || 'N/A'}<br>
         ${card.hp ? `<strong>HP:</strong> ${card.hp}<br>` : ''}
         ${card.artist ? `<strong>Artist:</strong> ${card.artist}` : ''}
@@ -704,7 +803,7 @@
       basicInfoSection.appendChild(infoPara);
       detailsSection.appendChild(basicInfoSection);
 
-      // Pricing Information
+      // Pricing Information Section
       const pricingSection = document.createElement('div');
       pricingSection.className = 'info-section';
       const pricingTitle = document.createElement('h3');
@@ -867,9 +966,12 @@
       }
     };
 
+    // Event listeners for filter inputs
     document.getElementById('search-input').addEventListener('input', renderCards);
     document.getElementById('filter-select').addEventListener('change', renderCards);
     document.getElementById('sort-select').addEventListener('change', renderCards);
+    document.getElementById('year-input').addEventListener('input', renderCards);
+    document.getElementById('foil-checkbox').addEventListener('change', renderCards);
 
     window.addEventListener('DOMContentLoaded', loadCards);
   </script>
