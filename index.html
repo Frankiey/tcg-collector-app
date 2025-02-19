@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Charizard Collection</title>
+  <style>
+    /* CSS Variables for enhanced theme */
+    :root {
+      --bg-color: #f5f5f7;
+      --card-bg: #fff;
+      --card-border: #e0e0e0;
+      --shadow-color: rgba(0, 0, 0, 0.12);
+      --font-color: #333;
+      --primary-color: #ff5722;
+      --primary-hover: #e64a19;
+      --bought-bg: #e8f5e9;
+      --success-color: #4caf50;
+      --header-bg: linear-gradient(135deg, #ff7043 0%, #ff3d00 100%);
+    }
+
+    /* Global Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-color);
+      margin: 0;
+      padding: 0;
+      color: var(--font-color);
+    }
+    
+    header {
+      background: var(--header-bg);
+      padding: 2rem 1rem 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      color: white;
+    }
+    
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    h1 {
+      margin: 0 0 1.2rem;
+      font-size: 2.5rem;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    
+    .search-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin: 0 auto;
+      max-width: 800px;
+    }
+    
+    .search-controls input,
+    .search-controls select {
+      padding: 0.7rem 1rem;
+      border-radius: 25px;
+      border: none;
+      font-size: 1rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      outline: none;
+      flex-grow: 1;
+      max-width: 300px;
+    }
+    
+    .search-controls input:focus,
+    .search-controls select:focus {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem 2rem;
+    }
+
+    /* Cards Grid with improved styling */
+    #cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px var(--shadow-color);
+      padding: 1rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+    
+    .card.bought {
+      background-color: var(--bought-bg);
+    }
+    
+    .card img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      transition: transform 0.5s ease;
+    }
+    
+    .card:hover img {
+      transform: scale(1.05);
+    }
+    
+    .card .title {
+      margin: 1rem 0 0.4rem;
+      font-weight: bold;
+      color: var(--font-color);
+      font-size: 1.2rem;
+    }
+    
+    .card .info {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.8rem;
+      line-height: 1.4;
+    }
+    
+    .card-actions {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1rem;
+      align-items: center;
+    }
+    
+    .bought-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    
+    .bought-wrapper input[type='checkbox'] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 1.2rem;
+      height: 1.2rem;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      background-color: white;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+    
+    .bought-wrapper input[type='checkbox']:checked {
+      background-color: var(--success-color);
+      border-color: var(--success-color);
+    }
+    
+    .bought-wrapper input[type='checkbox']:checked::after {
+      content: '✓';
+      color: white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.8rem;
+    }
+    
+    .bought-wrapper label {
+      font-size: 0.95rem;
+      color: #555;
+      cursor: pointer;
+    }
+
+    /* Enhanced Modal Styles */
+    #modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+    }
+    
+    #modal .modal-content {
+      background-color: #fff;
+      margin: 5% auto;
+      padding: 2rem;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 700px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      animation: modalIn 0.4s ease;
+    }
+    
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    #modal .close {
+      color: #999;
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.2s;
+      z-index: 10;
+    }
+    
+    #modal .close:hover {
+      color: #333;
+    }
+    
+    #modal-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    
+    #modal .modal-image {
+      grid-column: 1;
+      justify-self: center;
+    }
+    
+    #modal .modal-details {
+      grid-column: 2;
+    }
+    
+    #modal img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    #modal h2 {
+      color: var(--primary-color);
+      margin-top: 0;
+      font-size: 1.8rem;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 0.5rem;
+    }
+    
+    #modal .info-section {
+      margin-bottom: 1.5rem;
+    }
+    
+    #modal .info-section h3 {
+      margin-bottom: 0.5rem;
+      color: #555;
+      font-size: 1.2rem;
+    }
+    
+    #modal p {
+      font-size: 1rem;
+      color: var(--font-color);
+      line-height: 1.5;
+      margin: 0.7rem 0;
+    }
+    
+    #modal .price-block {
+      background-color: #f9f9f9;
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    
+    #modal .price-title {
+      font-weight: bold;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+    
+    #modal .price-detail {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    
+    #modal .price-item {
+      background: white;
+      padding: 0.5rem;
+      border-radius: 5px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      flex: 1;
+      min-width: 80px;
+      text-align: center;
+    }
+    
+    #modal .price-label {
+      font-size: 0.8rem;
+      color: #777;
+    }
+    
+    #modal .price-value {
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+    
+    #modal textarea {
+      width: 100%;
+      height: 80px;
+      margin: 0.5rem 0 1rem;
+      font-size: 0.95rem;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      resize: vertical;
+      font-family: inherit;
+      transition: border 0.2s;
+    }
+    
+    #modal textarea:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+    
+    #modal button.save-note {
+      padding: 0.7rem 1.5rem;
+      font-size: 1rem;
+      background-color: var(--success-color);
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.1s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    #modal button.save-note:hover {
+      background-color: #3d8b40;
+      transform: translateY(-1px);
+    }
+    
+    #modal button.save-note:active {
+      transform: translateY(1px);
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+      
+      #modal-body {
+        grid-template-columns: 1fr;
+      }
+      
+      #modal .modal-image,
+      #modal .modal-details {
+        grid-column: 1;
+      }
+      
+      #modal .modal-content {
+        padding: 1.5rem;
+        margin: 10% auto;
+      }
+      
+      .search-controls input,
+      .search-controls select {
+        max-width: none;
+        width: 100%;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .card {
+        padding: 0.8rem;
+      }
+      
+      h1 {
+        font-size: 1.8rem;
+      }
+      
+      header {
+        padding: 1.5rem 1rem 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <h1>My Charizard Collection</h1>
+      <div class="search-controls">
+        <input type="text" id="search-input" placeholder="Search by name, set, rarity..." />
+        <select id="filter-select">
+          <option value="all">All Cards</option>
+          <option value="bought">Bought</option>
+          <option value="notBought">Not Bought</option>
+        </select>
+        <select id="sort-select">
+          <option value="name">Sort by Name (A-Z)</option>
+          <option value="set">Sort by Set (A-Z)</option>
+          <option value="number">Sort by Card Number (Asc)</option>
+          <option value="rarity">Sort by Rarity (A-Z)</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div id="cards-container"></div>
+  </main>
+
+  <!-- Modal for detailed info -->
+  <div id="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <script>
+    // Constants and local storage keys
+    const STORAGE_KEY_BOUGHT = 'boughtCards';
+    const STORAGE_KEY_NOTES = 'cardNotes';
+    let boughtCards = JSON.parse(localStorage.getItem(STORAGE_KEY_BOUGHT)) || {};
+    let cardNotes = JSON.parse(localStorage.getItem(STORAGE_KEY_NOTES)) || {};
+    let allCards = [];
+
+    // Helper function to save data to localStorage
+    const saveToLocalStorage = (key, data) =>
+      localStorage.setItem(key, JSON.stringify(data));
+
+    // Format price with proper handling of undefined values
+    const formatPrice = (price) => {
+      return price ? `$${parseFloat(price).toFixed(2)}` : 'N/A';
+    };
+
+    // Create a card element
+    const createCardElement = (card) => {
+      const cardDiv = document.createElement('div');
+      cardDiv.classList.add('card');
+      if (boughtCards[card.id]) cardDiv.classList.add('bought');
+
+      // Card image
+      const img = document.createElement('img');
+      img.src = card.images.small;
+      img.alt = card.name;
+      cardDiv.appendChild(img);
+
+      // Title
+      const title = document.createElement('div');
+      title.className = 'title';
+      title.textContent = card.name;
+      cardDiv.appendChild(title);
+
+      // Info: number, set, and rarity
+      const info = document.createElement('div');
+      info.className = 'info';
+      const details = [
+        card.number ? `No. ${card.number}` : '',
+        card.set?.name ? `Set: ${card.set.name}` : '',
+        card.rarity ? `Rarity: ${card.rarity}` : ''
+      ]
+        .filter(Boolean)
+        .join(' • ');
+      info.textContent = details;
+      cardDiv.appendChild(info);
+
+      // Make the entire card clickable for details
+      cardDiv.addEventListener('click', (e) => {
+        // Don't open modal if clicking on checkbox or its label
+        const isCheckboxClick = e.target.type === 'checkbox' || 
+                                e.target.tagName === 'LABEL' ||
+                                e.target.closest('.bought-wrapper');
+        if (!isCheckboxClick) openModal(card);
+      });
+
+      // Card actions div
+      const cardActions = document.createElement('div');
+      cardActions.className = 'card-actions';
+
+      // Bought checkbox and label in its own wrapper
+      const boughtWrapper = document.createElement('div');
+      boughtWrapper.className = 'bought-wrapper';
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.id = `bought-${card.id}`;
+      checkbox.checked = !!boughtCards[card.id];
+      checkbox.addEventListener('change', (e) => {
+        e.stopPropagation(); // Prevent opening modal
+        boughtCards[card.id] = checkbox.checked;
+        saveToLocalStorage(STORAGE_KEY_BOUGHT, boughtCards);
+        cardDiv.classList.toggle('bought', checkbox.checked);
+        renderCards();
+      });
+      boughtWrapper.appendChild(checkbox);
+      
+      const label = document.createElement('label');
+      label.htmlFor = `bought-${card.id}`;
+      label.textContent = 'Bought';
+      label.addEventListener('click', (e) => e.stopPropagation());
+      boughtWrapper.appendChild(label);
+      
+      cardActions.appendChild(boughtWrapper);
+      cardDiv.appendChild(cardActions);
+
+      return cardDiv;
+    };
+
+    // Render cards based on search, filter, and sort criteria
+    const renderCards = () => {
+      const searchQuery = document
+        .getElementById('search-input')
+        .value.toLowerCase();
+      const filterValue = document.getElementById('filter-select').value;
+      const sortValue = document.getElementById('sort-select').value;
+      const cardsContainer = document.getElementById('cards-container');
+      cardsContainer.innerHTML = '';
+
+      let filteredCards = allCards.filter((card) => {
+        const matchesSearch =
+          (card.name &&
+            card.name.toLowerCase().includes(searchQuery)) ||
+          (card.set?.name &&
+            card.set.name.toLowerCase().includes(searchQuery)) ||
+          (card.number &&
+            card.number.toString().includes(searchQuery)) ||
+          (card.rarity &&
+            card.rarity.toLowerCase().includes(searchQuery));
+        let matchesFilter = true;
+        if (filterValue === 'bought') {
+          matchesFilter = !!boughtCards[card.id];
+        } else if (filterValue === 'notBought') {
+          matchesFilter = !boughtCards[card.id];
+        }
+        return matchesSearch && matchesFilter;
+      });
+
+      filteredCards.sort((a, b) => {
+        switch (sortValue) {
+          case 'name':
+            return a.name.localeCompare(b.name);
+          case 'set':
+            return (a.set?.name || '').localeCompare(b.set?.name || '');
+          case 'number':
+            // Convert to numbers for proper numerical sorting
+            return (parseInt(a.number) || 0) - (parseInt(b.number) || 0);
+          case 'rarity':
+            return (a.rarity || '').localeCompare(b.rarity || '');
+          default:
+            return 0;
+        }
+      });
+
+      if (filteredCards.length === 0) {
+        const noResults = document.createElement('div');
+        noResults.textContent = 'No cards found. Try different search criteria.';
+        noResults.style.textAlign = 'center';
+        noResults.style.gridColumn = '1 / -1';
+        noResults.style.padding = '2rem';
+        noResults.style.color = '#666';
+        cardsContainer.appendChild(noResults);
+        return;
+      }
+
+      filteredCards.forEach((card) => {
+        cardsContainer.appendChild(createCardElement(card));
+      });
+    };
+
+    // Modal functionality
+    const modal = document.getElementById('modal');
+    const modalBody = document.getElementById('modal-body');
+    const closeModalBtn = document.querySelector('#modal .close');
+
+    const closeModal = () => {
+      modal.style.display = 'none';
+      document.body.style.overflow = 'auto';
+    };
+
+    closeModalBtn.addEventListener('click', closeModal);
+    window.addEventListener('click', (event) => {
+      if (event.target === modal) closeModal();
+    });
+    
+    // Close modal with ESC key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.style.display === 'block') {
+        closeModal();
+      }
+    });
+
+    // Open modal with card details
+    const openModal = (card) => {
+      modalBody.innerHTML = '';
+      document.body.style.overflow = 'hidden'; // Prevent background scrolling
+
+      // Create image section
+      const imageSection = document.createElement('div');
+      imageSection.className = 'modal-image';
+      
+      // Card image (prefer large image if available)
+      const img = document.createElement('img');
+      img.src = card.images.large || card.images.small;
+      img.alt = card.name;
+      imageSection.appendChild(img);
+      
+      // Create details section
+      const detailsSection = document.createElement('div');
+      detailsSection.className = 'modal-details';
+      
+      // Title
+      const title = document.createElement('h2');
+      title.textContent = card.name;
+      detailsSection.appendChild(title);
+
+      // Basic Info Section
+      const basicInfoSection = document.createElement('div');
+      basicInfoSection.className = 'info-section';
+      
+      const basicInfoTitle = document.createElement('h3');
+      basicInfoTitle.textContent = 'Card Information';
+      basicInfoSection.appendChild(basicInfoTitle);
+      
+      const infoPara = document.createElement('p');
+      infoPara.innerHTML = `
+        <strong>Number:</strong> ${card.number || 'N/A'}<br>
+        <strong>Set:</strong> ${card.set?.name || 'N/A'}<br>
+        <strong>Rarity:</strong> ${card.rarity || 'N/A'}<br>
+        <strong>Types:</strong> ${(card.types || []).join(', ') || 'N/A'}<br>
+        ${card.hp ? `<strong>HP:</strong> ${card.hp}<br>` : ''}
+        ${card.artist ? `<strong>Artist:</strong> ${card.artist}` : ''}
+      `;
+      basicInfoSection.appendChild(infoPara);
+      detailsSection.appendChild(basicInfoSection);
+
+      // Pricing Information Section
+      const pricingSection = document.createElement('div');
+      pricingSection.className = 'info-section';
+      
+      const pricingTitle = document.createElement('h3');
+      pricingTitle.textContent = 'Pricing Information';
+      pricingSection.appendChild(pricingTitle);
+
+      // TCGPlayer Pricing
+      if (card.tcgplayer?.prices) {
+        const priceType = Object.keys(card.tcgplayer.prices)[0]; // Get first available price type
+        if (priceType && card.tcgplayer.prices[priceType]) {
+          const priceData = card.tcgplayer.prices[priceType];
+          
+          const tcgPriceBlock = document.createElement('div');
+          tcgPriceBlock.className = 'price-block';
+          
+          const tcgPriceTitle = document.createElement('div');
+          tcgPriceTitle.className = 'price-title';
+          tcgPriceTitle.textContent = `TCGplayer (${priceType.charAt(0).toUpperCase() + priceType.slice(1)})`;
+          tcgPriceBlock.appendChild(tcgPriceTitle);
+          
+          const tcgPriceDetail = document.createElement('div');
+          tcgPriceDetail.className = 'price-detail';
+          
+          // Create price items
+          const priceItems = [
+            { label: 'Low', value: formatPrice(priceData.low) },
+            { label: 'Mid', value: formatPrice(priceData.mid) },
+            { label: 'High', value: formatPrice(priceData.high) },
+            { label: 'Market', value: formatPrice(priceData.market) }
+          ];
+          
+          priceItems.forEach(item => {
+            const priceItem = document.createElement('div');
+            priceItem.className = 'price-item';
+            
+            const priceLabel = document.createElement('div');
+            priceLabel.className = 'price-label';
+            priceLabel.textContent = item.label;
+            priceItem.appendChild(priceLabel);
+            
+            const priceValue = document.createElement('div');
+            priceValue.className = 'price-value';
+            priceValue.textContent = item.value;
+            priceItem.appendChild(priceValue);
+            
+            tcgPriceDetail.appendChild(priceItem);
+          });
+          
+          tcgPriceBlock.appendChild(tcgPriceDetail);
+          pricingSection.appendChild(tcgPriceBlock);
+        }
+      }
+
+      // Cardmarket Pricing
+      if (card.cardmarket?.prices) {
+        const cmPrices = card.cardmarket.prices;
+        
+        const cmPriceBlock = document.createElement('div');
+        cmPriceBlock.className = 'price-block';
+        
+        const cmPriceTitle = document.createElement('div');
+        cmPriceTitle.className = 'price-title';
+        cmPriceTitle.textContent = 'Cardmarket';
+        cmPriceBlock.appendChild(cmPriceTitle);
+        
+        const cmPriceDetail = document.createElement('div');
+        cmPriceDetail.className = 'price-detail';
+        
+        // Create price items
+        const priceItems = [
+          { label: 'Avg Sell', value: formatPrice(cmPrices.averageSellPrice) },
+          { label: 'Low', value: formatPrice(cmPrices.lowPrice) },
+          { label: 'Trend', value: formatPrice(cmPrices.trendPrice) },
+          { label: '30d Avg', value: formatPrice(cmPrices.avg30) }
+        ];
+        
+        priceItems.forEach(item => {
+          const priceItem = document.createElement('div');
+          priceItem.className = 'price-item';
+          
+          const priceLabel = document.createElement('div');
+          priceLabel.className = 'price-label';
+          priceLabel.textContent = item.label;
+          priceItem.appendChild(priceLabel);
+          
+          const priceValue = document.createElement('div');
+          priceValue.className = 'price-value';
+          priceValue.textContent = item.value;
+          priceItem.appendChild(priceValue);
+          
+          cmPriceDetail.appendChild(priceItem);
+        });
+        
+        cmPriceBlock.appendChild(cmPriceDetail);
+        pricingSection.appendChild(cmPriceBlock);
+      }
+      
+      if (!card.tcgplayer?.prices && !card.cardmarket?.prices) {
+        const noPricing = document.createElement('p');
+        noPricing.textContent = 'No pricing information available for this card.';
+        pricingSection.appendChild(noPricing);
+      }
+      
+      detailsSection.appendChild(pricingSection);
+
+      // Notes Section
+      const notesSection = document.createElement('div');
+      notesSection.className = 'info-section';
+      
+      const notesTitle = document.createElement('h3');
+      notesTitle.textContent = 'Personal Notes';
+      notesSection.appendChild(notesTitle);
+      
+      const noteTextarea = document.createElement('textarea');
+      noteTextarea.placeholder = "Add your notes about this card here...";
+      noteTextarea.value = cardNotes[card.id] || '';
+      notesSection.appendChild(noteTextarea);
+      
+      const saveNoteBtn = document.createElement('button');
+      saveNoteBtn.className = 'save-note';
+      saveNoteBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Save Note';
+      saveNoteBtn.addEventListener('click', () => {
+        cardNotes[card.id] = noteTextarea.value;
+        saveToLocalStorage(STORAGE_KEY_NOTES, cardNotes);
+        
+        // Visual feedback
+        saveNoteBtn.textContent = 'Saved!';
+        setTimeout(() => {
+          saveNoteBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Save Note';
+        }, 1500);
+      });
+      notesSection.appendChild(saveNoteBtn);
+      detailsSection.appendChild(notesSection);
+
+      // Add the sections to the modal body
+      modalBody.appendChild(imageSection);
+      modalBody.appendChild(detailsSection);
+
+      modal.style.display = 'block';
+    };
+
+    // Load cards from API with caching fallback
+    const loadCards = async () => {
+      try {
+        const response = await fetch(
+          'https://api.pokemontcg.io/v2/cards?q=name:charizard'
+        );
+        const { data } = await response.json();
+        allCards = data;
+        renderCards();
+        localStorage.setItem('cachedCards', JSON.stringify(allCards));
+      } catch (error) {
+        console.error('Error fetching cards:', error);
+        const cached = localStorage.getItem('cachedCards');
+        if (cached) {
+          allCards = JSON.parse(cached);
+          renderCards();
+        } else {
+          const cardsContainer = document.getElementById('cards-container');
+          cardsContainer.innerHTML = '<div style="text-align: center; grid-column: 1/-1; padding: 2rem;">Failed to load cards. Please check your internet connection and try again.</div>';
+        }
+      }
+    };
+
+    // Event listeners for search, filter, and sort
+    document
+      .getElementById('search-input')
+      .addEventListener('input', renderCards);
+    document
+      .getElementById('filter-select')
+      .addEventListener('change', renderCards);
+    document
+      .getElementById('sort-select')
+      .addEventListener('change', renderCards);
+
+    window.addEventListener('DOMContentLoaded', loadCards);
+  </script>
+</body>
+</html>
