@@ -49,13 +49,26 @@
           <div class="tabs-content">
             <!-- Pokemon tabs list -->
             <div class="tabs" id="pokemon-tabs" v-show="currentView === 'all'">
+              <!-- Special Collection Tabs -->
+              <button 
+                v-for="tab in specialTabs" 
+                :key="tab.id"
+                class="tab" 
+                :class="{ active: currentCollection === tab.id }"
+                :data-collection="tab.id"
+                @click="selectCollection(tab.id, tab.queryType)"
+              >
+                <span>{{ tab.name }}</span>
+              </button>
+              
+              <!-- Regular Pokemon Tabs -->
               <button 
                 v-for="tab in pokemonTabs" 
                 :key="tab.name"
                 class="tab" 
                 :class="{ active: currentCollection === tab.name.toLowerCase() }"
                 :data-collection="tab.name.toLowerCase()"
-                @click="selectCollection(tab.name.toLowerCase())"
+                @click="selectCollection(tab.name.toLowerCase(), 'pokemon')"
               >
                 <span>{{ tab.name }}</span>
                 <span 
@@ -501,12 +514,16 @@
         FAVORITES: 'favoriteCards',
         CUSTOM_TABS: 'customPokemonTabs',
         CUSTOM_COLLECTIONS: 'customCollections',
-        COLLECTION_CARDS: 'collectionCards'
+        COLLECTION_CARDS: 'collectionCards',
+        QUERY_TYPES: 'queryTypes'
       },
       DEFAULT_POKEMON: [
         'Charizard', 'Cubone', 'Psyduck', 'Pikachu', 'Farfetch\'d', 
         'Golem', 'Gastly', 'Haunter', 'Gengar', 'Mew', 'Mewtwo', 
         'Machop', 'Machoke', 'Machamp'
+      ],
+      SPECIAL_COLLECTIONS: [
+        { id: 'trainergallery', name: 'Trainer Gallery', queryType: 'custom', query: 'number:TG*' }
       ],
       PRICE_LABELS: {
         tcgplayer: {
@@ -768,13 +785,13 @@
      * API Service
      */
     const ApiService = {
-      async fetchCards(pokemonName, options = {}) {
-        const { forceRefresh = false } = options;
+      async fetchCards(collectionId, options = {}) {
+        const { forceRefresh = false, queryType = 'pokemon', customQuery = null } = options;
         
         // Check for offline mode
         if (!navigator.onLine) {
           try {
-            const cachedCards = await DBService.getCards(pokemonName.toLowerCase());
+            const cachedCards = await DBService.getCards(collectionId);
             if (cachedCards && cachedCards.length > 0) {
               return cachedCards;
             }
@@ -786,17 +803,24 @@
         
         // Check cache first if not forcing refresh
         if (!forceRefresh) {
-          const metadata = await DBService.getCardMetadata(pokemonName.toLowerCase());
+          const metadata = await DBService.getCardMetadata(collectionId);
           if (metadata && Date.now() - metadata.timestamp < CONFIG.CACHE_EXPIRY) {
-            const cachedCards = await DBService.getCards(pokemonName.toLowerCase());
+            const cachedCards = await DBService.getCards(collectionId);
             if (cachedCards && cachedCards.length > 0) {
               return cachedCards;
             }
           }
         }
         
-        // Fetch from API
-        const query = "name:" + pokemonName;
+        // Build query based on query type
+        let query;
+        if (queryType === 'custom' && customQuery) {
+          query = customQuery;
+        } else {
+          // Default is Pokemon name query
+          query = "name:" + collectionId;
+        }
+        
         const url = `${CONFIG.API_BASE_URL}/cards?q=${encodeURIComponent(query)}`;
         
         try {
@@ -810,7 +834,7 @@
           const { data } = await response.json();
           
           // Cache the data
-          await DBService.saveCards(pokemonName.toLowerCase(), data);
+          await DBService.saveCards(collectionId, data);
           
           return data;
         } catch (error) {
@@ -818,7 +842,7 @@
           
           // Try to return cached data if available
           try {
-            const cachedCards = await DBService.getCards(pokemonName.toLowerCase());
+            const cachedCards = await DBService.getCards(collectionId);
             if (cachedCards && cachedCards.length > 0) {
               return cachedCards;
             }
@@ -1207,6 +1231,7 @@
           isOffline: false,
           currentView: 'all',
           currentCollection: 'charizard',
+          currentQueryType: 'pokemon',
           allCards: [],
           boughtCards: {},
           cardNotes: {},
@@ -1214,6 +1239,7 @@
           customTabs: [],
           customCollections: [],
           collectionCards: {},
+          collectionQueries: {},
           views: [
             { id: 'all', name: 'All Cards', icon: 'fas fa-th-large' },
             { id: 'favorites', name: 'Favorites', icon: 'fas fa-star' },
@@ -1248,7 +1274,8 @@
             priceMin: '',
             priceMax: ''
           },
-          defaultPokemonTabs: CONFIG.DEFAULT_POKEMON.map(name => ({ name }))
+          defaultPokemonTabs: CONFIG.DEFAULT_POKEMON.map(name => ({ name })),
+          specialTabs: CONFIG.SPECIAL_COLLECTIONS
         }
       },
       computed: {
@@ -1354,6 +1381,7 @@
             const customTabs = await DBService.getUserData(CONFIG.LOCAL_STORAGE_KEYS.CUSTOM_TABS);
             const customCollections = await DBService.getUserData(CONFIG.LOCAL_STORAGE_KEYS.CUSTOM_COLLECTIONS);
             const collectionCards = await DBService.getUserData(CONFIG.LOCAL_STORAGE_KEYS.COLLECTION_CARDS);
+            const queryTypes = await DBService.getUserData(CONFIG.LOCAL_STORAGE_KEYS.QUERY_TYPES);
             
             // Populate data, falling back to localStorage if needed
             this.boughtCards = boughtCards || JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEYS.BOUGHT)) || {};
@@ -1362,6 +1390,7 @@
             this.customTabs = customTabs || JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEYS.CUSTOM_TABS)) || [];
             this.customCollections = customCollections || JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEYS.CUSTOM_COLLECTIONS)) || [];
             this.collectionCards = collectionCards || JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEYS.COLLECTION_CARDS)) || {};
+            this.collectionQueries = queryTypes || {};
             
             // Migrate data from localStorage to IndexedDB if found
             if (!boughtCards && localStorage.getItem(CONFIG.LOCAL_STORAGE_KEYS.BOUGHT)) {
@@ -1382,6 +1411,7 @@
             this.customTabs = [];
             this.customCollections = [];
             this.collectionCards = {};
+            this.collectionQueries = {};
           }
         },
         
@@ -1428,8 +1458,28 @@
           this.errorMessage = '';
           
           try {
+            // Determine if collection is special or standard
+            let customQuery = null;
+            
+            // If it's a special collection, get the custom query
+            if (this.currentQueryType === 'custom') {
+              // Check if it's one of our special predefined collections
+              const specialTab = CONFIG.SPECIAL_COLLECTIONS.find(tab => tab.id === this.currentCollection);
+              if (specialTab) {
+                customQuery = specialTab.query;
+              } else {
+                // Otherwise check saved custom queries
+                customQuery = this.collectionQueries[this.currentCollection];
+              }
+            }
+            
             // Use the ApiService to fetch cards
-            const cards = await ApiService.fetchCards(this.currentCollection, { forceRefresh });
+            const cards = await ApiService.fetchCards(this.currentCollection, { 
+              forceRefresh,
+              queryType: this.currentQueryType,
+              customQuery
+            });
+            
             this.allCards = cards;
             
             // Clear any previous error
@@ -1468,8 +1518,9 @@
           this.currentView = viewId;
         },
         
-        selectCollection(collectionName) {
-          this.currentCollection = collectionName;
+        selectCollection(collectionId, queryType = 'pokemon') {
+          this.currentCollection = collectionId;
+          this.currentQueryType = queryType;
           this.loadCards();
         },
         
@@ -1563,7 +1614,7 @@
           
           this.newPokemonInput = '';
           this.changeView('all');
-          this.selectCollection(pokemonName.toLowerCase());
+          this.selectCollection(pokemonName.toLowerCase(), 'pokemon');
           
           this.showNotification({
             title: 'Pokemon Added',
@@ -1588,7 +1639,7 @@
             this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.CUSTOM_TABS, this.customTabs);
             
             if (this.currentCollection === pokemonName.toLowerCase()) {
-              this.selectCollection('charizard');
+              this.selectCollection('charizard', 'pokemon');
             }
             
             this.showNotification({
