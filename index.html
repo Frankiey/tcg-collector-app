@@ -6,6 +6,8 @@
   <title>The Pokemon Collection</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
   <style>
 /* Modern Theme CSS Variables */
 :root {
@@ -264,7 +266,6 @@ h1::after {
 
 /* Collection Views Styles */
 .collection-view {
-  display: none;
   padding: 1rem;
 }
 
@@ -691,7 +692,7 @@ h1::after {
 }
 
 /* Refresh Button */
-#refresh-btn {
+.refresh-btn {
   display: block;
   padding: 0.9rem 2rem;
   background: linear-gradient(135deg, var(--secondary-color), #2c52b3);
@@ -710,22 +711,22 @@ h1::after {
   width: fit-content;
 }
 
-#refresh-btn:hover {
+.refresh-btn:hover {
   background: linear-gradient(135deg, #4c7be3, #3354a7);
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(58, 103, 207, 0.4);
 }
 
-#refresh-btn:active {
+.refresh-btn:active {
   transform: translateY(1px);
 }
 
-#refresh-btn i {
+.refresh-btn i {
   margin-right: 0.5rem;
 }
 
 /* Collection Summary */
-#collection-summary {
+.collection-summary {
   background: rgba(29, 32, 47, 0.7);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
@@ -762,8 +763,7 @@ h1::after {
 }
 
 /* Loading Indicator */
-#loading-indicator {
-  display: none;
+.loading-indicator {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(0, 0, 0, 0.8);
@@ -815,20 +815,20 @@ main {
   padding: 0 1.5rem 3rem;
 }
 
-#cards-container {
+.cards-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1.4rem;
 }
 
 /* Fixing the favorites view container to show smaller cards */
-#favorites-container {
+.favorites-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 1rem;
 }
 
-#favorites-container .card {
+.favorites-container .card {
   transform: scale(0.92);
   transform-origin: top center;
   margin-bottom: -0.5rem;
@@ -1022,8 +1022,7 @@ main {
 }
 
 /* Modal Styles */
-#modal {
-  display: none;
+.modal {
   position: fixed;
   z-index: 1000;
   left: 0;
@@ -1036,7 +1035,7 @@ main {
   transition: all 0.4s;
 }
 
-#modal .modal-content {
+.modal .modal-content {
   background: linear-gradient(135deg, rgba(35, 38, 56, 0.95), rgba(23, 25, 38, 0.95));
   margin: 5% auto;
   padding: 2.5rem;
@@ -1062,7 +1061,7 @@ main {
   }
 }
 
-#modal .close {
+.modal .close {
   position: absolute;
   top: 20px;
   right: 25px;
@@ -1080,39 +1079,39 @@ main {
   z-index: 10;
 }
 
-#modal .close:hover {
+.modal .close:hover {
   background: var(--primary-color);
   transform: rotate(90deg);
 }
 
-#modal-body {
+.modal-body {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
   gap: 2.5rem;
 }
 
-#modal .modal-image {
+.modal .modal-image {
   grid-column: 1;
   justify-self: center;
   position: relative;
 }
 
-#modal .modal-details {
+.modal .modal-details {
   grid-column: 2;
 }
 
-#modal img {
+.modal img {
   max-width: 100%;
   height: auto;
   border-radius: 15px;
   transition: transform 0.3s;
 }
 
-#modal img:hover {
+.modal img:hover {
   transform: scale(1.03);
 }
 
-#modal h2 {
+.modal h2 {
   color: var(--primary-color);
   margin-top: 0;
   margin-bottom: 1.5rem;
@@ -1124,7 +1123,7 @@ main {
   gap: 0.5rem;
 }
 
-#modal h2::after {
+.modal h2::after {
   content: '';
   position: absolute;
   bottom: -8px;
@@ -1135,7 +1134,7 @@ main {
   border-radius: 3px;
 }
 
-#modal .info-section {
+.modal .info-section {
   background: rgba(21, 23, 34, 0.5);
   border-radius: 15px;
   padding: 1.5rem;
@@ -1143,7 +1142,7 @@ main {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-#modal .info-section h3 {
+.modal .info-section h3 {
   margin-top: 0;
   margin-bottom: 1rem;
   color: #e6ebf7;
@@ -1153,26 +1152,26 @@ main {
   gap: 0.5rem;
 }
 
-#modal .info-section h3 i {
+.modal .info-section h3 i {
   color: var(--secondary-color);
 }
 
-#modal p {
+.modal p {
   font-size: 0.95rem;
   color: #b8bedC;
   line-height: 1.6;
   margin: 0.5rem 0;
 }
 
-#modal strong {
+.modal strong {
   color: #e6ebf7;
 }
 
-#modal .price-block {
+.modal .price-block {
   margin-bottom: 1rem;
 }
 
-#modal .price-title {
+.modal .price-title {
   font-weight: 600;
   color: #e6ebf7;
   margin-bottom: 0.8rem;
@@ -1181,17 +1180,17 @@ main {
   gap: 0.5rem;
 }
 
-#modal .price-title i {
+.modal .price-title i {
   color: gold;
 }
 
-#modal .price-detail {
+.modal .price-detail {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 0.8rem;
 }
 
-#modal .price-item {
+.modal .price-item {
   background: rgba(58, 63, 92, 0.4);
   padding: 0.8rem;
   border-radius: 10px;
@@ -1200,23 +1199,23 @@ main {
   transition: transform 0.3s;
 }
 
-#modal .price-item:hover {
+.modal .price-item:hover {
   transform: translateY(-3px);
 }
 
-#modal .price-label {
+.modal .price-label {
   font-size: 0.8rem;
   color: #a0a9c8;
   margin-bottom: 0.3rem;
 }
 
-#modal .price-value {
+.modal .price-value {
   font-weight: 600;
   color: #4c7be3;
   font-size: 1.1rem;
 }
 
-#modal textarea {
+.modal textarea {
   width: 100%;
   height: 100px;
   margin: 0.8rem 0 1rem;
@@ -1231,13 +1230,13 @@ main {
   transition: all 0.3s;
 }
 
-#modal textarea:focus {
+.modal textarea:focus {
   border-color: var(--secondary-color);
   outline: none;
   box-shadow: 0 0 0 2px rgba(76, 123, 227, 0.2);
 }
 
-#modal button.save-note {
+.modal button.save-note {
   padding: 0.8rem 1.5rem;
   font-size: 0.95rem;
   background: linear-gradient(135deg, var(--success-color), #27ae60);
@@ -1254,29 +1253,29 @@ main {
   box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
 }
 
-#modal button.save-note:hover {
+.modal button.save-note:hover {
   background: linear-gradient(135deg, #2ecc71, #229954);
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(46, 204, 113, 0.4);
 }
 
-#modal button.save-note:active {
+.modal button.save-note:active {
   transform: translateY(1px);
 }
 
 /* Responsive Adjustments */
 @media (max-width: 992px) {
-  #modal-body {
+  .modal-body {
     grid-template-columns: 1fr;
     gap: 2rem;
   }
   
-  #modal .modal-image,
-  #modal .modal-details {
+  .modal .modal-image,
+  .modal .modal-details {
     grid-column: 1;
   }
   
-  #modal img {
+  .modal img {
     max-width: 300px;
     margin: 0 auto;
     display: block;
@@ -1292,7 +1291,7 @@ main {
     grid-template-columns: 1fr;
   }
   
-  #modal .modal-content {
+  .modal .modal-content {
     padding: 2rem 1.5rem;
     margin: 10% auto;
     width: 95%;
@@ -1317,7 +1316,7 @@ main {
     padding: 2rem 1rem 1.5rem;
   }
   
-  #cards-container {
+  .cards-container {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 1.2rem;
   }
@@ -1331,1103 +1330,869 @@ main {
     font-size: 1.1rem;
   }
   
-  #modal h2 {
+  .modal h2 {
     font-size: 1.6rem;
   }
 }
   </style>
 </head>
 <body>
-  <!-- Loading Indicator -->
-  <div id="loading-indicator">
-    <svg class="spinner" viewBox="0 0 50 50">
-      <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
-    </svg>
-  </div>
+  <div id="app">
+    <!-- Loading Indicator -->
+    <div class="loading-indicator" v-if="loading" style="display: flex;">
+      <svg class="spinner" viewBox="0 0 50 50">
+        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+      </svg>
+    </div>
 
-  <header>
-    <div class="header-content">
-      <h1>The Pokemon Collection</h1>
-      <!-- Tabs and views -->
-      <div class="tabs-container">
-        <div class="tabs-nav">
-          <button class="tabs-btn active" data-view="all"><i class="fas fa-th-large"></i></button>
-          <button class="tabs-btn" data-view="favorites"><i class="fas fa-star"></i></button>
-          <button class="tabs-btn" data-view="custom"><i class="fas fa-folder"></i></button>
-          <button class="tabs-btn" data-view="add"><i class="fas fa-plus"></i></button>
-        </div>
-        <div class="tabs-content">
-          <div class="tabs" id="pokemon-tabs">
-            <!-- Default Pokemon Tabs -->
-            <button class="tab active" data-collection="charizard">
-              <span>Charizard</span>
-              <span class="remove-btn" title="Remove"><i class="fas fa-times"></i></span>
+    <header>
+      <div class="header-content">
+        <h1>The Pokemon Collection</h1>
+        <!-- Tabs and views -->
+        <div class="tabs-container">
+          <div class="tabs-nav">
+            <button 
+              v-for="view in views" 
+              :key="view.id" 
+              class="tabs-btn" 
+              :class="{ active: currentView === view.id }"
+              @click="changeView(view.id)"
+            >
+              <i :class="view.icon"></i>
             </button>
-            <button class="tab" data-collection="cubone">
-              <span>Cubone</span>
-              <span class="remove-btn" title="Remove"><i class="fas fa-times"></i></span>
-            </button>
-            <button class="tab" data-collection="psyduck">
-              <span>Psyduck</span>
-              <span class="remove-btn" title="Remove"><i class="fas fa-times"></i></span>
-            </button>
-            <button class="tab" data-collection="pikachu">
-              <span>Pikachu</span>
-              <span class="remove-btn" title="Remove"><i class="fas fa-times"></i></span>
-            </button>
-            <button class="tab" data-collection="farfetch'd">
-              <span>Farfetch'd</span>
-              <span class="remove-btn" title="Remove"><i class="fas fa-times"></i></span>
-            </button>
-            <button class="tab" data-collection="golem">
-              <span>Golem</span>
-              <span class="remove-btn" title="Remove"><i class="fas fa-times"></i></span>
-            </button>
-            <button class="tab" data-collection="gastly">
-              <span>Gastly</span>
-              <span class="remove-btn" title="Remove"><i class="fas fa-times"></i></span>
-            </button>
-            <button class="tab" data-collection="haunter">
-              <span>Haunter</span>
-              <span class="remove-btn" title="Remove"><i class="fas fa-times"></i></span>
-            </button>
-            <button class="tab" data-collection="gengar">
-              <span>Gengar</span>
-              <span class="remove-btn" title="Remove"><i class="fas fa-times"></i></span>
-            </button>
-            <button class="tab" data-collection="mew">
-              <span>Mew</span>
-              <span class="remove-btn" title="Remove"><i class="fas fa-times"></i></span>
-            </button>
-            <button class="tab" data-collection="mewtwo">
-              <span>Mewtwo</span>
-              <span class="remove-btn" title="Remove"><i class="fas fa-times"></i></span>
-            </button>
-            <button class="tab" data-collection="machop">
-              <span>Machop</span>
-              <span class="remove-btn" title="Remove"><i class="fas fa-times"></i></span>
-            </button>
-            <button class="tab" data-collection="machoke">
-              <span>Machoke</span>
-              <span class="remove-btn" title="Remove"><i class="fas fa-times"></i></span>
-            </button>
-            <button class="tab" data-collection="machamp">
-              <span>Machamp</span>
-              <span class="remove-btn" title="Remove"><i class="fas fa-times"></i></span>
-            </button>   
           </div>
-          <!-- Add Pokemon Form -->
-          <div id="add-pokemon-form" style="display: none; padding: 1rem;">
-            <div style="display: flex; gap: 0.5rem;">
-              <input type="text" id="new-pokemon-input" placeholder="Enter Pokemon name..." style="flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(43,47,69,0.6); color: white;">
-              <button id="add-pokemon-btn" style="background: var(--primary-color); color: white; border: none; border-radius: 4px; padding: 0 1rem; cursor: pointer;">Add</button>
-              <button id="cancel-add-btn" style="background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 4px; padding: 0 1rem; cursor: pointer;">Cancel</button>
+          <div class="tabs-content">
+            <!-- Pokemon tabs list -->
+            <div class="tabs" id="pokemon-tabs" v-show="currentView === 'all'">
+              <button 
+                v-for="tab in pokemonTabs" 
+                :key="tab.name"
+                class="tab" 
+                :class="{ active: currentCollection === tab.name.toLowerCase() }"
+                :data-collection="tab.name.toLowerCase()"
+                @click="selectCollection(tab.name.toLowerCase())"
+              >
+                <span>{{ tab.name }}</span>
+                <span 
+                  class="remove-btn" 
+                  title="Remove" 
+                  @click.stop="handleTabRemoval(tab.name.toLowerCase())"
+                >
+                  <i class="fas fa-times"></i>
+                </span>
+              </button>
             </div>
-          </div>
-          <!-- Favorites View -->
-          <div id="favorites-view" class="collection-view">
-            <div class="view-header">
-              <h3><i class="fas fa-star"></i> My Favorite Cards</h3>
-            </div>
-            <div id="favorites-container" class="cards-gallery">
-              <div class="empty-state" id="favorites-empty">
-                <i class="fas fa-star"></i>
-                <h4>No favorites yet</h4>
-                <p>Star your favorite cards to see them here</p>
-              </div>
-            </div>
-          </div>
-          <!-- Custom Collections View -->
-          <div id="custom-view" class="collection-view">
-            <div class="view-header">
-              <h3><i class="fas fa-folder"></i> Custom Collections</h3>
-              <button id="new-collection-btn" class="action-btn"><i class="fas fa-plus"></i> New Collection</button>
-            </div>
-            <div id="add-collection-form" class="add-collection-form" style="display: none;">
-              <div class="form-group">
-                <label for="collection-name">Collection Name</label>
-                <input type="text" id="collection-name" placeholder="E.g., Holographic Cards">
-              </div>
-              <div class="form-group">
-                <label for="collection-description">Description (Optional)</label>
-                <textarea id="collection-description" placeholder="What makes this collection special?"></textarea>
-              </div>
-              <div class="form-group">
-                <label>Collection Type</label>
-                <div style="display: flex; gap: 1rem;">
-                  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                    <input type="radio" name="collection-type" value="manual" checked> 
-                    <span>Manual (Add cards individually)</span>
-                  </label>
-                  <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                    <input type="radio" name="collection-type" value="auto"> 
-                    <span>Auto (Based on filters)</span>
-                  </label>
-                </div>
-              </div>
-              <div class="form-actions">
-                <button id="cancel-collection-btn" class="form-btn form-btn-secondary">Cancel</button>
-                <button id="save-collection-btn" class="form-btn form-btn-primary">Create Collection</button>
-              </div>
-            </div>
-            <div id="custom-collections-list">
-              <div class="empty-state" id="collections-empty">
-                <i class="fas fa-folder-open"></i>
-                <h4>No custom collections yet</h4>
-                <p>Create a collection to organize your cards</p>
-                <button id="create-first-collection" class="btn-add-items">
-                  <i class="fas fa-plus"></i> Create Collection
+            
+            <!-- Add Pokemon Form -->
+            <div v-show="currentView === 'add'" style="padding: 1rem;">
+              <div style="display: flex; gap: 0.5rem;">
+                <input 
+                  type="text" 
+                  v-model="newPokemonInput" 
+                  placeholder="Enter Pokemon name..." 
+                  style="flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(43,47,69,0.6); color: white;"
+                  @keyup.enter="addNewPokemon"
+                >
+                <button 
+                  @click="addNewPokemon" 
+                  style="background: var(--primary-color); color: white; border: none; border-radius: 4px; padding: 0 1rem; cursor: pointer;"
+                >
+                  Add
+                </button>
+                <button 
+                  @click="changeView('all')" 
+                  style="background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 4px; padding: 0 1rem; cursor: pointer;"
+                >
+                  Cancel
                 </button>
               </div>
             </div>
+            
+            <!-- Favorites View -->
+            <div v-show="currentView === 'favorites'" class="collection-view">
+              <div class="view-header">
+                <h3><i class="fas fa-star"></i> My Favorite Cards</h3>
+              </div>
+              <div class="favorites-container">
+                <div class="empty-state" v-if="!favoriteCardsList.length">
+                  <i class="fas fa-star"></i>
+                  <h4>No favorites yet</h4>
+                  <p>Star your favorite cards to see them here</p>
+                </div>
+                <card-component 
+                  v-for="card in favoriteCardsList" 
+                  :key="card.id" 
+                  :card="card" 
+                  @toggle-bought="toggleCardBought"
+                  @toggle-favorite="toggleCardFavorite"
+                  @open-modal="openCardModal"
+                ></card-component>
+              </div>
+            </div>
+            
+            <!-- Custom Collections View -->
+            <div v-show="currentView === 'custom'" class="collection-view">
+              <div class="view-header">
+                <h3><i class="fas fa-folder"></i> Custom Collections</h3>
+                <button @click="showCollectionForm = true" class="action-btn">
+                  <i class="fas fa-plus"></i> New Collection
+                </button>
+              </div>
+              <div v-if="showCollectionForm" class="add-collection-form">
+                <div class="form-group">
+                  <label for="collection-name">Collection Name</label>
+                  <input type="text" v-model="newCollection.name" placeholder="E.g., Holographic Cards">
+                </div>
+                <div class="form-group">
+                  <label for="collection-description">Description (Optional)</label>
+                  <textarea v-model="newCollection.description" placeholder="What makes this collection special?"></textarea>
+                </div>
+                <div class="form-group">
+                  <label>Collection Type</label>
+                  <div style="display: flex; gap: 1rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="radio" v-model="newCollection.type" value="manual"> 
+                      <span>Manual (Add cards individually)</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="radio" v-model="newCollection.type" value="auto"> 
+                      <span>Auto (Based on filters)</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button @click="showCollectionForm = false" class="form-btn form-btn-secondary">Cancel</button>
+                  <button @click="saveCollection" class="form-btn form-btn-primary">Create Collection</button>
+                </div>
+              </div>
+              <div>
+                <div class="empty-state" v-if="!customCollections.length && !showCollectionForm">
+                  <i class="fas fa-folder-open"></i>
+                  <h4>No custom collections yet</h4>
+                  <p>Create a collection to organize your cards</p>
+                  <button @click="showCollectionForm = true" class="btn-add-items">
+                    <i class="fas fa-plus"></i> Create Collection
+                  </button>
+                </div>
+                <div 
+                  v-for="collection in customCollections" 
+                  :key="collection.id"
+                  class="custom-collection"
+                  @click="viewCollection(collection.id)"
+                >
+                  <div>
+                    <h4>{{ collection.name }}</h4>
+                    <p>{{ collection.description || "No description" }} • {{ getCollectionCardCount(collection.id) }} cards</p>
+                  </div>
+                  <div class="collection-actions">
+                    <button @click.stop="viewCollection(collection.id)" class="action-btn" title="View Collection">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button @click.stop="editCollection(collection.id)" class="action-btn" title="Edit Collection">
+                      <i class="fas fa-pencil-alt"></i>
+                    </button>
+                    <button @click.stop="deleteCollection(collection.id)" class="action-btn" title="Delete Collection">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Search and Filter Controls -->
+        <div class="controls-wrapper">
+          <div class="controls-container">
+            <div class="controls-header">
+              <h3><i class="fas fa-sliders-h"></i> Filters & Sorting</h3>
+              <button @click="toggleAdvancedFilters" class="toggle-filters">
+                <span>{{ showAdvancedFilters ? 'Hide Advanced' : 'Show Advanced' }}</span>
+                <i :class="showAdvancedFilters ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+              </button>
+            </div>
+            <div class="search-controls">
+              <div class="control-group">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" v-model="searchFilters.query" placeholder="Search by name, set, rarity..." />
+              </div>
+              <div class="control-group select-wrapper">
+                <i class="fas fa-filter search-icon"></i>
+                <select v-model="searchFilters.filterValue">
+                  <option value="all">All Cards</option>
+                  <option value="bought">Bought</option>
+                  <option value="notBought">Not Bought</option>
+                  <option value="favorites">Favorites</option>
+                </select>
+              </div>
+              <div class="control-group select-wrapper">
+                <i class="fas fa-sort search-icon"></i>
+                <select v-model="searchFilters.sortValue">
+                  <option value="name">Sort by Name</option>
+                  <option value="set">Sort by Set</option>
+                  <option value="number">Sort by Number</option>
+                  <option value="rarity">Sort by Rarity</option>
+                  <option value="printYear">Sort by Year</option>
+                </select>
+              </div>
+            </div>
+            <div class="checkbox-row">
+              <div class="checkbox-group">
+                <label>
+                  <input type="checkbox" v-model="searchFilters.reverseOrder" /> 
+                  Reverse Order
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label>
+                  <input type="checkbox" v-model="searchFilters.foilOnly" /> 
+                  Foil Cards Only
+                </label>
+              </div>
+              <button @click="refreshCards" class="refresh-btn">
+                <i class="fas fa-sync-alt"></i> Refresh
+              </button>
+            </div>
+            <!-- Advanced Filters -->
+            <div class="advanced-filters" v-show="showAdvancedFilters">
+              <div class="control-group">
+                <i class="fas fa-calendar-alt search-icon"></i>
+                <input type="text" v-model="searchFilters.year" placeholder="Filter by Year" />
+              </div>
+              <div class="control-group">
+                <i class="fas fa-dollar-sign search-icon"></i>
+                <input type="text" v-model.number="searchFilters.priceMin" placeholder="Min Price ($)" />
+              </div>
+              <div class="control-group">
+                <i class="fas fa-dollar-sign search-icon"></i>
+                <input type="text" v-model.number="searchFilters.priceMax" placeholder="Max Price ($)" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <!-- Search and Filter Controls -->
-      <div class="controls-wrapper">
-        <div class="controls-container">
-          <div class="controls-header">
-            <h3><i class="fas fa-sliders-h"></i> Filters & Sorting</h3>
-            <button class="toggle-filters" id="toggle-advanced">
-              <span id="toggle-text">Show Advanced</span>
-              <i class="fas fa-chevron-down" id="toggle-icon"></i>
-            </button>
+    </header>
+
+    <!-- Collection Summary -->
+    <div class="collection-summary">
+      <div class="summary-stat">
+        <i class="fas fa-layer-group"></i>
+        Total Cards: <span>{{ filteredCards.length }}</span>
+      </div>
+      <div class="summary-stat">
+        <i class="fas fa-shopping-cart"></i>
+        Bought: <span>{{ boughtCount }}</span>
+      </div>
+      <div class="summary-stat">
+        <i class="fas fa-star"></i>
+        Favorites: <span>{{ favoriteCount }}</span>
+      </div>
+    </div>
+
+    <main>
+      <div class="cards-container">
+        <div v-if="filteredCards.length === 0" style="text-align: center; grid-column: 1 / -1; padding: 4rem 1rem; color: #a0a9c8; font-size: 1.1rem;">
+          <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i><br>
+          No cards found. Try different search criteria.
+        </div>
+        <card-component 
+          v-for="card in filteredCards" 
+          :key="card.id" 
+          :card="card" 
+          @toggle-bought="toggleCardBought"
+          @toggle-favorite="toggleCardFavorite"
+          @open-modal="openCardModal"
+        ></card-component>
+      </div>
+    </main>
+
+    <!-- Card Modal -->
+    <div class="modal" v-if="selectedCard" @click="closeCardModal">
+      <div class="modal-content" @click.stop>
+        <span class="close" @click="closeCardModal"><i class="fas fa-times"></i></span>
+        <div class="modal-body">
+          <div class="modal-image">
+            <img :src="selectedCard.images.large || selectedCard.images.small" :alt="selectedCard.name">
           </div>
-          <div class="search-controls">
-            <div class="control-group">
-              <i class="fas fa-search search-icon"></i>
-              <input type="text" id="search-input" placeholder="Search by name, set, rarity..." />
+          <div class="modal-details">
+            <h2>
+              <i :class="'fas fa-' + getTypeIcon(selectedCard.types && selectedCard.types[0] ? selectedCard.types[0].toLowerCase() : 'default')"></i>
+              {{ selectedCard.name }}
+            </h2>
+            
+            <!-- Basic Info Section -->
+            <div class="info-section">
+              <h3><i class="fas fa-info-circle"></i> Card Information</h3>
+              <p>
+                <strong>Number:</strong> {{ selectedCard.number || 'N/A' }}<br>
+                <strong>Set:</strong> {{ selectedCard.set?.name || 'N/A' }}<br>
+                <strong>Rarity:</strong> {{ selectedCard.rarity || 'N/A' }}<br>
+                <strong>Printing Year:</strong> {{ getReleaseYear(selectedCard) }}<br>
+                <strong>Types:</strong> {{ (selectedCard.types || []).join(', ') || 'N/A' }}<br>
+                <span v-if="selectedCard.hp"><strong>HP:</strong> {{ selectedCard.hp }}<br></span>
+                <span v-if="selectedCard.artist"><strong>Artist:</strong> {{ selectedCard.artist }}</span>
+              </p>
             </div>
-            <div class="control-group select-wrapper">
-              <i class="fas fa-filter search-icon"></i>
-              <select id="filter-select">
-                <option value="all">All Cards</option>
-                <option value="bought">Bought</option>
-                <option value="notBought">Not Bought</option>
-                <option value="favorites">Favorites</option>
-              </select>
+            
+            <!-- Pricing Section -->
+            <div class="info-section">
+              <h3><i class="fas fa-tag"></i> Pricing Information</h3>
+              
+              <!-- TCGPlayer Pricing -->
+              <div v-if="selectedCard.tcgplayer?.prices" class="price-block">
+                <div class="price-title">
+                  <i class="fas fa-coins"></i>
+                  TCGplayer ({{ Object.keys(selectedCard.tcgplayer.prices)[0].charAt(0).toUpperCase() + Object.keys(selectedCard.tcgplayer.prices)[0].slice(1) }})
+                </div>
+                <div class="price-detail">
+                  <div class="price-item" v-for="(label, key) in {'low': 'Low', 'mid': 'Mid', 'high': 'High', 'market': 'Market'}" :key="key">
+                    <div class="price-label">{{ label }}</div>
+                    <div class="price-value">{{ formatPrice(getPriceValue(selectedCard, key)) }}</div>
+                  </div>
+                </div>
+                <a :href="selectedCard.tcgplayer.url || 'https://www.tcgplayer.com'" target="_blank" rel="noopener noreferrer" class="external-link-btn">
+                  <i class="fas fa-external-link-alt"></i> View on TCGplayer
+                </a>
+              </div>
+              
+              <!-- Cardmarket Pricing -->
+              <div v-if="selectedCard.cardmarket?.prices" class="price-block">
+                <div class="price-title">
+                  <i class="fas fa-euro-sign"></i> Cardmarket
+                </div>
+                <div class="price-detail">
+                  <div class="price-item" v-for="(label, key) in {'averageSellPrice': 'Avg Sell', 'lowPrice': 'Low', 'trendPrice': 'Trend', 'avg30': '30d Avg'}" :key="key">
+                    <div class="price-label">{{ label }}</div>
+                    <div class="price-value">{{ formatPrice(selectedCard.cardmarket.prices[key]) }}</div>
+                  </div>
+                </div>
+                <a :href="selectedCard.cardmarket.url || 'https://www.cardmarket.com'" target="_blank" rel="noopener noreferrer" class="external-link-btn">
+                  <i class="fas fa-external-link-alt"></i> View on Cardmarket
+                </a>
+              </div>
+              
+              <p v-if="!selectedCard.tcgplayer?.prices && !selectedCard.cardmarket?.prices">
+                <i class="fas fa-exclamation-circle"></i> No pricing information available for this card.
+              </p>
             </div>
-            <div class="control-group select-wrapper">
-              <i class="fas fa-sort search-icon"></i>
-              <select id="sort-select">
-                <option value="name">Sort by Name</option>
-                <option value="set">Sort by Set</option>
-                <option value="number">Sort by Number</option>
-                <option value="rarity">Sort by Rarity</option>
-                <option value="printYear">Sort by Year</option>
-              </select>
-            </div>
-          </div>
-          <div class="checkbox-row">
-            <div class="checkbox-group">
-              <label>
-                <input type="checkbox" id="reverse-checkbox" /> 
-                Reverse Order
-              </label>
-            </div>
-            <div class="checkbox-group">
-              <label>
-                <input type="checkbox" id="foil-checkbox" /> 
-                Foil Cards Only
-              </label>
-            </div>
-            <button id="refresh-btn"><i class="fas fa-sync-alt"></i> Refresh</button>
-          </div>
-          <!-- Advanced Filters -->
-          <div class="advanced-filters" id="advanced-filters" style="display: none;">
-            <div class="control-group">
-              <i class="fas fa-calendar-alt search-icon"></i>
-              <input type="text" id="year-input" placeholder="Filter by Year" />
-            </div>
-            <div class="control-group">
-              <i class="fas fa-dollar-sign search-icon"></i>
-              <input type="text" id="price-min" placeholder="Min Price ($)" />
-            </div>
-            <div class="control-group">
-              <i class="fas fa-dollar-sign search-icon"></i>
-              <input type="text" id="price-max" placeholder="Max Price ($)" />
+            
+            <!-- Notes Section -->
+            <div class="info-section">
+              <h3><i class="fas fa-sticky-note"></i> Personal Notes</h3>
+              <textarea 
+                v-model="cardNoteText" 
+                placeholder="Add your notes about this card here..."
+              ></textarea>
+              <button @click="saveCardNote" class="save-note">
+                <i class="fas" :class="noteSaved ? 'fa-check' : 'fa-save'"></i>
+                {{ noteSaved ? 'Saved!' : 'Save Note' }}
+              </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </header>
-
-  <!-- Collection Summary -->
-  <div id="collection-summary">
-    <div class="summary-stat">
-      <i class="fas fa-layer-group"></i>
-      Total Cards: <span id="total-count">0</span>
-    </div>
-    <div class="summary-stat">
-      <i class="fas fa-shopping-cart"></i>
-      Bought: <span id="bought-count">0</span>
-    </div>
-    <div class="summary-stat">
-      <i class="fas fa-star"></i>
-      Favorites: <span id="favorite-count">0</span>
-    </div>
-  </div>
-
-  <main>
-    <div id="cards-container"></div>
-  </main>
-
-  <!-- Modal for Detailed Card Info -->
-  <div id="modal">
-    <div class="modal-content">
-      <span class="close"><i class="fas fa-times"></i></span>
-      <div id="modal-body"></div>
     </div>
   </div>
 
   <script>
-    (function () {
-      "use strict";
-      /*─────────────────────────────*
-       *     CONSTANTS & STATE       *
-       *─────────────────────────────*/
-      const STORAGE_KEYS = {
-        bought: "boughtCards",
-        notes: "cardNotes",
-        favorites: "favoriteCards",
-        customTabs: "customPokemonTabs",
-        customCollections: "customCollections",
-        collectionCards: "collectionCards"
-      };
-
-      let currentCollection = "charizard";
-      let allCards = [];
-      let boughtCards = JSON.parse(localStorage.getItem(STORAGE_KEYS.bought)) || {};
-      let cardNotes = JSON.parse(localStorage.getItem(STORAGE_KEYS.notes)) || {};
-      let favoriteCards = JSON.parse(localStorage.getItem(STORAGE_KEYS.favorites)) || {};
-      let customTabs = JSON.parse(localStorage.getItem(STORAGE_KEYS.customTabs)) || [];
-      let customCollections = JSON.parse(localStorage.getItem(STORAGE_KEYS.customCollections)) || [];
-      let collectionCards = JSON.parse(localStorage.getItem(STORAGE_KEYS.collectionCards)) || {};
-
-      /*─────────────────────────────*
-       *       HELPER FUNCTIONS      *
-       *─────────────────────────────*/
-      const saveToLocalStorage = (key, data) =>
-        localStorage.setItem(key, JSON.stringify(data));
-
-      const formatPrice = (price) =>
-        price ? `$${parseFloat(price).toFixed(2)}` : "N/A";
-
-      // Returns an icon string based on the pokemon type
-      function getTypeIcon(type) {
-        const iconMap = {
-          fire: "fire",
-          water: "tint",
-          grass: "leaf",
-          electric: "bolt",
-          psychic: "brain",
-          fighting: "fist-raised",
-          darkness: "moon",
-          metal: "cog",
-          fairy: "magic",
-          dragon: "dragon",
-          colorless: "feather",
-          default: "certificate"
-        };
-        return iconMap[type] || iconMap.default;
-      }
-
-      /*─────────────────────────────*
-       *     CARD CREATION & MODAL   *
-       *─────────────────────────────*/
-      function createCardElement(card) {
-        const cardDiv = document.createElement("div");
-        cardDiv.classList.add("card");
-        cardDiv.dataset.cardId = card.id;
-        if (boughtCards[card.id]) cardDiv.classList.add("bought");
-
-        // Image
-        const imageContainer = document.createElement("div");
-        imageContainer.className = "card-image-container";
-        const img = document.createElement("img");
-        img.src = card.images.small;
-        img.alt = card.name;
-        img.loading = "lazy";
-        imageContainer.appendChild(img);
-        cardDiv.appendChild(imageContainer);
-
-        // Title and badges
-        const title = document.createElement("div");
-        title.className = "title";
-        title.textContent = card.name;
-        cardDiv.appendChild(title);
-
-        const badges = document.createElement("div");
-        badges.className = "card-badges";
-        if (card.rarity) {
-          const rarityBadge = document.createElement("span");
-          rarityBadge.className = "card-badge";
-          rarityBadge.textContent = card.rarity;
-          badges.appendChild(rarityBadge);
+    // Card Component
+    const CardComponent = {
+      props: {
+        card: {
+          type: Object,
+          required: true
         }
-        const releaseYear = card.set && card.set.releaseDate ? card.set.releaseDate.split("/")[0] : "";
-        if (releaseYear) {
-          const yearBadge = document.createElement("span");
-          yearBadge.className = "card-badge";
-          yearBadge.textContent = releaseYear;
-          badges.appendChild(yearBadge);
+      },
+      computed: {
+        isBought() {
+          return this.$root.boughtCards[this.card.id] || false;
+        },
+        isFavorite() {
+          return this.$root.favoriteCards[this.card.id] || false;
+        },
+        releaseYear() {
+          return this.card.set && this.card.set.releaseDate ? this.card.set.releaseDate.split("/")[0] : "";
         }
-        cardDiv.appendChild(badges);
-
-        // Info: set & number
-        const info = document.createElement("div");
-        info.className = "info";
-        info.textContent = [card.set?.name ? `Set: ${card.set.name}` : "", card.number ? `No. ${card.number}` : ""]
-          .filter(Boolean)
-          .join(" • ");
-        cardDiv.appendChild(info);
-
-        // Card Actions (Bought & Favorite)
-        const cardActions = document.createElement("div");
-        cardActions.className = "card-actions";
-        const boughtWrapper = document.createElement("div");
-        boughtWrapper.className = "bought-wrapper";
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.id = `bought-${card.id}`;
-        checkbox.checked = !!boughtCards[card.id];
-        checkbox.addEventListener("change", (e) => {
+      },
+      methods: {
+        toggleBought(e) {
           e.stopPropagation();
-          boughtCards[card.id] = checkbox.checked;
-          saveToLocalStorage(STORAGE_KEYS.bought, boughtCards);
-          cardDiv.classList.toggle("bought", checkbox.checked);
-          updateCollectionSummary();
-        });
-        boughtWrapper.appendChild(checkbox);
-        const label = document.createElement("label");
-        label.htmlFor = `bought-${card.id}`;
-        label.textContent = "Bought";
-        label.addEventListener("click", (e) => e.stopPropagation());
-        boughtWrapper.appendChild(label);
-        cardActions.appendChild(boughtWrapper);
-
-        // Favorite Star
-        const favoriteStar = document.createElement("span");
-        favoriteStar.className = "favorite-star";
-        favoriteStar.innerHTML = '<i class="fas fa-star"></i>';
-        if (favoriteCards[card.id]) favoriteStar.classList.add("favorited");
-        favoriteStar.addEventListener("click", (e) => {
+          this.$emit('toggle-bought', this.card.id);
+        },
+        toggleFavorite(e) {
           e.stopPropagation();
-          if (favoriteCards[card.id]) {
-            delete favoriteCards[card.id];
-            favoriteStar.classList.remove("favorited");
-          } else {
-            favoriteCards[card.id] = true;
-            favoriteStar.classList.add("favorited");
-          }
-          saveToLocalStorage(STORAGE_KEYS.favorites, favoriteCards);
-          updateCollectionSummary();
-        });
-        cardActions.appendChild(favoriteStar);
-        cardDiv.appendChild(cardActions);
-
-        // Open modal on card click (ignoring control clicks)
-        cardDiv.addEventListener("click", (e) => {
-          if (
-            e.target.type === "checkbox" ||
-            e.target.tagName === "LABEL" ||
-            e.target.closest(".favorite-star")
-          )
-            return;
-          openModal(card);
-        });
-        return cardDiv;
-      }
-
-      function updateCollectionSummary() {
-        const total = allCards.length;
-        const boughtCount = Object.keys(boughtCards).filter(
-          (id) => allCards.some((card) => card.id === id) && boughtCards[id]
-        ).length;
-        const favoriteCount = Object.keys(favoriteCards).filter(
-          (id) => allCards.some((card) => card.id === id) && favoriteCards[id]
-        ).length;
-        document.getElementById("total-count").textContent = total;
-        document.getElementById("bought-count").textContent = boughtCount;
-        document.getElementById("favorite-count").textContent = favoriteCount;
-      }
-
-      function openModal(card) {
-        const modal = document.getElementById("modal");
-        const modalBody = document.getElementById("modal-body");
-        modalBody.innerHTML = "";
-        document.body.style.overflow = "hidden";
-
-        const imageSection = document.createElement("div");
-        imageSection.className = "modal-image";
-        const img = document.createElement("img");
-        img.src = card.images.large || card.images.small;
-        img.alt = card.name;
-        imageSection.appendChild(img);
-
-        const detailsSection = document.createElement("div");
-        detailsSection.className = "modal-details";
-        const title = document.createElement("h2");
-        title.innerHTML = `<i class="fas fa-${card.types && card.types[0] ? getTypeIcon(card.types[0].toLowerCase()) : "certificate"}"></i> ${card.name}`;
-        detailsSection.appendChild(title);
-
-        // Basic Info Section
-        const basicInfoSection = document.createElement("div");
-        basicInfoSection.className = "info-section";
-        const basicInfoTitle = document.createElement("h3");
-        basicInfoTitle.innerHTML = '<i class="fas fa-info-circle"></i> Card Information';
-        basicInfoSection.appendChild(basicInfoTitle);
-        const releaseYear = card.set && card.set.releaseDate ? card.set.releaseDate.split("/")[0] : "N/A";
-        const infoPara = document.createElement("p");
-        infoPara.innerHTML = `
-          <strong>Number:</strong> ${card.number || "N/A"}<br>
-          <strong>Set:</strong> ${card.set?.name || "N/A"}<br>
-          <strong>Rarity:</strong> ${card.rarity || "N/A"}<br>
-          <strong>Printing Year:</strong> ${releaseYear}<br>
-          <strong>Types:</strong> ${(card.types || []).join(", ") || "N/A"}<br>
-          ${card.hp ? `<strong>HP:</strong> ${card.hp}<br>` : ""}
-          ${card.artist ? `<strong>Artist:</strong> ${card.artist}` : ""}
-        `;
-        basicInfoSection.appendChild(infoPara);
-        detailsSection.appendChild(basicInfoSection);
-
-        // Pricing Section
-        const pricingSection = document.createElement("div");
-        pricingSection.className = "info-section";
-        const pricingTitle = document.createElement("h3");
-        pricingTitle.innerHTML = '<i class="fas fa-tag"></i> Pricing Information';
-        pricingSection.appendChild(pricingTitle);
-        if (card.tcgplayer?.prices) {
-          const priceType = Object.keys(card.tcgplayer.prices)[0];
-          if (priceType && card.tcgplayer.prices[priceType]) {
-            const priceData = card.tcgplayer.prices[priceType];
-            const tcgPriceBlock = document.createElement("div");
-            tcgPriceBlock.className = "price-block";
-            const tcgPriceTitle = document.createElement("div");
-            tcgPriceTitle.className = "price-title";
-            tcgPriceTitle.innerHTML = `<i class="fas fa-coins"></i> TCGplayer (${priceType.charAt(0).toUpperCase() + priceType.slice(1)})`;
-            tcgPriceBlock.appendChild(tcgPriceTitle);
-            const tcgPriceDetail = document.createElement("div");
-            tcgPriceDetail.className = "price-detail";
-            [
-              { label: "Low", value: formatPrice(priceData.low) },
-              { label: "Mid", value: formatPrice(priceData.mid) },
-              { label: "High", value: formatPrice(priceData.high) },
-              { label: "Market", value: formatPrice(priceData.market) }
-            ].forEach((item) => {
-              const priceItem = document.createElement("div");
-              priceItem.className = "price-item";
-              const priceLabel = document.createElement("div");
-              priceLabel.className = "price-label";
-              priceLabel.textContent = item.label;
-              priceItem.appendChild(priceLabel);
-              const priceValue = document.createElement("div");
-              priceValue.className = "price-value";
-              priceValue.textContent = item.value;
-              priceItem.appendChild(priceValue);
-              tcgPriceDetail.appendChild(priceItem);
-            });
-            tcgPriceBlock.appendChild(tcgPriceDetail);
-            const tcgLink = document.createElement("a");
-            tcgLink.className = "external-link-btn";
-            tcgLink.href = card.tcgplayer.url || "https://www.tcgplayer.com";
-            tcgLink.target = "_blank";
-            tcgLink.rel = "noopener noreferrer";
-            tcgLink.innerHTML = '<i class="fas fa-external-link-alt"></i> View on TCGplayer';
-            tcgPriceBlock.appendChild(tcgLink);
-            pricingSection.appendChild(tcgPriceBlock);
-          }
+          this.$emit('toggle-favorite', this.card.id);
+        },
+        openModal() {
+          this.$emit('open-modal', this.card);
         }
-        if (card.cardmarket?.prices) {
-          const cmPrices = card.cardmarket.prices;
-          const cmPriceBlock = document.createElement("div");
-          cmPriceBlock.className = "price-block";
-          const cmPriceTitle = document.createElement("div");
-          cmPriceTitle.className = "price-title";
-          cmPriceTitle.innerHTML = '<i class="fas fa-euro-sign"></i> Cardmarket';
-          cmPriceBlock.appendChild(cmPriceTitle);
-          const cmPriceDetail = document.createElement("div");
-          cmPriceDetail.className = "price-detail";
-          [
-            { label: "Avg Sell", value: formatPrice(cmPrices.averageSellPrice) },
-            { label: "Low", value: formatPrice(cmPrices.lowPrice) },
-            { label: "Trend", value: formatPrice(cmPrices.trendPrice) },
-            { label: "30d Avg", value: formatPrice(cmPrices.avg30) }
-          ].forEach((item) => {
-            const priceItem = document.createElement("div");
-            priceItem.className = "price-item";
-            const priceLabel = document.createElement("div");
-            priceLabel.className = "price-label";
-            priceLabel.textContent = item.label;
-            priceItem.appendChild(priceLabel);
-            const priceValue = document.createElement("div");
-            priceValue.className = "price-value";
-            priceValue.textContent = item.value;
-            priceItem.appendChild(priceValue);
-            cmPriceDetail.appendChild(priceItem);
-          });
-          cmPriceBlock.appendChild(cmPriceDetail);
-          const cmLink = document.createElement("a");
-          cmLink.className = "external-link-btn";
-          cmLink.href = card.cardmarket.url || "https://www.cardmarket.com";
-          cmLink.target = "_blank";
-          cmLink.rel = "noopener noreferrer";
-          cmLink.innerHTML = '<i class="fas fa-external-link-alt"></i> View on Cardmarket';
-          cmPriceBlock.appendChild(cmLink);
-          pricingSection.appendChild(cmPriceBlock);
-        }
-        if (!card.tcgplayer?.prices && !card.cardmarket?.prices) {
-          const noPricing = document.createElement("p");
-          noPricing.innerHTML = '<i class="fas fa-exclamation-circle"></i> No pricing information available for this card.';
-          pricingSection.appendChild(noPricing);
-        }
-        detailsSection.appendChild(pricingSection);
-
-        // Notes Section
-        const notesSection = document.createElement("div");
-        notesSection.className = "info-section";
-        const notesTitle = document.createElement("h3");
-        notesTitle.innerHTML = '<i class="fas fa-sticky-note"></i> Personal Notes';
-        notesSection.appendChild(notesTitle);
-        const noteTextarea = document.createElement("textarea");
-        noteTextarea.placeholder = "Add your notes about this card here...";
-        noteTextarea.value = cardNotes[card.id] || "";
-        notesSection.appendChild(noteTextarea);
-        const saveNoteBtn = document.createElement("button");
-        saveNoteBtn.className = "save-note";
-        saveNoteBtn.innerHTML = '<i class="fas fa-save"></i> Save Note';
-        saveNoteBtn.addEventListener("click", () => {
-          cardNotes[card.id] = noteTextarea.value;
-          saveToLocalStorage(STORAGE_KEYS.notes, cardNotes);
-          saveNoteBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
-          setTimeout(() => {
-            saveNoteBtn.innerHTML = '<i class="fas fa-save"></i> Save Note';
-          }, 1500);
-        });
-        notesSection.appendChild(saveNoteBtn);
-        detailsSection.appendChild(notesSection);
-
-        modalBody.appendChild(imageSection);
-        modalBody.appendChild(detailsSection);
-        modal.style.display = "block";
-      }
-
-      /*─────────────────────────────*
-       *         DATA LOADING        *
-       *─────────────────────────────*/
-      async function loadCards() {
-        const loadingIndicator = document.getElementById("loading-indicator");
-        loadingIndicator.style.display = "flex";
-        const cacheKey = "cachedCards_" + currentCollection;
-        const cacheTimestampKey = "cacheTimestamp_" + currentCollection;
-        const now = Date.now();
-        const oneDay = 24 * 60 * 60 * 1000;
-        const cachedData = localStorage.getItem(cacheKey);
-        const cachedTimestamp = localStorage.getItem(cacheTimestampKey);
-
-        if (cachedData && cachedTimestamp && now - parseInt(cachedTimestamp) < oneDay) {
-          allCards = JSON.parse(cachedData);
-          renderCards();
-          loadingIndicator.style.display = "none";
-          return;
-        }
-        const query = "name:" + currentCollection;
-        try {
-          const response = await fetch("https://api.pokemontcg.io/v2/cards?q=" + encodeURIComponent(query));
-          const { data } = await response.json();
-          allCards = data;
-          renderCards();
-          saveToLocalStorage(cacheKey, allCards);
-          saveToLocalStorage(cacheTimestampKey, now);
-        } catch (error) {
-          console.error("Error fetching cards:", error);
-          const cached = localStorage.getItem(cacheKey);
-          if (cached) {
-            allCards = JSON.parse(cached);
-            renderCards();
-          } else {
-            const cardsContainer = document.getElementById("cards-container");
-            cardsContainer.innerHTML = `
-              <div style="text-align: center; grid-column: 1/-1; padding: 3rem;">
-                <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
-                <p style="font-size: 1.2rem; color: #e6ebf7; margin-bottom: 0.5rem;">Failed to load cards</p>
-                <p style="color: #a0a9c8;">Please check your internet connection and try again.</p>
-              </div>`;
-          }
-        } finally {
-          loadingIndicator.style.display = "none";
-        }
-      }
-
-      /*─────────────────────────────*
-       *     FAVORITES & COLLECTIONS *
-       *─────────────────────────────*/
-      function renderFavoriteCards() {
-        const container = document.getElementById("favorites-container");
-        let emptyState = document.getElementById("favorites-empty");
-        if (!emptyState) {
-          emptyState = document.createElement("div");
-          emptyState.className = "empty-state";
-          emptyState.id = "favorites-empty";
-          emptyState.innerHTML = `
-            <i class="fas fa-star"></i>
-            <h4>No favorites yet</h4>
-            <p>Star your favorite cards to see them here</p>
-          `;
-          container.appendChild(emptyState);
-        }
-        Array.from(container.children).forEach(child => {
-          if (child.id !== "favorites-empty") container.removeChild(child);
-        });
-        const favoriteCardIds = Object.keys(favoriteCards).filter(id => favoriteCards[id]);
-        if (!favoriteCardIds.length) {
-          emptyState.style.display = "block";
-          return;
-        }
-        emptyState.style.display = "none";
-        const allPokemonTabs = Array.from(document.querySelectorAll("#pokemon-tabs .tab"));
-        const pokemonNames = allPokemonTabs.map(tab => tab.getAttribute("data-collection"));
-        Promise.all(
-          pokemonNames.map(pokemonName => {
-            const cacheKey = "cachedCards_" + pokemonName;
-            const collection = JSON.parse(localStorage.getItem(cacheKey)) || [];
-            return collection.filter(card => favoriteCardIds.includes(card.id));
-          })
-        ).then(results => {
-          const uniqueFavorites = Array.from(new Map(results.flat().map(card => [card.id, card])).values());
-          renderFavoriteCardsList(uniqueFavorites);
-        });
-      }
-
-      function renderFavoriteCardsList(cards) {
-        const container = document.getElementById("favorites-container");
-        cards.forEach(card => container.appendChild(createCardElement(card)));
-      }
-
-      function renderCustomCollections() {
-        const container = document.getElementById("custom-collections-list");
-        const emptyState = document.getElementById("collections-empty");
-        if (!customCollections.length) {
-          container.innerHTML = "";
-          emptyState.style.display = "block";
-          return;
-        }
-        emptyState.style.display = "none";
-        container.innerHTML = "";
-        customCollections.forEach(collection => {
-          const collectionElement = document.createElement("div");
-          collectionElement.className = "custom-collection";
-          collectionElement.dataset.id = collection.id;
-          const cardCount = collectionCards[collection.id] ? collectionCards[collection.id].length : 0;
-          collectionElement.innerHTML = `
-            <div>
-              <h4>${collection.name}</h4>
-              <p>${collection.description || "No description"} • ${cardCount} cards</p>
+      },
+      template: `
+        <div class="card" :class="{ bought: isBought }" @click="openModal">
+          <div class="card-image-container">
+            <img :src="card.images.small" :alt="card.name" loading="lazy">
+          </div>
+          <div class="title">{{ card.name }}</div>
+          <div class="card-badges">
+            <span v-if="card.rarity" class="card-badge">{{ card.rarity }}</span>
+            <span v-if="releaseYear" class="card-badge">{{ releaseYear }}</span>
+          </div>
+          <div class="info">
+            {{ [card.set?.name ? 'Set: ' + card.set.name : '', card.number ? 'No. ' + card.number : ''].filter(Boolean).join(' • ') }}
+          </div>
+          <div class="card-actions">
+            <div class="bought-wrapper">
+              <input 
+                type="checkbox" 
+                :id="'bought-' + card.id" 
+                :checked="isBought"
+                @change="toggleBought"
+                @click.stop
+              >
+              <label :for="'bought-' + card.id" @click.stop>Bought</label>
             </div>
-            <div class="collection-actions">
-              <button class="action-btn view-collection" title="View Collection">
-                <i class="fas fa-eye"></i>
-              </button>
-              <button class="action-btn edit-collection" title="Edit Collection">
-                <i class="fas fa-pencil-alt"></i>
-              </button>
-              <button class="action-btn delete-collection" title="Delete Collection">
-                <i class="fas fa-trash-alt"></i>
-              </button>
-            </div>
-          `;
-          collectionElement.querySelector(".view-collection").addEventListener("click", e => {
-            e.stopPropagation();
-            viewCollection(collection.id);
-          });
-          collectionElement.querySelector(".edit-collection").addEventListener("click", e => {
-            e.stopPropagation();
-            editCollection(collection.id);
-          });
-          collectionElement.querySelector(".delete-collection").addEventListener("click", e => {
-            e.stopPropagation();
-            deleteCollection(collection.id);
-          });
-          collectionElement.addEventListener("click", () => viewCollection(collection.id));
-          container.appendChild(collectionElement);
-        });
-      }
+            <span 
+              class="favorite-star" 
+              :class="{ favorited: isFavorite }"
+              @click.stop="toggleFavorite"
+            >
+              <i class="fas fa-star"></i>
+            </span>
+          </div>
+        </div>
+      `
+    };
 
-      function showCollectionForm() {
-        document.getElementById("add-collection-form").style.display = "block";
-        document.getElementById("collection-name").focus();
-        document.getElementById("collections-empty").style.display = "none";
-      }
-
-      function resetCollectionForm() {
-        document.getElementById("collection-name").value = "";
-        document.getElementById("collection-description").value = "";
-        document.querySelector('input[name="collection-type"][value="manual"]').checked = true;
-      }
-
-      function saveCollection() {
-        const name = document.getElementById("collection-name").value.trim();
-        if (!name) {
-          alert("Please enter a collection name");
-          return;
+    // Vue App
+    const app = Vue.createApp({
+      components: {
+        'card-component': CardComponent
+      },
+      data() {
+        return {
+          // Storage keys
+          storageKeys: {
+            bought: "boughtCards",
+            notes: "cardNotes",
+            favorites: "favoriteCards",
+            customTabs: "customPokemonTabs",
+            customCollections: "customCollections",
+            collectionCards: "collectionCards"
+          },
+          
+          // App state
+          loading: false,
+          currentView: 'all',
+          currentCollection: 'charizard',
+          allCards: [],
+          boughtCards: {},
+          cardNotes: {},
+          favoriteCards: {},
+          customTabs: [],
+          customCollections: [],
+          collectionCards: {},
+          
+          // UI state
+          views: [
+            { id: 'all', icon: 'fas fa-th-large' },
+            { id: 'favorites', icon: 'fas fa-star' },
+            { id: 'custom', icon: 'fas fa-folder' },
+            { id: 'add', icon: 'fas fa-plus' }
+          ],
+          showAdvancedFilters: false,
+          showCollectionForm: false,
+          
+          // Form inputs
+          newPokemonInput: '',
+          newCollection: {
+            name: '',
+            description: '',
+            type: 'manual'
+          },
+          
+          // Modal state
+          selectedCard: null,
+          cardNoteText: '',
+          noteSaved: false,
+          
+          // Search filters
+          searchFilters: {
+            query: '',
+            filterValue: 'all',
+            sortValue: 'name',
+            reverseOrder: false,
+            foilOnly: false,
+            year: '',
+            priceMin: '',
+            priceMax: ''
+          },
+          
+          // Defaults
+          defaultPokemonTabs: [
+            { name: 'Charizard' },
+            { name: 'Cubone' },
+            { name: 'Psyduck' },
+            { name: 'Pikachu' },
+            { name: 'Farfetch\'d' },
+            { name: 'Golem' },
+            { name: 'Gastly' },
+            { name: 'Haunter' },
+            { name: 'Gengar' },
+            { name: 'Mew' },
+            { name: 'Mewtwo' },
+            { name: 'Machop' },
+            { name: 'Machoke' },
+            { name: 'Machamp' }
+          ]
         }
-        const description = document.getElementById("collection-description").value.trim();
-        const type = document.querySelector('input[name="collection-type"]:checked').value;
-        const newCollection = {
-          id: "col_" + Date.now(),
-          name,
-          description,
-          type,
-          created: Date.now(),
-          lastModified: Date.now()
-        };
-        customCollections.push(newCollection);
-        saveToLocalStorage(STORAGE_KEYS.customCollections, customCollections);
-        collectionCards[newCollection.id] = [];
-        saveToLocalStorage(STORAGE_KEYS.collectionCards, collectionCards);
-        document.getElementById("add-collection-form").style.display = "none";
-        resetCollectionForm();
-        renderCustomCollections();
-      }
-
-      function viewCollection(collectionId) {
-        const collection = customCollections.find(c => c.id === collectionId);
-        if (!collection) return;
-        alert(`Viewing collection: ${collection.name}\n\nThis would open a detailed view of all cards in this collection.`);
-      }
-
-      function editCollection(collectionId) {
-        const collection = customCollections.find(c => c.id === collectionId);
-        if (!collection) return;
-        alert(`Editing collection: ${collection.name}\n\nThis would open a form to edit the collection details.`);
-      }
-
-      function deleteCollection(collectionId) {
-        const collection = customCollections.find(c => c.id === collectionId);
-        if (!collection) return;
-        if (confirm(`Are you sure you want to delete the collection "${collection.name}"?`)) {
-          customCollections = customCollections.filter(c => c.id !== collectionId);
-          saveToLocalStorage(STORAGE_KEYS.customCollections, customCollections);
-          delete collectionCards[collectionId];
-          saveToLocalStorage(STORAGE_KEYS.collectionCards, collectionCards);
-          renderCustomCollections();
-        }
-      }
-
-      /*─────────────────────────────*
-       *         TABS & NAVIGATION   *
-       *─────────────────────────────*/
-      function initTabs() {
-        const tabsNavBtns = document.querySelectorAll(".tabs-nav .tabs-btn");
-        const pokemonTabs = document.getElementById("pokemon-tabs");
-        const addPokemonForm = document.getElementById("add-pokemon-form");
-        const favoritesView = document.getElementById("favorites-view");
-        const customView = document.getElementById("custom-view");
-
-        tabsNavBtns.forEach(btn => {
-          btn.addEventListener("click", () => {
-            tabsNavBtns.forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-            const view = btn.getAttribute("data-view");
-            addPokemonForm.style.display = "none";
-            pokemonTabs.style.display = "none";
-            favoritesView.style.display = "none";
-            customView.style.display = "none";
-            if (view === "add") {
-              addPokemonForm.style.display = "block";
-              document.getElementById("new-pokemon-input").focus();
-            } else if (view === "favorites") {
-              favoritesView.style.display = "block";
-              renderFavoriteCards();
-            } else if (view === "custom") {
-              customView.style.display = "block";
-              renderCustomCollections();
-            } else {
-              pokemonTabs.style.display = "flex";
-              renderAllPokemonTabs();
+      },
+      computed: {
+        pokemonTabs() {
+          // Combine default tabs with custom tabs
+          const customTabObjects = this.customTabs.map(name => ({ name }));
+          return [...this.defaultPokemonTabs, ...customTabObjects];
+        },
+        filteredCards() {
+          const query = this.searchFilters.query.toLowerCase();
+          const filterValue = this.searchFilters.filterValue;
+          const sortValue = this.searchFilters.sortValue;
+          const year = this.searchFilters.year.toLowerCase();
+          const foilOnly = this.searchFilters.foilOnly;
+          const priceMin = parseFloat(this.searchFilters.priceMin) || 0;
+          const priceMax = parseFloat(this.searchFilters.priceMax) || Infinity;
+          
+          let filtered = this.allCards.filter(card => {
+            // Search query
+            const matchesSearch =
+              (card.name && card.name.toLowerCase().includes(query)) ||
+              (card.set?.name && card.set.name.toLowerCase().includes(query)) ||
+              (card.number && card.number.toString().includes(query)) ||
+              (card.rarity && card.rarity.toLowerCase().includes(query));
+            if (!matchesSearch) return false;
+            
+            // Year filter
+            const releaseYear = card.set && card.set.releaseDate ? card.set.releaseDate.split("/")[0] : "";
+            if (year && (!releaseYear || !releaseYear.toLowerCase().includes(year))) return false;
+            
+            // Foil only filter
+            if (foilOnly && (!card.rarity || !card.rarity.toLowerCase().includes("holo"))) return false;
+            
+            // Price filtering
+            if (priceMin > 0 || priceMax < Infinity) {
+              let cardPrice = 0;
+              if (card.tcgplayer?.prices) {
+                const priceObj = Object.values(card.tcgplayer.prices)[0];
+                cardPrice = priceObj?.market || priceObj?.mid || 0;
+              } else if (card.cardmarket?.prices) {
+                cardPrice = card.cardmarket.prices.averageSellPrice || card.cardmarket.prices.trendPrice || 0;
+              }
+              if (cardPrice < priceMin || cardPrice > priceMax) return false;
+            }
+            
+            // Card status filters
+            if (filterValue === "bought" && !this.boughtCards[card.id]) return false;
+            if (filterValue === "notBought" && this.boughtCards[card.id]) return false;
+            if (filterValue === "favorites" && !this.favoriteCards[card.id]) return false;
+            
+            return true;
+          });
+          
+          // Sorting
+          filtered.sort((a, b) => {
+            switch (sortValue) {
+              case "name":
+                return a.name.localeCompare(b.name);
+              case "set":
+                return (a.set?.name || "").localeCompare(b.set?.name || "");
+              case "number":
+                return (parseInt(a.number) || 0) - (parseInt(b.number) || 0);
+              case "rarity":
+                return (a.rarity || "").localeCompare(b.rarity || "");
+              case "printYear": {
+                const yearA = parseInt(a.set?.releaseDate ? a.set.releaseDate.split("/")[0] : "0", 10);
+                const yearB = parseInt(b.set?.releaseDate ? b.set.releaseDate.split("/")[0] : "0", 10);
+                return yearA - yearB;
+              }
+              default:
+                return 0;
             }
           });
-        });
-      }
-
-      function renderAllPokemonTabs() {
-        const tabs = document.querySelectorAll("#pokemon-tabs .tab");
-        tabs.forEach(tab => tab.style.display = "flex");
-      }
-
-      function addNewPokemon() {
-        const input = document.getElementById("new-pokemon-input");
-        const pokemonName = input.value.trim();
-        if (!pokemonName) {
-          alert("Please enter a Pokemon name");
-          return;
-        }
-        const exists = Array.from(document.querySelectorAll("#pokemon-tabs .tab")).some(
-          tab => tab.querySelector("span").textContent.toLowerCase() === pokemonName.toLowerCase()
-        );
-        if (exists) {
-          alert("This Pokemon is already in your collection!");
-          return;
-        }
-        const newTab = document.createElement("button");
-        newTab.className = "tab";
-        newTab.setAttribute("data-collection", pokemonName.toLowerCase());
-        const span = document.createElement("span");
-        span.textContent = pokemonName;
-        newTab.appendChild(span);
-        const removeBtn = document.createElement("span");
-        removeBtn.className = "remove-btn";
-        removeBtn.title = "Remove";
-        removeBtn.innerHTML = '<i class="fas fa-times"></i>';
-        newTab.appendChild(removeBtn);
-        newTab.addEventListener("click", function (e) {
-          if (e.target.closest(".remove-btn")) return;
-          document.querySelectorAll("#pokemon-tabs .tab").forEach(t => t.classList.remove("active"));
-          this.classList.add("active");
-          currentCollection = this.getAttribute("data-collection");
-          loadCards();
-        });
-        removeBtn.addEventListener("click", e => {
-          e.stopPropagation();
-          handleTabRemoval(newTab);
-        });
-        document.getElementById("pokemon-tabs").appendChild(newTab);
-        customTabs.push(pokemonName.toLowerCase());
-        saveToLocalStorage(STORAGE_KEYS.customTabs, customTabs);
-        input.value = "";
-        document.querySelector(".tabs-nav .tabs-btn[data-view='all']").click();
-        newTab.click();
-      }
-
-      function handleTabRemoval(tab) {
-        const pokemonName = tab.getAttribute("data-collection");
-        const defaultPokemon = ["charizard", "cubone", "psyduck", "pikachu", "farfetch'd", "golem", "gastly", "haunter", "gengar", "mew", "mewtwo", "machop", "machoke", "machamp"];
-        if (defaultPokemon.includes(pokemonName.toLowerCase())) {
-          alert("Default Pokemon cannot be removed from the collection.");
-          return;
-        }
-        if (confirm(`Remove ${pokemonName} from your collection tabs?`)) {
-          customTabs = customTabs.filter(name => name !== pokemonName.toLowerCase());
-          saveToLocalStorage(STORAGE_KEYS.customTabs, customTabs);
-          tab.remove();
-          if (tab.classList.contains("active")) {
-            const firstTab = document.querySelector("#pokemon-tabs .tab");
-            if (firstTab) firstTab.click();
+          
+          // Reverse order if needed
+          if (this.searchFilters.reverseOrder) {
+            filtered.reverse();
           }
+          
+          return filtered;
+        },
+        favoriteCardsList() {
+          const favoriteIds = Object.keys(this.favoriteCards).filter(id => this.favoriteCards[id]);
+          return this.allCards.filter(card => favoriteIds.includes(card.id));
+        },
+        boughtCount() {
+          return Object.keys(this.boughtCards).filter(id => 
+            this.allCards.some(card => card.id === id) && this.boughtCards[id]
+          ).length;
+        },
+        favoriteCount() {
+          return Object.keys(this.favoriteCards).filter(id => 
+            this.allCards.some(card => card.id === id) && this.favoriteCards[id]
+          ).length;
         }
-      }
-
-      function initCustomTabs() {
-        customTabs.forEach(pokemonName => {
-          const defaultPokemon = ["charizard", "cubone", "psyduck", "pikachu", "farfetch'd", "golem", "gastly", "haunter", "gengar", "mew", "mewtwo", "machop", "machoke", "machamp"];
-          if (defaultPokemon.includes(pokemonName.toLowerCase())) return;
-          const exists = Array.from(document.querySelectorAll("#pokemon-tabs .tab")).some(
-            tab => tab.getAttribute("data-collection").toLowerCase() === pokemonName.toLowerCase()
+      },
+      methods: {
+        async loadFromLocalStorage() {
+          // Load data from localStorage
+          this.boughtCards = JSON.parse(localStorage.getItem(this.storageKeys.bought)) || {};
+          this.cardNotes = JSON.parse(localStorage.getItem(this.storageKeys.notes)) || {};
+          this.favoriteCards = JSON.parse(localStorage.getItem(this.storageKeys.favorites)) || {};
+          this.customTabs = JSON.parse(localStorage.getItem(this.storageKeys.customTabs)) || [];
+          this.customCollections = JSON.parse(localStorage.getItem(this.storageKeys.customCollections)) || [];
+          this.collectionCards = JSON.parse(localStorage.getItem(this.storageKeys.collectionCards)) || {};
+        },
+        
+        saveToLocalStorage(key, data) {
+          localStorage.setItem(key, JSON.stringify(data));
+        },
+        
+        async loadCards(forceRefresh = false) {
+          this.loading = true;
+          const cacheKey = "cachedCards_" + this.currentCollection;
+          const cacheTimestampKey = "cacheTimestamp_" + this.currentCollection;
+          const now = Date.now();
+          const oneDay = 24 * 60 * 60 * 1000;
+          const cachedData = localStorage.getItem(cacheKey);
+          const cachedTimestamp = localStorage.getItem(cacheTimestampKey);
+          
+          if (!forceRefresh && cachedData && cachedTimestamp && now - parseInt(cachedTimestamp) < oneDay) {
+            this.allCards = JSON.parse(cachedData);
+            this.loading = false;
+            return;
+          }
+          
+          const query = "name:" + this.currentCollection;
+          try {
+            const response = await fetch("https://api.pokemontcg.io/v2/cards?q=" + encodeURIComponent(query));
+            const { data } = await response.json();
+            this.allCards = data;
+            this.saveToLocalStorage(cacheKey, this.allCards);
+            this.saveToLocalStorage(cacheTimestampKey, now);
+          } catch (error) {
+            console.error("Error fetching cards:", error);
+            const cached = localStorage.getItem(cacheKey);
+            if (cached) {
+              this.allCards = JSON.parse(cached);
+            } else {
+              this.allCards = [];
+            }
+          } finally {
+            this.loading = false;
+          }
+        },
+        
+        refreshCards() {
+          const cacheKey = "cachedCards_" + this.currentCollection;
+          const cacheTimestampKey = "cacheTimestamp_" + this.currentCollection;
+          localStorage.removeItem(cacheKey);
+          localStorage.removeItem(cacheTimestampKey);
+          this.loadCards(true);
+        },
+        
+        // View and Navigation
+        changeView(viewId) {
+          this.currentView = viewId;
+        },
+        
+        selectCollection(collectionName) {
+          this.currentCollection = collectionName;
+          this.loadCards();
+        },
+        
+        toggleAdvancedFilters() {
+          this.showAdvancedFilters = !this.showAdvancedFilters;
+        },
+        
+        // Card Actions
+        toggleCardBought(cardId) {
+          this.boughtCards[cardId] = !this.boughtCards[cardId];
+          this.saveToLocalStorage(this.storageKeys.bought, this.boughtCards);
+        },
+        
+        toggleCardFavorite(cardId) {
+          this.favoriteCards[cardId] = !this.favoriteCards[cardId];
+          this.saveToLocalStorage(this.storageKeys.favorites, this.favoriteCards);
+        },
+        
+        // Modal handling
+        openCardModal(card) {
+          this.selectedCard = card;
+          this.cardNoteText = this.cardNotes[card.id] || '';
+          this.noteSaved = false;
+          document.body.style.overflow = 'hidden';
+        },
+        
+        closeCardModal() {
+          this.selectedCard = null;
+          document.body.style.overflow = 'auto';
+        },
+        
+        saveCardNote() {
+          if (!this.selectedCard) return;
+          
+          this.cardNotes[this.selectedCard.id] = this.cardNoteText;
+          this.saveToLocalStorage(this.storageKeys.notes, this.cardNotes);
+          this.noteSaved = true;
+          
+          setTimeout(() => {
+            this.noteSaved = false;
+          }, 1500);
+        },
+        
+        // Pokemon Tab Management
+        addNewPokemon() {
+          const pokemonName = this.newPokemonInput.trim();
+          if (!pokemonName) {
+            alert("Please enter a Pokemon name");
+            return;
+          }
+          
+          const exists = this.pokemonTabs.some(tab => 
+            tab.name.toLowerCase() === pokemonName.toLowerCase()
           );
-          if (exists) return;
-          const newTab = document.createElement("button");
-          newTab.className = "tab";
-          newTab.setAttribute("data-collection", pokemonName.toLowerCase());
-          const span = document.createElement("span");
-          span.textContent = pokemonName;
-          newTab.appendChild(span);
-          const removeBtn = document.createElement("span");
-          removeBtn.className = "remove-btn";
-          removeBtn.title = "Remove";
-          removeBtn.innerHTML = '<i class="fas fa-times"></i>';
-          newTab.appendChild(removeBtn);
-          newTab.addEventListener("click", function (e) {
-            if (e.target.closest(".remove-btn")) return;
-            document.querySelectorAll("#pokemon-tabs .tab").forEach(t => t.classList.remove("active"));
-            this.classList.add("active");
-            currentCollection = this.getAttribute("data-collection");
-            loadCards();
-          });
-          removeBtn.addEventListener("click", function (e) {
-            e.stopPropagation();
-            handleTabRemoval(newTab);
-          });
-          document.getElementById("pokemon-tabs").appendChild(newTab);
+          
+          if (exists) {
+            alert("This Pokemon is already in your collection!");
+            return;
+          }
+          
+          this.customTabs.push(pokemonName.toLowerCase());
+          this.saveToLocalStorage(this.storageKeys.customTabs, this.customTabs);
+          this.newPokemonInput = '';
+          this.changeView('all');
+          this.selectCollection(pokemonName.toLowerCase());
+        },
+        
+        handleTabRemoval(pokemonName) {
+          const defaultPokemon = this.defaultPokemonTabs.map(tab => tab.name.toLowerCase());
+          if (defaultPokemon.includes(pokemonName.toLowerCase())) {
+            alert("Default Pokemon cannot be removed from the collection.");
+            return;
+          }
+          
+          if (confirm(`Remove ${pokemonName} from your collection tabs?`)) {
+            this.customTabs = this.customTabs.filter(name => name !== pokemonName.toLowerCase());
+            this.saveToLocalStorage(this.storageKeys.customTabs, this.customTabs);
+            
+            if (this.currentCollection === pokemonName.toLowerCase()) {
+              this.selectCollection('charizard');
+            }
+          }
+        },
+        
+        // Custom Collections
+        saveCollection() {
+          if (!this.newCollection.name.trim()) {
+            alert("Please enter a collection name");
+            return;
+          }
+          
+          const newCollection = {
+            id: "col_" + Date.now(),
+            name: this.newCollection.name.trim(),
+            description: this.newCollection.description.trim(),
+            type: this.newCollection.type,
+            created: Date.now(),
+            lastModified: Date.now()
+          };
+          
+          this.customCollections.push(newCollection);
+          this.saveToLocalStorage(this.storageKeys.customCollections, this.customCollections);
+          
+          this.collectionCards[newCollection.id] = [];
+          this.saveToLocalStorage(this.storageKeys.collectionCards, this.collectionCards);
+          
+          this.showCollectionForm = false;
+          this.newCollection = { name: '', description: '', type: 'manual' };
+        },
+        
+        getCollectionCardCount(collectionId) {
+          return this.collectionCards[collectionId] ? this.collectionCards[collectionId].length : 0;
+        },
+        
+        viewCollection(collectionId) {
+          const collection = this.customCollections.find(c => c.id === collectionId);
+          if (!collection) return;
+          alert(`Viewing collection: ${collection.name}\n\nThis would open a detailed view of all cards in this collection.`);
+        },
+        
+        editCollection(collectionId) {
+          const collection = this.customCollections.find(c => c.id === collectionId);
+          if (!collection) return;
+          alert(`Editing collection: ${collection.name}\n\nThis would open a form to edit the collection details.`);
+        },
+        
+        deleteCollection(collectionId) {
+          const collection = this.customCollections.find(c => c.id === collectionId);
+          if (!collection) return;
+          
+          if (confirm(`Are you sure you want to delete the collection "${collection.name}"?`)) {
+            this.customCollections = this.customCollections.filter(c => c.id !== collectionId);
+            this.saveToLocalStorage(this.storageKeys.customCollections, this.customCollections);
+            
+            delete this.collectionCards[collectionId];
+            this.saveToLocalStorage(this.storageKeys.collectionCards, this.collectionCards);
+          }
+        },
+        
+        // Helper functions
+        getTypeIcon(type) {
+          const iconMap = {
+            fire: "fire",
+            water: "tint",
+            grass: "leaf",
+            electric: "bolt",
+            psychic: "brain",
+            fighting: "fist-raised",
+            darkness: "moon",
+            metal: "cog",
+            fairy: "magic",
+            dragon: "dragon",
+            colorless: "feather",
+            default: "certificate"
+          };
+          return iconMap[type] || iconMap.default;
+        },
+        
+        formatPrice(price) {
+          return price ? `$${parseFloat(price).toFixed(2)}` : "N/A";
+        },
+        
+        getPriceValue(card, key) {
+          if (!card.tcgplayer?.prices) return null;
+          const priceType = Object.keys(card.tcgplayer.prices)[0];
+          if (!priceType || !card.tcgplayer.prices[priceType]) return null;
+          return card.tcgplayer.prices[priceType][key];
+        },
+        
+        getReleaseYear(card) {
+          return card.set && card.set.releaseDate ? card.set.releaseDate.split("/")[0] : "N/A";
+        }
+      },
+      mounted() {
+        // Initialize app
+        this.loadFromLocalStorage();
+        this.loadCards();
+        
+        // Close modal with escape key
+        window.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && this.selectedCard) {
+            this.closeCardModal();
+          }
         });
       }
-
-      function renderCards() {
-  const searchQuery = document.getElementById("search-input").value.toLowerCase();
-  const filterValue = document.getElementById("filter-select").value;
-  const sortValue = document.getElementById("sort-select").value;
-  const yearFilter = document.getElementById("year-input").value.toLowerCase();
-  const foilFilter = document.getElementById("foil-checkbox").checked;
-  const priceMin = parseFloat(document.getElementById("price-min").value) || 0;
-  const priceMax = parseFloat(document.getElementById("price-max").value) || Infinity;
-  
-  const cardsContainer = document.getElementById("cards-container");
-  cardsContainer.innerHTML = "";
-  
-  let filteredCards = allCards.filter(card => {
-    const matchesSearch =
-      (card.name && card.name.toLowerCase().includes(searchQuery)) ||
-      (card.set?.name && card.set.name.toLowerCase().includes(searchQuery)) ||
-      (card.number && card.number.toString().includes(searchQuery)) ||
-      (card.rarity && card.rarity.toLowerCase().includes(searchQuery));
-    if (!matchesSearch) return false;
-    
-    const releaseYear = card.set && card.set.releaseDate ? card.set.releaseDate.split("/")[0] : "";
-    if (yearFilter && (!releaseYear || !releaseYear.toLowerCase().includes(yearFilter))) return false;
-    
-    if (foilFilter && (!card.rarity || !card.rarity.toLowerCase().includes("holo"))) return false;
-    
-    // Price filtering
-    if (priceMin > 0 || priceMax < Infinity) {
-      let cardPrice = 0;
-      if (card.tcgplayer?.prices) {
-        const priceObj = Object.values(card.tcgplayer.prices)[0];
-        cardPrice = priceObj?.market || priceObj?.mid || 0;
-      } else if (card.cardmarket?.prices) {
-        cardPrice = card.cardmarket.prices.averageSellPrice || card.cardmarket.prices.trendPrice || 0;
-      }
-      if (cardPrice < priceMin || cardPrice > priceMax) return false;
-    }
-    
-    if (filterValue === "bought" && !boughtCards[card.id]) return false;
-    if (filterValue === "notBought" && boughtCards[card.id]) return false;
-    if (filterValue === "favorites" && !favoriteCards[card.id]) return false;
-    
-    return true;
-  });
-  
-  // Sorting
-  filteredCards.sort((a, b) => {
-    switch (sortValue) {
-      case "name":
-        return a.name.localeCompare(b.name);
-      case "set":
-        return (a.set?.name || "").localeCompare(b.set?.name || "");
-      case "number":
-        return (parseInt(a.number) || 0) - (parseInt(b.number) || 0);
-      case "rarity":
-        return (a.rarity || "").localeCompare(b.rarity || "");
-      case "printYear": {
-        const yearA = parseInt(a.set?.releaseDate ? a.set.releaseDate.split("/")[0] : "0", 10);
-        const yearB = parseInt(b.set?.releaseDate ? b.set.releaseDate.split("/")[0] : "0", 10);
-        return yearA - yearB;
-      }
-      default:
-        return 0;
-    }
-  });
-  
-  if (document.getElementById("reverse-checkbox").checked) {
-    filteredCards.reverse();
-  }
-  
-  if (filteredCards.length === 0) {
-    const noResults = document.createElement("div");
-    noResults.innerHTML = '<i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i><br>No cards found. Try different search criteria.';
-    noResults.style.textAlign = "center";
-    noResults.style.gridColumn = "1 / -1";
-    noResults.style.padding = "4rem 1rem";
-    noResults.style.color = "#a0a9c8";
-    noResults.style.fontSize = "1.1rem";
-    cardsContainer.appendChild(noResults);
-    updateCollectionSummary();
-    return;
-  }
-  
-  filteredCards.forEach(card => {
-    cardsContainer.appendChild(createCardElement(card));
-  });
-  updateCollectionSummary();
-}
-
-function bindTabEvents() {
-  const tabs = document.querySelectorAll("#pokemon-tabs .tab");
-  tabs.forEach(tab => {
-    tab.addEventListener("click", function(e) {
-      // Prevent clicks on the remove button from triggering the tab change
-      if (e.target.closest(".remove-btn")) return;
-      // Remove active class from all tabs and mark this one as active
-      document.querySelectorAll("#pokemon-tabs .tab").forEach(t => t.classList.remove("active"));
-      this.classList.add("active");
-      currentCollection = this.getAttribute("data-collection");
-      loadCards();
     });
-  });
-}
-      /*─────────────────────────────*
-       *         EVENT BINDINGS      *
-       *─────────────────────────────*/
-      document.getElementById("add-pokemon-btn").addEventListener("click", addNewPokemon);
-      document.getElementById("new-pokemon-input").addEventListener("keypress", (e) => {
-        if (e.key === "Enter") addNewPokemon();
-      });
-      document.getElementById("cancel-add-btn").addEventListener("click", () => {
-        document.getElementById("add-pokemon-form").style.display = "none";
-        document.getElementById("pokemon-tabs").style.display = "flex";
-        document.querySelector(".tabs-nav .tabs-btn[data-view='all']").click();
-      });
-      document.getElementById("new-collection-btn").addEventListener("click", showCollectionForm);
-      document.getElementById("create-first-collection").addEventListener("click", showCollectionForm);
-      document.getElementById("cancel-collection-btn").addEventListener("click", () => {
-        document.getElementById("add-collection-form").style.display = "none";
-        if (!customCollections.length) document.getElementById("collections-empty").style.display = "block";
-        resetCollectionForm();
-      });
-      document.getElementById("save-collection-btn").addEventListener("click", saveCollection);
-
-      // Advanced filters toggle
-      document.getElementById("toggle-advanced").addEventListener("click", function () {
-        const advancedFilters = document.getElementById("advanced-filters");
-        const toggleText = document.getElementById("toggle-text");
-        const toggleIcon = document.getElementById("toggle-icon");
-        if (advancedFilters.style.display === "none") {
-          advancedFilters.style.display = "grid";
-          toggleText.textContent = "Hide Advanced";
-          toggleIcon.className = "fas fa-chevron-up";
-        } else {
-          advancedFilters.style.display = "none";
-          toggleText.textContent = "Show Advanced";
-          toggleIcon.className = "fas fa-chevron-down";
-        }
-      });
-
-      // Filter input events
-      ["search-input", "filter-select", "sort-select", "reverse-checkbox", "year-input", "foil-checkbox", "price-min", "price-max"]
-        .forEach(id => document.getElementById(id).addEventListener("input", renderCards));
-
-      // Refresh button clears cache and reloads cards
-      document.getElementById("refresh-btn").addEventListener("click", () => {
-        const cacheKey = "cachedCards_" + currentCollection;
-        const cacheTimestampKey = "cacheTimestamp_" + currentCollection;
-        localStorage.removeItem(cacheKey);
-        localStorage.removeItem(cacheTimestampKey);
-        loadCards();
-      });
-
-      // Modal close events
-      const modal = document.getElementById("modal");
-      document.querySelector("#modal .close").addEventListener("click", () => {
-        modal.style.display = "none";
-        document.body.style.overflow = "auto";
-      });
-      window.addEventListener("click", (event) => {
-        if (event.target === modal) modal.style.display = "none";
-      });
-      window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modal.style.display === "block") modal.style.display = "none";
-      });
-
-      /*─────────────────────────────*
-       *       INITIALIZATION        *
-       *─────────────────────────────*/
-      window.addEventListener("DOMContentLoaded", () => {
-        initCustomTabs();
-        initTabs();
-        bindTabEvents(); // Bind click events for default tabs
-
-        loadCards();
-      });
-    })();
+    
+    app.mount('#app');
   </script>
 </body>
 </html>
