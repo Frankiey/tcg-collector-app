@@ -117,33 +117,134 @@
     }
 
     /* Tabs Styles */
-    .tabs {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 0.7rem;
+    .tabs-container {
       margin: 0 auto 1.5rem;
       max-width: 1000px;
       padding: 0 1rem;
+    }
+    
+    .tabs-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary-color) rgba(255, 255, 255, 0.1);
+    }
+    
+    .tabs-nav::-webkit-scrollbar {
+      height: 5px;
+    }
+    
+    .tabs-nav::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+    
+    .tabs-nav::-webkit-scrollbar-thumb {
+      background-color: var(--primary-color);
+      border-radius: 10px;
+    }
+    
+    .tabs-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.6);
+      padding: 0.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .tabs-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+    
+    .tabs-btn.active {
+      background: var(--primary-color);
+      color: white;
+    }
+    
+    .tabs-content {
+      position: relative;
+      background: rgba(30, 33, 48, 0.6);
+      border-radius: 8px;
+      padding: 0.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.5rem;
+      max-height: 170px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary-color) rgba(255, 255, 255, 0.1);
+    }
+    
+    .tabs::-webkit-scrollbar {
+      width: 5px;
+    }
+    
+    .tabs::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+    
+    .tabs::-webkit-scrollbar-thumb {
+      background-color: var(--primary-color);
+      border-radius: 10px;
     }
     
     .tab {
       background: rgba(58, 63, 92, 0.6);
       border: 1px solid rgba(255, 255, 255, 0.1);
       color: var(--font-color);
-      padding: 0.7rem 1.2rem;
-      border-radius: 9999px;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
       cursor: pointer;
       transition: all 0.3s;
       font-weight: 500;
-      font-size: 0.95rem;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      font-size: 0.9rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
       backdrop-filter: blur(5px);
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 0.5rem;
       position: relative;
-      overflow: hidden;
+    }
+    
+    .tab .remove-btn {
+      opacity: 0;
+      width: 18px;
+      height: 18px;
+      background: rgba(255, 82, 82, 0.2);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .tab:hover .remove-btn {
+      opacity: 1;
+    }
+    
+    .tab .remove-btn:hover {
+      background: rgba(255, 82, 82, 0.8);
+      transform: scale(1.1);
     }
     
     .tab::before {
@@ -203,11 +304,54 @@
       padding: 0 1rem;
     }
     
+    .controls-container {
+      background: rgba(21, 23, 34, 0.5);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .controls-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 0.5rem;
+    }
+    
+    .controls-header h3 {
+      font-size: 1rem;
+      font-weight: 500;
+      color: #e6ebf7;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .toggle-filters {
+      background: none;
+      border: none;
+      color: #a0a9c8;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s;
+    }
+    
+    .toggle-filters:hover {
+      color: white;
+    }
+    
     .search-controls {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: minmax(200px, 1fr) repeat(2, minmax(150px, 1fr));
       gap: 1rem;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
     }
     
     .control-group {
@@ -216,11 +360,11 @@
     
     .search-icon {
       position: absolute;
-      left: 15px;
+      left: 12px;
       top: 50%;
       transform: translateY(-50%);
       color: #8c91b6;
-      font-size: 1rem;
+      font-size: 0.9rem;
       pointer-events: none;
     }
     
@@ -228,20 +372,20 @@
     .search-controls select,
     .advanced-filters input {
       width: 100%;
-      padding: 0.9rem 1rem 0.9rem 2.5rem;
-      border-radius: 8px;
+      padding: 0.75rem 1rem 0.75rem 2.2rem;
+      border-radius: 6px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      font-size: 0.95rem;
-      background: rgba(43, 47, 69, 0.8);
+      font-size: 0.9rem;
+      background: rgba(43, 47, 69, 0.6);
       color: var(--font-color);
       transition: all 0.3s;
       backdrop-filter: blur(10px);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
     
     .search-controls select {
       appearance: none;
-      padding-right: 2.5rem;
+      padding-right: 2.2rem;
       cursor: pointer;
     }
     
@@ -254,7 +398,7 @@
       font-family: 'Font Awesome 6 Free';
       font-weight: 900;
       position: absolute;
-      right: 15px;
+      right: 12px;
       top: 50%;
       transform: translateY(-50%);
       color: #8c91b6;
@@ -266,36 +410,43 @@
     .advanced-filters input:focus {
       outline: none;
       border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(255, 82, 82, 0.2);
+      box-shadow: 0 0 0 2px rgba(255, 82, 82, 0.15);
+    }
+    
+    .checkbox-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
     }
     
     .checkbox-group {
       display: flex;
       align-items: center;
-      margin-top: 1rem;
     }
     
     .checkbox-group label {
-      margin-right: 2rem;
       color: #b8bedC;
       display: flex;
       align-items: center;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       cursor: pointer;
     }
     
     .checkbox-group input[type="checkbox"] {
       appearance: none;
       -webkit-appearance: none;
-      width: 1.2rem;
-      height: 1.2rem;
-      border: 2px solid rgba(255, 255, 255, 0.2);
+      width: 1.1rem;
+      height: 1.1rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 4px;
       margin-right: 0.5rem;
       display: grid;
       place-content: center;
       transition: all 0.2s;
       cursor: pointer;
+      background: rgba(43, 47, 69, 0.6);
     }
     
     .checkbox-group input[type="checkbox"]::before {
@@ -321,9 +472,11 @@
     /* Advanced Filters */
     .advanced-filters {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
     }
     
     /* Refresh Button */
@@ -453,15 +606,15 @@
     
     #cards-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-      gap: 1.8rem;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.4rem;
     }
     
     .card {
       background: var(--card-bg);
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-      padding: 1.2rem;
+      border-radius: 12px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      padding: 0.9rem;
       text-align: center;
       transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       position: relative;
@@ -482,8 +635,8 @@
     }
     
     .card:hover {
-      transform: translateY(-10px) scale(1.02);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), var(--card-glow);
+      transform: translateY(-7px) scale(1.02);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3), var(--card-glow);
     }
     
     .card:hover::before {
@@ -737,13 +890,11 @@
       max-width: 100%;
       height: auto;
       border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      transform: perspective(1000px) rotateY(-5deg);
-      transition: transform 0.5s;
+      transition: transform 0.3s;
     }
     
     #modal img:hover {
-      transform: perspective(1000px) rotateY(0deg);
+      transform: scale(1.03);
     }
     
     #modal h2 {
@@ -982,75 +1133,162 @@
   <header>
     <div class="header-content">
       <h1>The Pokemon Collection</h1>
-      <!-- Tabs for each Pokemon -->
-      <div class="tabs">
-        <button class="tab active" data-collection="charizard">Charizard</button>
-        <button class="tab" data-collection="cubone">Cubone</button>
-        <button class="tab" data-collection="psyduck">Psyduck</button>
-        <button class="tab" data-collection="pikachu">Pikachu</button>
-        <button class="tab" data-collection="farfetch'd">Farfetch'd</button>
-        <button class="tab" data-collection="golem">Golem</button>
-        <button class="tab" data-collection="gastly">Gastly</button>
-        <button class="tab" data-collection="haunter">Haunter</button>
-        <button class="tab" data-collection="gengar">Gengar</button>
-        <button class="tab" data-collection="mew">Mew</button>
-        <button class="tab" data-collection="mewtwo">Mewtwo</button>
-        <button class="tab" data-collection="machop">Machop</button>
-        <button class="tab" data-collection="machoke">Machoke</button>
-        <button class="tab" data-collection="machamp">Machamp</button>
+      
+      <!-- Improved Tabs for Pokemon -->
+      <div class="tabs-container">
+        <div class="tabs-nav">
+          <button class="tabs-btn active" data-view="all"><i class="fas fa-th-large"></i></button>
+          <button class="tabs-btn" data-view="favorites"><i class="fas fa-star"></i></button>
+          <button class="tabs-btn" data-view="custom"><i class="fas fa-folder"></i></button>
+          <button class="tabs-btn" data-view="add"><i class="fas fa-plus"></i></button>
+        </div>
+        
+        <div class="tabs-content">
+          <div class="tabs" id="pokemon-tabs">
+            <button class="tab active" data-collection="charizard">
+              <span>Charizard</span>
+              <button class="remove-btn" title="Remove"><i class="fas fa-times"></i></button>
+            </button>
+            <button class="tab" data-collection="cubone">
+              <span>Cubone</span>
+              <button class="remove-btn" title="Remove"><i class="fas fa-times"></i></button>
+            </button>
+            <button class="tab" data-collection="psyduck">
+              <span>Psyduck</span>
+              <button class="remove-btn" title="Remove"><i class="fas fa-times"></i></button>
+            </button>
+            <button class="tab" data-collection="pikachu">
+              <span>Pikachu</span>
+              <button class="remove-btn" title="Remove"><i class="fas fa-times"></i></button>
+            </button>
+            <button class="tab" data-collection="farfetch'd">
+              <span>Farfetch'd</span>
+              <button class="remove-btn" title="Remove"><i class="fas fa-times"></i></button>
+            </button>
+            <button class="tab" data-collection="golem">
+              <span>Golem</span>
+              <button class="remove-btn" title="Remove"><i class="fas fa-times"></i></button>
+            </button>
+            <button class="tab" data-collection="gastly">
+              <span>Gastly</span>
+              <button class="remove-btn" title="Remove"><i class="fas fa-times"></i></button>
+            </button>
+            <button class="tab" data-collection="haunter">
+              <span>Haunter</span>
+              <button class="remove-btn" title="Remove"><i class="fas fa-times"></i></button>
+            </button>
+            <button class="tab" data-collection="gengar">
+              <span>Gengar</span>
+              <button class="remove-btn" title="Remove"><i class="fas fa-times"></i></button>
+            </button>
+            <button class="tab" data-collection="mew">
+              <span>Mew</span>
+              <button class="remove-btn" title="Remove"><i class="fas fa-times"></i></button>
+            </button>
+            <button class="tab" data-collection="mewtwo">
+              <span>Mewtwo</span>
+              <button class="remove-btn" title="Remove"><i class="fas fa-times"></i></button>
+            </button>
+            <button class="tab" data-collection="machop">
+              <span>Machop</span>
+              <button class="remove-btn" title="Remove"><i class="fas fa-times"></i></button>
+            </button>
+            <button class="tab" data-collection="machoke">
+              <span>Machoke</span>
+              <button class="remove-btn" title="Remove"><i class="fas fa-times"></i></button>
+            </button>
+            <button class="tab" data-collection="machamp">
+              <span>Machamp</span>
+              <button class="remove-btn" title="Remove"><i class="fas fa-times"></i></button>
+            </button>
+          </div>
+          
+          <!-- Add Pokemon Form (Initially Hidden) -->
+          <div id="add-pokemon-form" style="display: none; padding: 1rem;">
+            <div style="display: flex; gap: 0.5rem;">
+              <input type="text" id="new-pokemon-input" placeholder="Enter Pokemon name..." style="flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(43,47,69,0.6); color: white;">
+              <button id="add-pokemon-btn" style="background: var(--primary-color); color: white; border: none; border-radius: 4px; padding: 0 1rem; cursor: pointer;">Add</button>
+              <button id="cancel-add-btn" style="background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 4px; padding: 0 1rem; cursor: pointer;">Cancel</button>
+            </div>
+          </div>
+        </div>
       </div>
       
       <div class="controls-wrapper">
-        <!-- Search and sort controls -->
-        <div class="search-controls">
-          <div class="control-group">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" id="search-input" placeholder="Search by name, set, rarity..." />
+        <!-- Improved Search and sort controls -->
+        <div class="controls-container">
+          <div class="controls-header">
+            <h3><i class="fas fa-sliders-h"></i> Filters & Sorting</h3>
+            <button class="toggle-filters" id="toggle-advanced">
+              <span id="toggle-text">Show Advanced</span>
+              <i class="fas fa-chevron-down" id="toggle-icon"></i>
+            </button>
           </div>
           
-          <div class="control-group select-wrapper">
-            <i class="fas fa-filter search-icon"></i>
-            <select id="filter-select">
-              <option value="all">All Cards</option>
-              <option value="bought">Bought</option>
-              <option value="notBought">Not Bought</option>
-              <option value="favorites">Favorites</option>
-            </select>
-          </div>
-          
-          <div class="control-group select-wrapper">
-            <i class="fas fa-sort search-icon"></i>
-            <select id="sort-select">
-              <option value="name">Sort by Name (A-Z)</option>
-              <option value="set">Sort by Set (A-Z)</option>
-              <option value="number">Sort by Card Number (Asc)</option>
-              <option value="rarity">Sort by Rarity (A-Z)</option>
-              <option value="printYear">Sort by Print Year</option>
-            </select>
-          </div>
-        </div>
-        
-        <!-- Advanced Filters -->
-        <div class="advanced-filters">
-          <div class="control-group">
-            <i class="fas fa-calendar-alt search-icon"></i>
-            <input type="text" id="year-input" placeholder="Filter by Printing Year" />
-          </div>
-          
-          <div class="checkbox-group">
-            <label>
-              <input type="checkbox" id="reverse-checkbox" /> 
-              Reverse Order
-            </label>
+          <div class="search-controls">
+            <div class="control-group">
+              <i class="fas fa-search search-icon"></i>
+              <input type="text" id="search-input" placeholder="Search by name, set, rarity..." />
+            </div>
             
-            <label>
-              <input type="checkbox" id="foil-checkbox" /> 
-              Foil Only
-            </label>
+            <div class="control-group select-wrapper">
+              <i class="fas fa-filter search-icon"></i>
+              <select id="filter-select">
+                <option value="all">All Cards</option>
+                <option value="bought">Bought</option>
+                <option value="notBought">Not Bought</option>
+                <option value="favorites">Favorites</option>
+              </select>
+            </div>
+            
+            <div class="control-group select-wrapper">
+              <i class="fas fa-sort search-icon"></i>
+              <select id="sort-select">
+                <option value="name">Sort by Name</option>
+                <option value="set">Sort by Set</option>
+                <option value="number">Sort by Number</option>
+                <option value="rarity">Sort by Rarity</option>
+                <option value="printYear">Sort by Year</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="checkbox-row">
+            <div class="checkbox-group">
+              <label>
+                <input type="checkbox" id="reverse-checkbox" /> 
+                Reverse Order
+              </label>
+            </div>
+            
+            <div class="checkbox-group">
+              <label>
+                <input type="checkbox" id="foil-checkbox" /> 
+                Foil Cards Only
+              </label>
+            </div>
+            
+            <button id="refresh-btn"><i class="fas fa-sync-alt"></i> Refresh</button>
+          </div>
+          
+          <!-- Advanced Filters (Initially Hidden) -->
+          <div class="advanced-filters" id="advanced-filters" style="display: none;">
+            <div class="control-group">
+              <i class="fas fa-calendar-alt search-icon"></i>
+              <input type="text" id="year-input" placeholder="Filter by Year" />
+            </div>
+            
+            <div class="control-group">
+              <i class="fas fa-dollar-sign search-icon"></i>
+              <input type="text" id="price-min" placeholder="Min Price ($)" />
+            </div>
+            
+            <div class="control-group">
+              <i class="fas fa-dollar-sign search-icon"></i>
+              <input type="text" id="price-max" placeholder="Max Price ($)" />
+            </div>
           </div>
         </div>
-        
-        <button id="refresh-btn"><i class="fas fa-sync-alt"></i> Get Latest Cards</button>
       </div>
     </div>
   </header>
@@ -1245,6 +1483,8 @@
       const sortValue = document.getElementById('sort-select').value;
       const yearFilter = document.getElementById('year-input').value.toLowerCase();
       const foilFilter = document.getElementById('foil-checkbox').checked;
+      const priceMin = parseFloat(document.getElementById('price-min').value) || 0;
+      const priceMax = parseFloat(document.getElementById('price-max').value) || Infinity;
       
       const cardsContainer = document.getElementById('cards-container');
       cardsContainer.innerHTML = '';
@@ -1261,8 +1501,29 @@
         if (yearFilter && (!releaseYear || !releaseYear.toLowerCase().includes(yearFilter))) {
           return false;
         }
+        
         if (foilFilter && (!card.rarity || !card.rarity.toLowerCase().includes('holo'))) {
           return false;
+        }
+        
+        // Price filtering
+        if (priceMin > 0 || priceMax < Infinity) {
+          let cardPrice = 0;
+          
+          // Try to get price from tcgplayer
+          if (card.tcgplayer?.prices) {
+            const priceObj = Object.values(card.tcgplayer.prices)[0];
+            cardPrice = priceObj?.market || priceObj?.mid || 0;
+          }
+          // Try cardmarket if tcgplayer doesn't have a price
+          else if (card.cardmarket?.prices) {
+            cardPrice = card.cardmarket.prices.averageSellPrice || 
+                        card.cardmarket.prices.trendPrice || 0;
+          }
+          
+          if (cardPrice < priceMin || cardPrice > priceMax) {
+            return false;
+          }
         }
         
         if (filterValue === 'bought' && !boughtCards[card.id]) return false;
@@ -1571,17 +1832,279 @@
       }
     };
 
-    // Tab functionality for each Pokemon
-    const tabs = document.querySelectorAll('.tabs .tab');
+    // Custom Pokémon tabs storage
+    const STORAGE_KEY_CUSTOM_TABS = 'customPokemonTabs';
+    let customTabs = JSON.parse(localStorage.getItem(STORAGE_KEY_CUSTOM_TABS)) || [];
+    
+    // Tab navigation functionality
+    const tabsNavBtns = document.querySelectorAll('.tabs-nav .tabs-btn');
+    const pokemonTabs = document.getElementById('pokemon-tabs');
+    const addPokemonForm = document.getElementById('add-pokemon-form');
+    
+    tabsNavBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabsNavBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const view = btn.getAttribute('data-view');
+        
+        // Hide all forms first
+        addPokemonForm.style.display = 'none';
+        pokemonTabs.style.display = 'flex';
+        
+        if (view === 'add') {
+          pokemonTabs.style.display = 'none';
+          addPokemonForm.style.display = 'block';
+          document.getElementById('new-pokemon-input').focus();
+        } 
+        else if (view === 'favorites') {
+          renderFavoritesPokemonTabs();
+        }
+        else if (view === 'custom') {
+          renderCustomPokemonTabs();
+        }
+        else {
+          // Default 'all' view
+          renderAllPokemonTabs();
+        }
+      });
+    });
+    
+    // Render different tab views
+    function renderAllPokemonTabs() {
+      const tabs = document.querySelectorAll('#pokemon-tabs .tab');
+      tabs.forEach(tab => {
+        tab.style.display = 'flex';
+      });
+    }
+    
+    function renderFavoritesPokemonTabs() {
+      const tabs = document.querySelectorAll('#pokemon-tabs .tab');
+      tabs.forEach(tab => {
+        const collection = tab.getAttribute('data-collection');
+        // Check if there are any favorite cards for this Pokémon
+        const hasFavorites = Object.keys(favoriteCards).some(cardId => {
+          return allCards.find(card => 
+            card.id === cardId && 
+            card.name.toLowerCase() === collection.toLowerCase()
+          );
+        });
+        
+        tab.style.display = hasFavorites ? 'flex' : 'none';
+      });
+    }
+    
+    function renderCustomPokemonTabs() {
+      const tabs = document.querySelectorAll('#pokemon-tabs .tab');
+      tabs.forEach(tab => {
+        const collection = tab.getAttribute('data-collection');
+        tab.style.display = customTabs.includes(collection.toLowerCase()) ? 'flex' : 'none';
+      });
+    }
+    
+    // Add new Pokemon functionality
+    document.getElementById('add-pokemon-btn').addEventListener('click', addNewPokemon);
+    document.getElementById('new-pokemon-input').addEventListener('keypress', e => {
+      if (e.key === 'Enter') addNewPokemon();
+    });
+    
+    document.getElementById('cancel-add-btn').addEventListener('click', () => {
+      addPokemonForm.style.display = 'none';
+      pokemonTabs.style.display = 'flex';
+      tabsNavBtns[0].click(); // Back to all view
+    });
+    
+    function addNewPokemon() {
+      const pokemonName = document.getElementById('new-pokemon-input').value.trim();
+      
+      if (!pokemonName) {
+        alert('Please enter a Pokemon name');
+        return;
+      }
+      
+      // Check if tab already exists
+      const existingTab = Array.from(document.querySelectorAll('#pokemon-tabs .tab')).find(
+        tab => tab.querySelector('span').textContent.toLowerCase() === pokemonName.toLowerCase()
+      );
+      
+      if (existingTab) {
+        alert('This Pokemon is already in your collection!');
+        return;
+      }
+      
+      // Create new tab
+      const newTab = document.createElement('button');
+      newTab.className = 'tab';
+      newTab.setAttribute('data-collection', pokemonName.toLowerCase());
+      
+      const tabText = document.createElement('span');
+      tabText.textContent = pokemonName;
+      newTab.appendChild(tabText);
+      
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'remove-btn';
+      removeBtn.title = 'Remove';
+      removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+      newTab.appendChild(removeBtn);
+      
+      // Add event listeners
+      newTab.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-btn')) return;
+        
+        document.querySelectorAll('#pokemon-tabs .tab').forEach(t => {
+          t.classList.remove('active');
+        });
+        this.classList.add('active');
+        currentCollection = this.getAttribute('data-collection');
+        loadCards();
+      });
+      
+      removeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        handleTabRemoval(newTab);
+      });
+      
+      // Add to DOM and save to custom tabs
+      pokemonTabs.appendChild(newTab);
+      customTabs.push(pokemonName.toLowerCase());
+      localStorage.setItem(STORAGE_KEY_CUSTOM_TABS, JSON.stringify(customTabs));
+      
+      // Reset form and switch view
+      document.getElementById('new-pokemon-input').value = '';
+      tabsNavBtns[0].click(); // Back to all view
+      
+      // Select the new tab
+      newTab.click();
+    }
+    
+    // Remove tab functionality
+    const existingRemoveBtns = document.querySelectorAll('#pokemon-tabs .tab .remove-btn');
+    existingRemoveBtns.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const tab = this.closest('.tab');
+        handleTabRemoval(tab);
+      });
+    });
+    
+    function handleTabRemoval(tab) {
+      const pokemonName = tab.getAttribute('data-collection');
+      
+      // Default pokemon can't be removed
+      const defaultPokemon = ['charizard', 'cubone', 'psyduck', 'pikachu', 'farfetch\'d', 
+                             'golem', 'gastly', 'haunter', 'gengar', 'mew', 'mewtwo',
+                             'machop', 'machoke', 'machamp'];
+      
+      if (defaultPokemon.includes(pokemonName.toLowerCase())) {
+        alert('Default Pokemon cannot be removed from the collection.');
+        return;
+      }
+      
+      if (confirm(`Remove ${pokemonName} from your collection tabs?`)) {
+        // Update custom tabs list
+        customTabs = customTabs.filter(name => name !== pokemonName.toLowerCase());
+        localStorage.setItem(STORAGE_KEY_CUSTOM_TABS, JSON.stringify(customTabs));
+        
+        // Remove from DOM
+        tab.remove();
+        
+        // If current tab was selected, switch to first tab
+        if (tab.classList.contains('active')) {
+          const firstTab = document.querySelector('#pokemon-tabs .tab');
+          if (firstTab) {
+            firstTab.click();
+          }
+        }
+      }
+    }
+    
+    // Initialize custom tabs from storage
+    function initCustomTabs() {
+      customTabs.forEach(pokemonName => {
+        // Skip if it's a default tab or already exists
+        const defaultPokemon = ['charizard', 'cubone', 'psyduck', 'pikachu', 'farfetch\'d', 
+                               'golem', 'gastly', 'haunter', 'gengar', 'mew', 'mewtwo',
+                               'machop', 'machoke', 'machamp'];
+        
+        if (defaultPokemon.includes(pokemonName.toLowerCase())) {
+          return;
+        }
+        
+        const existingTab = Array.from(document.querySelectorAll('#pokemon-tabs .tab')).find(
+          tab => tab.getAttribute('data-collection').toLowerCase() === pokemonName.toLowerCase()
+        );
+        
+        if (existingTab) {
+          return;
+        }
+        
+        // Create new tab
+        const newTab = document.createElement('button');
+        newTab.className = 'tab';
+        newTab.setAttribute('data-collection', pokemonName.toLowerCase());
+        
+        const tabText = document.createElement('span');
+        tabText.textContent = pokemonName;
+        newTab.appendChild(tabText);
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.title = 'Remove';
+        removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+        newTab.appendChild(removeBtn);
+        
+        // Add event listeners
+        newTab.addEventListener('click', function(e) {
+          if (e.target.closest('.remove-btn')) return;
+          
+          document.querySelectorAll('#pokemon-tabs .tab').forEach(t => {
+            t.classList.remove('active');
+          });
+          this.classList.add('active');
+          currentCollection = this.getAttribute('data-collection');
+          loadCards();
+        });
+        
+        removeBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          handleTabRemoval(newTab);
+        });
+        
+        // Add to DOM
+        pokemonTabs.appendChild(newTab);
+      });
+    }
+    
+    // Advanced filters toggle
+    document.getElementById('toggle-advanced').addEventListener('click', function() {
+      const advancedFilters = document.getElementById('advanced-filters');
+      const toggleText = document.getElementById('toggle-text');
+      const toggleIcon = document.getElementById('toggle-icon');
+      
+      if (advancedFilters.style.display === 'none') {
+        advancedFilters.style.display = 'grid';
+        toggleText.textContent = 'Hide Advanced';
+        toggleIcon.className = 'fas fa-chevron-up';
+      } else {
+        advancedFilters.style.display = 'none';
+        toggleText.textContent = 'Show Advanced';
+        toggleIcon.className = 'fas fa-chevron-down';
+      }
+    });
+    
+    // Pokemon tab functionality
+    const tabs = document.querySelectorAll('#pokemon-tabs .tab');
     tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
+      tab.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-btn')) return;
+        
         tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        currentCollection = tab.getAttribute('data-collection');
+        this.classList.add('active');
+        currentCollection = this.getAttribute('data-collection');
         loadCards();
       });
     });
-
+    
     // Refresh button functionality to clear cache and get latest cards
     document.getElementById('refresh-btn').addEventListener('click', () => {
       const cacheKey = 'cachedCards_' + currentCollection;
@@ -1598,9 +2121,14 @@
     document.getElementById('reverse-checkbox').addEventListener('change', renderCards);
     document.getElementById('year-input').addEventListener('input', renderCards);
     document.getElementById('foil-checkbox').addEventListener('change', renderCards);
+    document.getElementById('price-min').addEventListener('input', renderCards);
+    document.getElementById('price-max').addEventListener('input', renderCards);
 
     // Initialize the app
-    window.addEventListener('DOMContentLoaded', loadCards);
+    window.addEventListener('DOMContentLoaded', () => {
+      initCustomTabs();
+      loadCards();
+    });
   </script>
 </body>
 </html>
