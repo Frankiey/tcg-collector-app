@@ -9,8 +9,6 @@
   <link rel="stylesheet" href="styles.css">
   <!-- Vue 3 CDN -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-  <!-- idb - IndexedDB Promised Library -->
-  <script src="https://cdn.jsdelivr.net/npm/idb@7/build/iife/index-min.js"></script>
 </head>
 <body>
   <div id="app">
@@ -562,198 +560,306 @@
      */
     const DBService = {
       db: null,
+      connectionPromise: null, // Track the connection promise
+      isConnecting: false,     // Track connection state
 
-      // Initialize IndexedDB
+      // Initialize IndexedDB with connection management
       async init() {
-        return new Promise((resolve, reject) => {
-          const request = window.indexedDB.open(CONFIG.DB_NAME, CONFIG.DB_VERSION);
+        // Return existing connection if available
+        if (this.db && this.db.transaction) {
+          return this.db;
+        }
+        
+        // Return existing connection promise if already connecting
+        if (this.isConnecting && this.connectionPromise) {
+          return this.connectionPromise;
+        }
+        
+        this.isConnecting = true;
+        
+        this.connectionPromise = new Promise((resolve, reject) => {
+          try {
+            const request = window.indexedDB.open(CONFIG.DB_NAME, CONFIG.DB_VERSION);
 
-          request.onerror = (event) => {
-            console.error('IndexedDB error:', event.target.error);
-            reject(event.target.error);
-          };
+            request.onerror = (event) => {
+              console.error('IndexedDB error:', event.target.error);
+              this.isConnecting = false;
+              reject(event.target.error);
+            };
 
-          request.onsuccess = (event) => {
-            this.db = event.target.result;
-            resolve(this.db);
-          };
+            request.onsuccess = (event) => {
+              this.db = event.target.result;
+              
+              // Handle unexpected connection closures
+              this.db.onclose = () => {
+                console.log('IndexedDB connection closed unexpectedly');
+                this.db = null;
+                this.isConnecting = false;
+              };
+              
+              // Handle version change (another tab/window requested a version change)
+              this.db.onversionchange = (event) => {
+                this.db.close();
+                console.log('IndexedDB version change, connection closed');
+                this.db = null;
+                this.isConnecting = false;
+                alert('Database updated in another window. Please refresh this page.');
+              };
+              
+              this.isConnecting = false;
+              resolve(this.db);
+            };
 
-          request.onupgradeneeded = (event) => {
-            const db = event.target.result;
-            
-            // Create card store
-            if (!db.objectStoreNames.contains('cards')) {
-              const cardStore = db.createObjectStore('cards', { keyPath: 'id' });
-              cardStore.createIndex('collection', 'collection', { unique: false });
-              cardStore.createIndex('lastUpdated', 'lastUpdated', { unique: false });
-            }
-            
-            // Create settings store
-            if (!db.objectStoreNames.contains('settings')) {
-              db.createObjectStore('settings', { keyPath: 'key' });
-            }
-            
-            // Create user data store
-            if (!db.objectStoreNames.contains('userData')) {
-              db.createObjectStore('userData', { keyPath: 'key' });
-            }
-          };
+            request.onupgradeneeded = (event) => {
+              const db = event.target.result;
+              
+              // Create card store
+              if (!db.objectStoreNames.contains('cards')) {
+                const cardStore = db.createObjectStore('cards', { keyPath: 'id' });
+                cardStore.createIndex('collection', 'collection', { unique: false });
+                cardStore.createIndex('lastUpdated', 'lastUpdated', { unique: false });
+              }
+              
+              // Create settings store
+              if (!db.objectStoreNames.contains('settings')) {
+                db.createObjectStore('settings', { keyPath: 'key' });
+              }
+              
+              // Create user data store
+              if (!db.objectStoreNames.contains('userData')) {
+                db.createObjectStore('userData', { keyPath: 'key' });
+              }
+            };
+          } catch (err) {
+            this.isConnecting = false;
+            reject(err);
+          }
         });
+        
+        return this.connectionPromise;
       },
 
-      // Card operations
+      // Safely execute a database operation with retries
+      async executeWithRetry(operation, maxRetries = 3) {
+        let retries = 0;
+        let lastError;
+        
+        while (retries < maxRetries) {
+          try {
+            // Ensure DB is initialized before each attempt
+            await this.init();
+            return await operation();
+          } catch (error) {
+            retries++;
+            lastError = error;
+            console.warn(`Database operation failed (attempt ${retries}/${maxRetries}):`, error);
+            
+            // Reset DB connection if the error is related to closed connection
+            if (
+              error.name === 'InvalidStateError' || 
+              (error.message && error.message.includes('connection is closing'))
+            ) {
+              this.db = null;
+              this.isConnecting = false;
+              await new Promise(resolve => setTimeout(resolve, 300 * retries)); // Increasing backoff
+            }
+          }
+        }
+        
+        throw lastError || new Error('Database operation failed after multiple retries');
+      },
+
+      // Card operations with retry logic
       async saveCards(collection, cards) {
-        const tx = this.db.transaction('cards', 'readwrite');
-        const store = tx.objectStore('cards');
-        
-        // First delete old cards for this collection
-        const collectionIndex = store.index('collection');
-        const collectionRequest = collectionIndex.getAllKeys(collection);
-        
-        return new Promise((resolve, reject) => {
-          collectionRequest.onsuccess = (event) => {
-            const existingKeys = event.target.result;
-            
-            // Delete existing cards for this collection
-            const deletePromises = existingKeys.map(key => {
-              return new Promise((deleteResolve) => {
-                const deleteRequest = store.delete(key);
-                deleteRequest.onsuccess = () => deleteResolve();
-              });
-            });
-            
-            Promise.all(deletePromises).then(() => {
-              // Add new cards
-              const timestamp = Date.now();
-              const addPromises = cards.map(card => {
-                card.collection = collection;
-                card.lastUpdated = timestamp;
-                return new Promise((addResolve) => {
-                  const addRequest = store.put(card);
-                  addRequest.onsuccess = () => addResolve();
-                });
-              });
-              
-              Promise.all(addPromises).then(() => {
-                // Save metadata
+        return this.executeWithRetry(async () => {
+          const tx = this.db.transaction('cards', 'readwrite');
+          const store = tx.objectStore('cards');
+          
+          // Add promise-based transaction completion tracking
+          const txComplete = new Promise((resolve, reject) => {
+            tx.oncomplete = resolve;
+            tx.onerror = () => reject(tx.error);
+            tx.onabort = () => reject(new Error('Transaction aborted'));
+          });
+          
+          // First delete old cards for this collection
+          const collectionIndex = store.index('collection');
+          const collectionRequest = collectionIndex.getAllKeys(collection);
+          
+          return new Promise((resolve, reject) => {
+            collectionRequest.onsuccess = async (event) => {
+              try {
+                const existingKeys = event.target.result;
+                
+                // Delete existing cards for this collection
+                for (const key of existingKeys) {
+                  store.delete(key);
+                }
+                
+                // Add new cards
+                const timestamp = Date.now();
+                for (const card of cards) {
+                  card.collection = collection;
+                  card.lastUpdated = timestamp;
+                  store.put(card);
+                }
+                
+                // Save metadata in a new transaction
+                await txComplete;
+                
                 const settingsTx = this.db.transaction('settings', 'readwrite');
                 const settingsStore = settingsTx.objectStore('settings');
+                
+                // Create a promise for settings transaction
+                const settingsTxComplete = new Promise((settingsResolve, settingsReject) => {
+                  settingsTx.oncomplete = settingsResolve;
+                  settingsTx.onerror = () => settingsReject(settingsTx.error);
+                });
+                
                 settingsStore.put({
                   key: `collection_${collection}`,
                   timestamp: timestamp,
                   cardsCount: cards.length
                 });
                 
-                settingsTx.oncomplete = () => resolve();
-              });
-            });
-          };
-          
-          collectionRequest.onerror = (event) => reject(event.target.error);
-          tx.onerror = (event) => reject(event.target.error);
+                await settingsTxComplete;
+                resolve();
+              } catch (err) {
+                reject(err);
+              }
+            };
+            
+            collectionRequest.onerror = (event) => reject(event.target.error);
+          });
         });
       },
 
       async getCards(collection) {
-        const tx = this.db.transaction('cards', 'readonly');
-        const store = tx.objectStore('cards');
-        const index = store.index('collection');
-        const request = index.getAll(collection);
-        
-        return new Promise((resolve, reject) => {
-          request.onsuccess = (event) => resolve(event.target.result);
-          request.onerror = (event) => reject(event.target.error);
+        return this.executeWithRetry(async () => {
+          const tx = this.db.transaction('cards', 'readonly');
+          const store = tx.objectStore('cards');
+          const index = store.index('collection');
+          
+          return new Promise((resolve, reject) => {
+            const request = index.getAll(collection);
+            request.onsuccess = (event) => resolve(event.target.result);
+            request.onerror = (event) => reject(event.target.error);
+          });
         });
       },
 
       async getCardMetadata(collection) {
-        const tx = this.db.transaction('settings', 'readonly');
-        const store = tx.objectStore('settings');
-        const request = store.get(`collection_${collection}`);
-        
-        return new Promise((resolve, reject) => {
-          request.onsuccess = (event) => resolve(event.target.result || null);
-          request.onerror = (event) => reject(event.target.error);
+        return this.executeWithRetry(async () => {
+          const tx = this.db.transaction('settings', 'readonly');
+          const store = tx.objectStore('settings');
+          
+          return new Promise((resolve, reject) => {
+            const request = store.get(`collection_${collection}`);
+            request.onsuccess = (event) => resolve(event.target.result || null);
+            request.onerror = (event) => reject(event.target.error);
+          });
         });
       },
 
-      // User data operations
+      // User data operations with retry logic
       async saveUserData(key, data) {
-        const tx = this.db.transaction('userData', 'readwrite');
-        const store = tx.objectStore('userData');
-        const request = store.put({ key, data, timestamp: Date.now() });
+        // Convert any reactive Vue objects to plain objects before saving
+        const plainData = utils.toPlainObject(data);
         
-        return new Promise((resolve, reject) => {
-          request.onsuccess = () => resolve();
-          request.onerror = (event) => reject(event.target.error);
+        return this.executeWithRetry(async () => {
+          const tx = this.db.transaction('userData', 'readwrite');
+          const store = tx.objectStore('userData');
+          
+          return new Promise((resolve, reject) => {
+            const request = store.put({ key, data: plainData, timestamp: Date.now() });
+            request.onsuccess = () => resolve();
+            request.onerror = (event) => reject(event.target.error);
+            
+            // Add transaction completion handling
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+          });
         });
       },
 
       async getUserData(key) {
-        const tx = this.db.transaction('userData', 'readonly');
-        const store = tx.objectStore('userData');
-        const request = store.get(key);
-        
-        return new Promise((resolve, reject) => {
-          request.onsuccess = (event) => {
-            const result = event.target.result;
-            resolve(result ? result.data : null);
-          };
-          request.onerror = (event) => reject(event.target.error);
+        return this.executeWithRetry(async () => {
+          const tx = this.db.transaction('userData', 'readonly');
+          const store = tx.objectStore('userData');
+          
+          return new Promise((resolve, reject) => {
+            const request = store.get(key);
+            request.onsuccess = (event) => {
+              const result = event.target.result;
+              resolve(result ? result.data : null);
+            };
+            request.onerror = (event) => reject(event.target.error);
+          });
         });
       },
 
       async getAllUserData() {
-        const tx = this.db.transaction('userData', 'readonly');
-        const store = tx.objectStore('userData');
-        const request = store.getAll();
-        
-        return new Promise((resolve, reject) => {
-          request.onsuccess = (event) => {
-            const result = event.target.result;
-            const dataMap = {};
-            
-            result.forEach(item => {
-              dataMap[item.key] = item.data;
-            });
-            
-            resolve(dataMap);
-          };
-          request.onerror = (event) => reject(event.target.error);
+        return this.executeWithRetry(async () => {
+          const tx = this.db.transaction('userData', 'readonly');
+          const store = tx.objectStore('userData');
+          
+          return new Promise((resolve, reject) => {
+            const request = store.getAll();
+            request.onsuccess = (event) => {
+              const result = event.target.result;
+              const dataMap = {};
+              
+              result.forEach(item => {
+                dataMap[item.key] = item.data;
+              });
+              
+              resolve(dataMap);
+            };
+            request.onerror = (event) => reject(event.target.error);
+          });
         });
       },
 
       // Export all data
       async exportAllData() {
-        const userData = await this.getAllUserData();
-        const cardData = {};
-        
-        // Get unique collections
-        const tx = this.db.transaction('settings', 'readonly');
-        const store = tx.objectStore('settings');
-        const request = store.getAll();
-        
-        return new Promise((resolve, reject) => {
-          request.onsuccess = async (event) => {
-            const collections = event.target.result
-              .filter(item => item.key.startsWith('collection_'))
-              .map(item => item.key.replace('collection_', ''));
-            
-            // Get cards for each collection
-            const collectionPromises = collections.map(async collection => {
-              cardData[collection] = await this.getCards(collection);
-            });
-            
-            await Promise.all(collectionPromises);
-            
-            resolve({
-              version: CONFIG.CACHE_VERSION,
-              timestamp: Date.now(),
-              userData,
-              cardData
-            });
-          };
-          request.onerror = (event) => reject(event.target.error);
+        return this.executeWithRetry(async () => {
+          const userData = await this.getAllUserData();
+          const cardData = {};
+          
+          // Get unique collections
+          const tx = this.db.transaction('settings', 'readonly');
+          const store = tx.objectStore('settings');
+          
+          return new Promise((resolve, reject) => {
+            const request = store.getAll();
+            request.onsuccess = async (event) => {
+              try {
+                const collections = event.target.result
+                  .filter(item => item.key.startsWith('collection_'))
+                  .map(item => item.key.replace('collection_', ''));
+                
+                // Get cards for each collection
+                for (const collection of collections) {
+                  try {
+                    cardData[collection] = await this.getCards(collection);
+                  } catch (error) {
+                    console.warn(`Error getting cards for collection ${collection}:`, error);
+                    cardData[collection] = []; // Use empty array for failed collections
+                  }
+                }
+                
+                resolve({
+                  version: CONFIG.CACHE_VERSION,
+                  timestamp: Date.now(),
+                  userData,
+                  cardData
+                });
+              } catch (error) {
+                reject(error);
+              }
+            };
+            request.onerror = (event) => reject(event.target.error);
+          });
         });
       },
 
@@ -778,6 +884,20 @@
         }
         
         return true;
+      },
+
+      // Close and reset database connection (useful for cleanup)
+      closeConnection() {
+        if (this.db) {
+          try {
+            this.db.close();
+            console.log('Database connection closed cleanly');
+          } catch (e) {
+            console.error('Error closing database:', e);
+          }
+          this.db = null;
+          this.isConnecting = false;
+        }
       }
     };
 
@@ -915,6 +1035,26 @@
         }
         
         return cardPrice;
+      },
+      
+      // Convert Vue reactive objects to plain objects
+      toPlainObject(obj) {
+        // Handle non-objects
+        if (obj === null || typeof obj !== 'object') {
+          return obj;
+        }
+        
+        // Use JSON parse/stringify for a deep clone that removes Vue proxies
+        try {
+          return JSON.parse(JSON.stringify(obj));
+        } catch (e) {
+          console.error('Error converting reactive object to plain object:', e);
+          // Fallback to a simple object copy if JSON fails
+          if (Array.isArray(obj)) {
+            return [...obj];
+          }
+          return {...obj};
+        }
       }
     };
 
@@ -1439,17 +1579,25 @@
         
         async saveToStorage(key, data) {
           try {
+            // Convert Vue reactive objects to plain objects
+            const plainData = utils.toPlainObject(data);
+            
             // Save to IndexedDB
             if (DBService.db) {
-              await DBService.saveUserData(key, data);
+              await DBService.saveUserData(key, plainData);
             }
             
             // Backup to localStorage
-            localStorage.setItem(key, JSON.stringify(data));
+            localStorage.setItem(key, JSON.stringify(plainData));
           } catch (error) {
             console.error('Error saving to storage:', error);
             // Still try localStorage as fallback
-            localStorage.setItem(key, JSON.stringify(data));
+            try {
+              const plainData = utils.toPlainObject(data);
+              localStorage.setItem(key, JSON.stringify(plainData));
+            } catch (e) {
+              console.error('Fatal storage error:', e);
+            }
           }
         },
         
@@ -1543,14 +1691,23 @@
         },
         
         async toggleCardFavorite(cardId) {
-          this.favoriteCards[cardId] = !this.favoriteCards[cardId];
-          await this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.FAVORITES, this.favoriteCards);
-          
-          if (this.favoriteCards[cardId]) {
+          try {
+            this.favoriteCards[cardId] = !this.favoriteCards[cardId]; 
+            await this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.FAVORITES, this.favoriteCards);
+            
+            if (this.favoriteCards[cardId]) {
+              this.showNotification({
+                title: 'Card Favorited',
+                message: 'Card has been added to your favorites',
+                type: 'success'
+              });
+            }
+          } catch (error) {
+            console.error('Error toggling favorite status:', error);
             this.showNotification({
-              title: 'Card Favorited',
-              message: 'Card has been added to your favorites',
-              type: 'success'
+              title: 'Operation Failed',
+              message: 'Could not update favorite status. Please try again.',
+              type: 'error'
             });
           }
         },
@@ -1840,6 +1997,9 @@
         // Clean up any event listeners or resources
         window.removeEventListener('online', OfflineService.updateOnlineStatus);
         window.removeEventListener('offline', OfflineService.updateOnlineStatus);
+        
+        // Close DB connection when app unmounts
+        DBService.closeConnection();
       }
     });
     
@@ -1850,6 +2010,11 @@
       try {
         // Mount the Vue app
         app.mount('#app');
+        
+        // Add event listener to close the database when the page unloads
+        window.addEventListener('beforeunload', () => {
+          DBService.closeConnection();
+        });
         
         // Register service worker for offline support if available and on a supported protocol
         if ('serviceWorker' in navigator && 
