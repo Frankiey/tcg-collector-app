@@ -2161,49 +2161,57 @@ tabsNavBtns.forEach(btn => {
   });
 });
 
-// Favorites view functionality
 function renderFavoriteCards() {
   const container = document.getElementById('favorites-container');
-  const emptyState = document.getElementById('favorites-empty');
-  
-  // Filter all cards to find favorites
+  // Ensure the empty state element exists. If it was removed, recreate it.
+  let emptyState = document.getElementById('favorites-empty');
+  if (!emptyState) {
+    emptyState = document.createElement('div');
+    emptyState.className = 'empty-state';
+    emptyState.id = 'favorites-empty';
+    emptyState.innerHTML = `
+      <i class="fas fa-star"></i>
+      <h4>No favorites yet</h4>
+      <p>Star your favorite cards to see them here</p>
+    `;
+    container.appendChild(emptyState);
+  }
+
+  // Remove any card elements but keep the emptyState element intact
+  Array.from(container.children).forEach(child => {
+    if (child.id !== 'favorites-empty') {
+      container.removeChild(child);
+    }
+  });
+
+  // Get favorite card IDs from storage
   const favoriteCardIds = Object.keys(favoriteCards).filter(id => favoriteCards[id]);
-  
+
   if (favoriteCardIds.length === 0) {
-    container.innerHTML = '';
     emptyState.style.display = 'block';
     return;
   }
-  
   emptyState.style.display = 'none';
-  container.innerHTML = '';
-  
-  // Find favorite cards across all cached collections
-  let allFavoriteCards = [];
-  
-  // Function to load and check a specific collection for favorite cards
-  const checkCollection = async (pokemonName) => {
-    const cacheKey = 'cachedCards_' + pokemonName;
-    let collectionCards = JSON.parse(localStorage.getItem(cacheKey)) || [];
-    
-    // Find favorites in this collection
-    const favorites = collectionCards.filter(card => favoriteCardIds.includes(card.id));
-    allFavoriteCards = [...allFavoriteCards, ...favorites];
-    
-    // Render if we have cards
-    if (allFavoriteCards.length > 0) {
-      renderFavoriteCardsList(allFavoriteCards);
-    }
-  };
-  
-  // Get all possible Pokemon names from tabs
+
+  // Get all Pokémon names from tabs
   const allPokemonTabs = document.querySelectorAll('#pokemon-tabs .tab');
-  const pokemonNames = Array.from(allPokemonTabs).map(tab => 
-    tab.getAttribute('data-collection')
-  );
-  
-  // Check each collection
-  pokemonNames.forEach(checkCollection);
+  const pokemonNames = Array.from(allPokemonTabs).map(tab => tab.getAttribute('data-collection'));
+
+  // Gather favorite cards from all collections
+  Promise.all(
+    pokemonNames.map(pokemonName => {
+      const cacheKey = 'cachedCards_' + pokemonName;
+      let collectionCards = JSON.parse(localStorage.getItem(cacheKey)) || [];
+      return collectionCards.filter(card => favoriteCardIds.includes(card.id));
+    })
+  ).then(results => {
+    // Flatten and deduplicate favorites (using card.id as the key)
+    let allFavoriteCards = results.flat();
+    const uniqueFavorites = Array.from(
+      new Map(allFavoriteCards.map(card => [card.id, card])).values()
+    );
+    renderFavoriteCardsList(uniqueFavorites);
+  });
 }
 
 function renderFavoriteCardsList(cards) {
