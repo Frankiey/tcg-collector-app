@@ -29,6 +29,17 @@
   --pokemon-psyduck: #42a5f5;
   --pokemon-cubone: #8d6e63;
 }
+
+/* Fix for white overflow on Mac */
+html {
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--font-color);
+  height: 100%;
+  overflow-x: hidden;
+  overscroll-behavior: none;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -44,6 +55,7 @@ body {
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
+  overscroll-behavior: none;
 }
 
 body::before {
@@ -809,6 +821,19 @@ main {
   gap: 1.4rem;
 }
 
+/* Fixing the favorites view container to show smaller cards */
+#favorites-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+#favorites-container .card {
+  transform: scale(0.92);
+  transform-origin: top center;
+  margin-bottom: -0.5rem;
+}
+
 .card {
   background: var(--card-bg);
   border-radius: 12px;
@@ -1313,6 +1338,7 @@ main {
 </style>
 </head>
 <body>
+<!-- Rest of the HTML body remains unchanged -->
 <!-- Loading Indicator -->
 <div id="loading-indicator">
 <svg class="spinner" viewBox="0 0 50 50">
