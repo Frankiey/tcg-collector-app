@@ -4,154 +4,397 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Pokemon Collection</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
   <style>
-    /* Dark theme CSS Variables */
+    /* Modern Theme CSS Variables */
     :root {
-      --bg-color: #121212;
-      --card-bg: #1e1e1e;
-      --card-border: #333;
-      --shadow-color: rgba(0, 0, 0, 0.6);
-      --font-color: #e0e0e0;
-      --primary-color: #b3401e;
-      --primary-hover: #9b2502;
-      --bought-bg: #2e7d32;
-      --success-color: #66bb6a;
-      --header-bg: linear-gradient(135deg, #424242, #212121);
+      --bg-gradient: linear-gradient(135deg, #0d0f18, #1c1f2e);
+      --card-bg: rgba(35, 38, 56, 0.8);
+      --card-border: rgba(98, 108, 153, 0.3);
+      --shadow-color: rgba(0, 0, 0, 0.3);
+      --font-primary: 'Poppins', sans-serif;
+      --font-color: #e6ebf7;
+      --primary-color: #ff5252;
+      --primary-hover: #ff7676;
+      --secondary-color: #3a67cf;
+      --secondary-hover: #4c7be3;
+      --bought-bg: rgba(35, 156, 87, 0.25);
+      --success-color: #2ecc71;
+      --header-bg: linear-gradient(135deg, #171b2c, #0d0f18);
+      --glassmorphism: rgba(29, 32, 43, 0.7);
+      --card-glow: 0 0 15px rgba(255, 82, 82, 0.3);
+      --pokemon-charizard: #ff5722;
+      --pokemon-pikachu: #fdd835;
+      --pokemon-psyduck: #42a5f5;
+      --pokemon-cubone: #8d6e63;
     }
 
     /* Global Styles */
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: var(--bg-color);
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-primary);
+      background: var(--bg-gradient);
+      background-attachment: fixed;
       color: var(--font-color);
+      margin: 0;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCI+CiAgPGNpcmNsZSBjeD0iMjUiIGN5PSIyNSIgcj0iMTAiIGZpbGw9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wMikiIC8+Cjwvc3ZnPg==');
+      opacity: 0.4;
+      z-index: -1;
     }
     
     header {
       background: var(--header-bg);
-      padding: 2rem 1rem 1.5rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      color: white;
-      text-align: center;
+      padding: 2.5rem 1rem 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Decorative pokeball background in header */
+    header::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 30px solid rgba(255, 82, 82, 0.15);
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 60%);
+      z-index: 0;
+    }
+    
+    .header-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1400px;
+      margin: 0 auto;
     }
     
     h1 {
-      margin: 0 0 1.2rem;
-      font-size: 2.5rem;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      margin: 0 0 1.5rem;
+      font-size: 3rem;
+      text-align: center;
+      background: linear-gradient(90deg, #ff5252, #ff7b79, #ff5252);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      position: relative;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      text-shadow: 0 5px 15px rgba(255, 82, 82, 0.2);
+    }
+    
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #ff5252, rgba(255, 82, 82, 0.5));
+      border-radius: 2px;
     }
 
     /* Tabs Styles */
     .tabs {
       display: flex;
       justify-content: center;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-      max-width: 800px; /* Adjust the max-width as needed */
-      margin: 0 auto;   /* Centers the tabs container */
       flex-wrap: wrap;
+      gap: 0.7rem;
+      margin: 0 auto 1.5rem;
+      max-width: 1000px;
+      padding: 0 1rem;
     }
-    .tabs button {
-      background: var(--card-bg);
-      border: 1px solid #444;
+    
+    .tab {
+      background: rgba(58, 63, 92, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: var(--font-color);
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
+      padding: 0.7rem 1.2rem;
+      border-radius: 9999px;
       cursor: pointer;
-      transition: background 0.2s;
-      flex: 1 1 auto;
-      min-width: 100px;
-      margin: 0.2rem;
-
+      transition: all 0.3s;
+      font-weight: 500;
+      font-size: 0.95rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(5px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
     }
-    .tabs button.active {
+    
+    .tab::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .tab:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+    }
+    
+    .tab:hover::before {
+      opacity: 1;
+    }
+    
+    .tab.active {
       background: var(--primary-color);
-      color: #fff;
+      box-shadow: 0 4px 12px rgba(255, 82, 82, 0.4);
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Pokemon-specific tab colors */
+    .tab[data-collection="charizard"].active {
+      background: var(--pokemon-charizard);
+      box-shadow: 0 4px 12px rgba(255, 87, 34, 0.4);
+    }
+    
+    .tab[data-collection="pikachu"].active {
+      background: var(--pokemon-pikachu);
+      color: #333;
+      box-shadow: 0 4px 12px rgba(253, 216, 53, 0.4);
+    }
+    
+    .tab[data-collection="psyduck"].active {
+      background: var(--pokemon-psyduck);
+      box-shadow: 0 4px 12px rgba(66, 165, 245, 0.4);
+    }
+    
+    .tab[data-collection="cubone"].active {
+      background: var(--pokemon-cubone);
+      box-shadow: 0 4px 12px rgba(141, 110, 99, 0.4);
     }
 
-    /* Refresh Button */
-    #refresh-btn {
-      padding: 0.5rem 1rem;
-      background: var(--primary-color);
-      border: none;
-      border-radius: 25px;
-      color: #fff;
-      cursor: pointer;
-      margin-top: 1rem;
-      transition: background 0.2s;
-    }
-    #refresh-btn:hover {
-      background: var(--primary-hover);
+    /* Search Controls */
+    .controls-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 1rem;
     }
     
     .search-controls {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.5rem;
-      margin: 0 auto;
-      max-width: 800px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    
+    .control-group {
+      position: relative;
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #8c91b6;
+      font-size: 1rem;
+      pointer-events: none;
     }
     
     .search-controls input,
-    .search-controls select {
-      padding: 0.7rem 1rem;
-      border-radius: 25px;
-      border: 1px solid #444;
-      font-size: 1rem;
-      background: #2a2a2a;
+    .search-controls select,
+    .advanced-filters input {
+      width: 100%;
+      padding: 0.9rem 1rem 0.9rem 2.5rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.95rem;
+      background: rgba(43, 47, 69, 0.8);
       color: var(--font-color);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      outline: none;
-      flex-grow: 1;
-      max-width: 300px;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .search-controls select {
+      appearance: none;
+      padding-right: 2.5rem;
+      cursor: pointer;
+    }
+    
+    .select-wrapper {
+      position: relative;
+    }
+    
+    .select-wrapper::after {
+      content: '\f107';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #8c91b6;
+      pointer-events: none;
     }
     
     .search-controls input:focus,
-    .search-controls select:focus {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    .search-controls select:focus,
+    .advanced-filters input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px rgba(255, 82, 82, 0.2);
     }
     
-    .search-controls label {
+    .checkbox-group {
       display: flex;
       align-items: center;
-      gap: 0.25rem;
-      font-size: 1rem;
-      color: var(--font-color);
-    }
-    
-    /* Advanced Filters: Only printing year and foil checkbox */
-    .advanced-filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      justify-content: center;
       margin-top: 1rem;
     }
-    .advanced-filters input {
-      padding: 0.7rem 1rem;
-      border-radius: 25px;
-      border: 1px solid #444;
-      max-width: 200px;
-      background: #2a2a2a;
-      color: var(--font-color);
-    }
-    .advanced-filters label {
+    
+    .checkbox-group label {
+      margin-right: 2rem;
+      color: #b8bedC;
       display: flex;
       align-items: center;
-      gap: 0.25rem;
-      color: #ccc;
       font-size: 0.95rem;
+      cursor: pointer;
+    }
+    
+    .checkbox-group input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 1.2rem;
+      height: 1.2rem;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      margin-right: 0.5rem;
+      display: grid;
+      place-content: center;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    
+    .checkbox-group input[type="checkbox"]::before {
+      content: "";
+      width: 0.65rem;
+      height: 0.65rem;
+      transform: scale(0);
+      transition: 120ms transform ease-in-out;
+      box-shadow: inset 1em 1em var(--primary-color);
+      transform-origin: center;
+      clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    }
+    
+    .checkbox-group input[type="checkbox"]:checked {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+    
+    .checkbox-group input[type="checkbox"]:checked::before {
+      transform: scale(1);
+    }
+
+    /* Advanced Filters */
+    .advanced-filters {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    /* Refresh Button */
+    #refresh-btn {
+      display: block;
+      padding: 0.9rem 2rem;
+      background: linear-gradient(135deg, var(--secondary-color), #2c52b3);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 0.95rem;
+      margin: 1.5rem auto;
+      box-shadow: 0 4px 10px rgba(58, 103, 207, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+    }
+    
+    #refresh-btn:hover {
+      background: linear-gradient(135deg, #4c7be3, #3354a7);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(58, 103, 207, 0.4);
+    }
+    
+    #refresh-btn:active {
+      transform: translateY(1px);
+    }
+    
+    #refresh-btn i {
+      margin-right: 0.5rem;
     }
 
     /* Collection Summary */
     #collection-summary {
+      background: rgba(29, 32, 47, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1.2rem;
       text-align: center;
-      padding: 1rem;
-      color: #ccc;
+      color: #b8bedC;
       font-size: 1rem;
+      margin: 0 auto 2rem;
+      max-width: 1000px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    
+    .summary-stat {
+      display: flex;
+      align-items: center;
+      margin: 0 0.5rem;
+    }
+    
+    .summary-stat i {
+      font-size: 1.5rem;
+      margin-right: 0.5rem;
+      color: var(--primary-color);
+    }
+    
+    .summary-stat span {
+      font-weight: 600;
+      color: var(--font-color);
+      margin-left: 0.25rem;
     }
 
     /* Loading Indicator */
@@ -163,74 +406,142 @@
       z-index: 1500;
       align-items: center;
       justify-content: center;
+      backdrop-filter: blur(5px);
     }
+    
     .spinner {
-      border: 8px solid #f3f3f3;
-      border-top: 8px solid var(--primary-color);
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      animation: spin 1s linear infinite;
+      width: 80px;
+      height: 80px;
+      position: relative;
+      animation: rotate 2s linear infinite;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    
+    .spinner .path {
+      stroke: var(--primary-color);
+      stroke-linecap: round;
+      animation: dash 1.5s ease-in-out infinite;
+      stroke-width: 5;
+    }
+    
+    @keyframes rotate {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    
+    @keyframes dash {
+      0% {
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
+      }
+      50% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
+      }
+      100% {
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
+      }
     }
 
     /* Cards Grid */
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 1.5rem 3rem;
+    }
+    
     #cards-container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1.5rem;
-      padding: 0 1rem 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.8rem;
     }
     
     .card {
       background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 4px 12px var(--shadow-color);
-      padding: 1rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      padding: 1.2rem;
       text-align: center;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       position: relative;
       overflow: hidden;
       cursor: pointer;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
+      opacity: 0;
+      transition: opacity 0.4s;
     }
     
     .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), var(--card-glow);
+    }
+    
+    .card:hover::before {
+      opacity: 1;
     }
     
     .card.bought {
-      background-color: var(--bought-bg);
+      background: linear-gradient(135deg, var(--bought-bg), rgba(20, 75, 40, 0.3));
+    }
+    
+    .card-image-container {
+      position: relative;
+      padding-bottom: 1rem;
+      padding-top: 0.5rem;
     }
     
     .card img {
       width: 100%;
       height: auto;
-      border-radius: 8px;
-      transition: transform 0.5s ease;
+      border-radius: 10px;
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
     
     .card:hover img {
-      transform: scale(1.05);
+      transform: scale(1.08);
     }
     
     .card .title {
-      margin: 1rem 0 0.4rem;
-      font-weight: bold;
+      margin: 1.2rem 0 0.4rem;
+      font-weight: 600;
       color: var(--font-color);
       font-size: 1.2rem;
+      line-height: 1.3;
     }
     
     .card .info {
-      font-size: 0.9rem;
-      color: #aaa;
-      margin-bottom: 0.8rem;
-      line-height: 1.4;
+      font-size: 0.85rem;
+      color: #a0a9c8;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+    
+    .card-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .card-badge {
+      background: rgba(58, 103, 207, 0.2);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.8rem;
+      color: #a0beff;
+      backdrop-filter: blur(5px);
     }
     
     .card-actions {
@@ -238,12 +549,14 @@
       align-items: center;
       justify-content: space-between;
       margin-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 1rem;
     }
     
     .bought-wrapper {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
     }
     
     .bought-wrapper input[type='checkbox'] {
@@ -251,12 +564,12 @@
       -webkit-appearance: none;
       width: 1.2rem;
       height: 1.2rem;
-      border: 2px solid #555;
+      border: 2px solid rgba(255, 255, 255, 0.2);
       border-radius: 4px;
-      background-color: #1e1e1e;
       cursor: pointer;
       position: relative;
       transition: all 0.2s;
+      background-color: rgba(255, 255, 255, 0.1);
     }
     
     .bought-wrapper input[type='checkbox']:checked {
@@ -265,51 +578,70 @@
     }
     
     .bought-wrapper input[type='checkbox']:checked::after {
-      content: '✓';
+      content: '\f00c';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
       color: white;
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 0.8rem;
+      font-size: 0.7rem;
     }
     
     .bought-wrapper label {
-      font-size: 0.95rem;
-      color: #ccc;
+      font-size: 0.9rem;
+      color: #a0a9c8;
       cursor: pointer;
     }
-
+    
     /* Favorite Star */
     .favorite-star {
       cursor: pointer;
       font-size: 1.5rem;
-      color: #555;
-      transition: color 0.2s;
-      margin-left: 0.5rem;
+      color: rgba(255, 255, 255, 0.2);
+      transition: all 0.3s;
     }
+    
+    .favorite-star:hover {
+      transform: scale(1.2);
+    }
+    
     .favorite-star.favorited {
       color: gold;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
     }
-
+    
     /* External Link Button */
     .external-link-btn {
-      display: inline-block;
-      margin-top: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: var(--primary-color);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding: 0.7rem 1.2rem;
+      background: linear-gradient(135deg, var(--primary-color), #e03e3e);
       color: #fff;
       text-decoration: none;
-      border-radius: 25px;
+      border-radius: 8px;
       font-size: 0.9rem;
-      transition: background 0.2s, transform 0.1s;
+      font-weight: 500;
+      transition: all 0.3s;
+      box-shadow: 0 4px 10px rgba(255, 82, 82, 0.3);
     }
+    
     .external-link-btn:hover {
-      background: var(--primary-hover);
-      transform: translateY(-1px);
+      background: linear-gradient(135deg, #ff7676, #ff5252);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(255, 82, 82, 0.4);
     }
+    
     .external-link-btn:active {
       transform: translateY(1px);
+    }
+    
+    .external-link-btn i {
+      font-size: 0.8rem;
     }
 
     /* Modal Styles */
@@ -323,64 +655,78 @@
       height: 100%;
       overflow: auto;
       background-color: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(5px);
-      transition: all 0.3s ease;
+      backdrop-filter: blur(8px);
+      transition: all 0.4s;
     }
     
     #modal .modal-content {
-      background-color: var(--card-bg);
+      background: linear-gradient(135deg, rgba(35, 38, 56, 0.95), rgba(23, 25, 38, 0.95));
       margin: 5% auto;
-      padding: 2rem;
-      border-radius: 16px;
+      padding: 2.5rem;
+      border-radius: 20px;
       width: 90%;
-      max-width: 700px;
+      max-width: 900px;
       position: relative;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-      animation: modalIn 0.4s ease;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+      animation: modalIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       color: var(--font-color);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
     
     @keyframes modalIn {
       from {
         opacity: 0;
-        transform: translateY(-30px);
+        transform: translateY(-30px) scale(0.95);
       }
       to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
       }
     }
     
-    /* Improved Close Button */
     #modal .close {
-      color: #fff;
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 50%;
-      padding: 5px 10px;
       position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 32px;
-      font-weight: bold;
+      top: 20px;
+      right: 25px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.5rem;
       cursor: pointer;
-      transition: background 0.2s, transform 0.2s;
+      transition: all 0.3s;
       z-index: 10;
     }
     
     #modal .close:hover {
-      background: var(--primary-hover);
-      transform: scale(1.1);
+      background: var(--primary-color);
+      transform: rotate(90deg);
     }
     
     #modal-body {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 2.5rem;
     }
     
     #modal .modal-image {
       grid-column: 1;
       justify-self: center;
+      position: relative;
+    }
+    
+    #modal .modal-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 30%, rgba(23, 25, 38, 0.8) 100%);
+      pointer-events: none;
+      opacity: 0.7;
     }
     
     #modal .modal-details {
@@ -390,112 +736,162 @@
     #modal img {
       max-width: 100%;
       height: auto;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transform: perspective(1000px) rotateY(-5deg);
+      transition: transform 0.5s;
+    }
+    
+    #modal img:hover {
+      transform: perspective(1000px) rotateY(0deg);
     }
     
     #modal h2 {
       color: var(--primary-color);
       margin-top: 0;
-      font-size: 1.8rem;
-      border-bottom: 2px solid #333;
-      padding-bottom: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+      position: relative;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    #modal h2::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 50px;
+      height: 3px;
+      background: var(--primary-color);
+      border-radius: 3px;
     }
     
     #modal .info-section {
+      background: rgba(21, 23, 34, 0.5);
+      border-radius: 15px;
+      padding: 1.5rem;
       margin-bottom: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
     
     #modal .info-section h3 {
-      margin-bottom: 0.5rem;
-      color: #ccc;
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: #e6ebf7;
       font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    #modal .info-section h3 i {
+      color: var(--secondary-color);
     }
     
     #modal p {
-      font-size: 1rem;
-      color: var(--font-color);
-      line-height: 1.5;
-      margin: 0.7rem 0;
+      font-size: 0.95rem;
+      color: #b8bedC;
+      line-height: 1.6;
+      margin: 0.5rem 0;
+    }
+    
+    #modal strong {
+      color: #e6ebf7;
     }
     
     #modal .price-block {
-      background-color: #2a2a2a;
-      padding: 0.8rem;
-      border-radius: 8px;
       margin-bottom: 1rem;
     }
     
     #modal .price-title {
-      font-weight: bold;
-      color: #ccc;
-      margin-bottom: 0.5rem;
-    }
-    
-    #modal .price-detail {
+      font-weight: 600;
+      color: #e6ebf7;
+      margin-bottom: 0.8rem;
       display: flex;
-      flex-wrap: wrap;
+      align-items: center;
       gap: 0.5rem;
     }
     
+    #modal .price-title i {
+      color: gold;
+    }
+    
+    #modal .price-detail {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 0.8rem;
+    }
+    
     #modal .price-item {
-      background: #333;
-      padding: 0.5rem;
-      border-radius: 5px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-      flex: 1;
-      min-width: 80px;
-      text-align: center;
+      background: rgba(58, 63, 92, 0.4);
+      padding: 0.8rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: transform 0.3s;
+    }
+    
+    #modal .price-item:hover {
+      transform: translateY(-3px);
     }
     
     #modal .price-label {
       font-size: 0.8rem;
-      color: #bbb;
+      color: #a0a9c8;
+      margin-bottom: 0.3rem;
     }
     
     #modal .price-value {
-      font-weight: bold;
-      color: var(--primary-color);
+      font-weight: 600;
+      color: #4c7be3;
+      font-size: 1.1rem;
     }
     
     #modal textarea {
       width: 100%;
-      height: 80px;
-      margin: 0.5rem 0 1rem;
+      height: 100px;
+      margin: 0.8rem 0 1rem;
       font-size: 0.95rem;
-      padding: 0.8rem;
-      border: 1px solid #444;
-      border-radius: 8px;
+      padding: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
       resize: vertical;
       font-family: inherit;
-      background: #2a2a2a;
+      background: rgba(21, 23, 34, 0.5);
       color: var(--font-color);
-      transition: border 0.2s;
+      transition: all 0.3s;
     }
     
     #modal textarea:focus {
-      border-color: var(--primary-color);
+      border-color: var(--secondary-color);
       outline: none;
+      box-shadow: 0 0 0 2px rgba(76, 123, 227, 0.2);
     }
     
     #modal button.save-note {
-      padding: 0.7rem 1.5rem;
-      font-size: 1rem;
-      background-color: var(--success-color);
+      padding: 0.8rem 1.5rem;
+      font-size: 0.95rem;
+      background: linear-gradient(135deg, var(--success-color), #27ae60);
       color: #fff;
       border: none;
-      border-radius: 25px;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.2s, transform 0.1s;
+      transition: all 0.3s;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
+      font-weight: 500;
+      box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
     }
     
     #modal button.save-note:hover {
-      background-color: #4caf50;
-      transform: translateY(-1px);
+      background: linear-gradient(135deg, #2ecc71, #229954);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(46, 204, 113, 0.4);
     }
     
     #modal button.save-note:active {
@@ -503,13 +899,10 @@
     }
     
     /* Responsive Adjustments */
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 2rem;
-      }
-      
+    @media (max-width: 992px) {
       #modal-body {
         grid-template-columns: 1fr;
+        gap: 2rem;
       }
       
       #modal .modal-image,
@@ -517,21 +910,37 @@
         grid-column: 1;
       }
       
-      #modal .modal-content {
-        padding: 1.5rem;
-        margin: 10% auto;
+      #modal img {
+        max-width: 300px;
+        margin: 0 auto;
+        display: block;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
       }
       
-      .search-controls input,
-      .search-controls select {
-        max-width: none;
-        width: 100%;
+      .search-controls {
+        grid-template-columns: 1fr;
+      }
+      
+      #modal .modal-content {
+        padding: 2rem 1.5rem;
+        margin: 10% auto;
+        width: 95%;
+      }
+      
+      .tab {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
       }
     }
     
     @media (max-width: 480px) {
       .card {
-        padding: 0.8rem;
+        padding: 1rem;
       }
       
       h1 {
@@ -539,11 +948,25 @@
       }
       
       header {
-        padding: 1.5rem 1rem 1.2rem;
+        padding: 2rem 1rem 1.5rem;
       }
       
       #cards-container {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1.2rem;
+      }
+      
+      .card-badge {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.6rem;
+      }
+      
+      .card .title {
+        font-size: 1.1rem;
+      }
+      
+      #modal h2 {
+        font-size: 1.6rem;
       }
     }
   </style>
@@ -551,7 +974,9 @@
 <body>
   <!-- Loading Indicator -->
   <div id="loading-indicator">
-    <div class="spinner"></div>
+    <svg class="spinner" viewBox="0 0 50 50">
+      <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+    </svg>
   </div>
   
   <header>
@@ -573,42 +998,78 @@
         <button class="tab" data-collection="machop">Machop</button>
         <button class="tab" data-collection="machoke">Machoke</button>
         <button class="tab" data-collection="machamp">Machamp</button>
-
-
       </div>
-      <!-- Search and sort controls -->
-      <div class="search-controls">
-        <input type="text" id="search-input" placeholder="Search by name, set, rarity..." />
-        <select id="filter-select">
-          <option value="all">All Cards</option>
-          <option value="bought">Bought</option>
-          <option value="notBought">Not Bought</option>
-          <option value="favorites">Favorites</option>
-        </select>
-        <select id="sort-select">
-          <option value="name">Sort by Name (A-Z)</option>
-          <option value="set">Sort by Set (A-Z)</option>
-          <option value="number">Sort by Card Number (Asc)</option>
-          <option value="rarity">Sort by Rarity (A-Z)</option>
-          <option value="printYear">Sort by Print Year</option>
-        </select>
-        <label>
-          <input type="checkbox" id="reverse-checkbox" /> Reverse Order
-        </label>
-      </div>
-      <!-- Advanced Filters and Refresh Button -->
-      <div class="advanced-filters">
-        <input type="text" id="year-input" placeholder="Filter by Printing Year" />
-        <label>
-          <input type="checkbox" id="foil-checkbox" /> Foil
-        </label>
-        <button id="refresh-btn">Get Latest Cards</button>
+      
+      <div class="controls-wrapper">
+        <!-- Search and sort controls -->
+        <div class="search-controls">
+          <div class="control-group">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="search-input" placeholder="Search by name, set, rarity..." />
+          </div>
+          
+          <div class="control-group select-wrapper">
+            <i class="fas fa-filter search-icon"></i>
+            <select id="filter-select">
+              <option value="all">All Cards</option>
+              <option value="bought">Bought</option>
+              <option value="notBought">Not Bought</option>
+              <option value="favorites">Favorites</option>
+            </select>
+          </div>
+          
+          <div class="control-group select-wrapper">
+            <i class="fas fa-sort search-icon"></i>
+            <select id="sort-select">
+              <option value="name">Sort by Name (A-Z)</option>
+              <option value="set">Sort by Set (A-Z)</option>
+              <option value="number">Sort by Card Number (Asc)</option>
+              <option value="rarity">Sort by Rarity (A-Z)</option>
+              <option value="printYear">Sort by Print Year</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Advanced Filters -->
+        <div class="advanced-filters">
+          <div class="control-group">
+            <i class="fas fa-calendar-alt search-icon"></i>
+            <input type="text" id="year-input" placeholder="Filter by Printing Year" />
+          </div>
+          
+          <div class="checkbox-group">
+            <label>
+              <input type="checkbox" id="reverse-checkbox" /> 
+              Reverse Order
+            </label>
+            
+            <label>
+              <input type="checkbox" id="foil-checkbox" /> 
+              Foil Only
+            </label>
+          </div>
+        </div>
+        
+        <button id="refresh-btn"><i class="fas fa-sync-alt"></i> Get Latest Cards</button>
       </div>
     </div>
   </header>
   
   <!-- Collection Summary -->
-  <div id="collection-summary"></div>
+  <div id="collection-summary">
+    <div class="summary-stat">
+      <i class="fas fa-layer-group"></i>
+      Total Cards: <span id="total-count">0</span>
+    </div>
+    <div class="summary-stat">
+      <i class="fas fa-shopping-cart"></i>
+      Bought: <span id="bought-count">0</span>
+    </div>
+    <div class="summary-stat">
+      <i class="fas fa-star"></i>
+      Favorites: <span id="favorite-count">0</span>
+    </div>
+  </div>
   
   <main>
     <div id="cards-container"></div>
@@ -617,7 +1078,7 @@
   <!-- Modal for Detailed Card Info -->
   <div id="modal">
     <div class="modal-content">
-      <span class="close">&times;</span>
+      <span class="close"><i class="fas fa-times"></i></span>
       <div id="modal-body"></div>
     </div>
   </div>
@@ -647,13 +1108,20 @@
     const createCardElement = (card) => {
       const cardDiv = document.createElement('div');
       cardDiv.classList.add('card');
+      cardDiv.dataset.cardId = card.id;
       if (boughtCards[card.id]) cardDiv.classList.add('bought');
 
+      // Card image container
+      const imageContainer = document.createElement('div');
+      imageContainer.className = 'card-image-container';
+      
       // Card image
       const img = document.createElement('img');
       img.src = card.images.small;
       img.alt = card.name;
-      cardDiv.appendChild(img);
+      img.loading = 'lazy'; // Lazy loading for performance
+      imageContainer.appendChild(img);
+      cardDiv.appendChild(imageContainer);
 
       // Title
       const title = document.createElement('div');
@@ -661,15 +1129,35 @@
       title.textContent = card.name;
       cardDiv.appendChild(title);
 
-      // Info: number, set, rarity, and printing year
+      // Card badges (rarity, year)
+      const badges = document.createElement('div');
+      badges.className = 'card-badges';
+      
+      // Rarity badge if available
+      if (card.rarity) {
+        const rarityBadge = document.createElement('span');
+        rarityBadge.className = 'card-badge';
+        rarityBadge.textContent = card.rarity;
+        badges.appendChild(rarityBadge);
+      }
+      
+      // Year badge if available
+      const releaseYear = card.set && card.set.releaseDate ? card.set.releaseDate.split('/')[0] : '';
+      if (releaseYear) {
+        const yearBadge = document.createElement('span');
+        yearBadge.className = 'card-badge';
+        yearBadge.textContent = releaseYear;
+        badges.appendChild(yearBadge);
+      }
+      
+      cardDiv.appendChild(badges);
+
+      // Info: set and number
       const info = document.createElement('div');
       info.className = 'info';
-      const releaseYear = card.set && card.set.releaseDate ? card.set.releaseDate.split('/')[0] : '';
       const details = [
-        card.number ? `No. ${card.number}` : '',
         card.set?.name ? `Set: ${card.set.name}` : '',
-        card.rarity ? `Rarity: ${card.rarity}` : '',
-        releaseYear ? `Year: ${releaseYear}` : ''
+        card.number ? `No. ${card.number}` : ''
       ].filter(Boolean).join(' • ');
       info.textContent = details;
       cardDiv.appendChild(info);
@@ -690,7 +1178,7 @@
         boughtCards[card.id] = checkbox.checked;
         saveToLocalStorage(STORAGE_KEY_BOUGHT, boughtCards);
         cardDiv.classList.toggle('bought', checkbox.checked);
-        renderCards();
+        updateCollectionSummary();
       });
       boughtWrapper.appendChild(checkbox);
       
@@ -704,7 +1192,7 @@
       // Favorite star icon
       const favoriteStar = document.createElement('span');
       favoriteStar.className = 'favorite-star';
-      favoriteStar.innerHTML = '★';
+      favoriteStar.innerHTML = '<i class="fas fa-star"></i>';
       if (favoriteCards[card.id]) {
         favoriteStar.classList.add('favorited');
       }
@@ -717,7 +1205,8 @@
           favoriteCards[card.id] = true;
           favoriteStar.classList.add('favorited');
         }
-        localStorage.setItem(STORAGE_KEY_FAVORITES, JSON.stringify(favoriteCards));
+        saveToLocalStorage(STORAGE_KEY_FAVORITES, favoriteCards);
+        updateCollectionSummary();
       });
       cardActions.appendChild(favoriteStar);
 
@@ -726,8 +1215,8 @@
       // Make card clickable (ignoring control clicks)
       cardDiv.addEventListener('click', (e) => {
         const isControlClick = e.target.type === 'checkbox' || 
-                               e.target.tagName === 'LABEL' ||
-                               e.target.classList.contains('favorite-star');
+                              e.target.tagName === 'LABEL' ||
+                              e.target.closest('.favorite-star');
         if (!isControlClick) openModal(card);
       });
 
@@ -737,10 +1226,16 @@
     // Update collection summary
     function updateCollectionSummary() {
       const total = allCards.length;
-      const boughtCount = Object.keys(boughtCards).filter(id => boughtCards[id]).length;
-      const favoriteCount = Object.keys(favoriteCards).filter(id => favoriteCards[id]).length;
-      const summaryDiv = document.getElementById('collection-summary');
-      summaryDiv.innerHTML = `Total Cards: ${total} | Bought: ${boughtCount} | Favorites: ${favoriteCount}`;
+      const boughtCount = Object.keys(boughtCards).filter(id => 
+        allCards.some(card => card.id === id) && boughtCards[id]
+      ).length;
+      const favoriteCount = Object.keys(favoriteCards).filter(id => 
+        allCards.some(card => card.id === id) && favoriteCards[id]
+      ).length;
+      
+      document.getElementById('total-count').textContent = total;
+      document.getElementById('bought-count').textContent = boughtCount;
+      document.getElementById('favorite-count').textContent = favoriteCount;
     }
 
     // Render cards with filtering and sorting
@@ -804,11 +1299,12 @@
 
       if (filteredCards.length === 0) {
         const noResults = document.createElement('div');
-        noResults.textContent = 'No cards found. Try different search criteria.';
+        noResults.innerHTML = '<i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i><br>No cards found. Try different search criteria.';
         noResults.style.textAlign = 'center';
         noResults.style.gridColumn = '1 / -1';
-        noResults.style.padding = '2rem';
-        noResults.style.color = '#aaa';
+        noResults.style.padding = '4rem 1rem';
+        noResults.style.color = '#a0a9c8';
+        noResults.style.fontSize = '1.1rem';
         cardsContainer.appendChild(noResults);
         updateCollectionSummary();
         return;
@@ -854,14 +1350,15 @@
       detailsSection.className = 'modal-details';
       
       const title = document.createElement('h2');
-      title.textContent = card.name;
+      title.innerHTML = `<i class="fas fa-${card.types && card.types[0] ? getTypeIcon(card.types[0].toLowerCase()) : 'certificate'}"></i> ${card.name}`;
       detailsSection.appendChild(title);
 
       const basicInfoSection = document.createElement('div');
       basicInfoSection.className = 'info-section';
       const basicInfoTitle = document.createElement('h3');
-      basicInfoTitle.textContent = 'Card Information';
+      basicInfoTitle.innerHTML = '<i class="fas fa-info-circle"></i> Card Information';
       basicInfoSection.appendChild(basicInfoTitle);
+      
       const releaseYear = card.set && card.set.releaseDate ? card.set.releaseDate.split('/')[0] : 'N/A';
       const infoPara = document.createElement('p');
       infoPara.innerHTML = `
@@ -879,7 +1376,7 @@
       const pricingSection = document.createElement('div');
       pricingSection.className = 'info-section';
       const pricingTitle = document.createElement('h3');
-      pricingTitle.textContent = 'Pricing Information';
+      pricingTitle.innerHTML = '<i class="fas fa-tag"></i> Pricing Information';
       pricingSection.appendChild(pricingTitle);
 
       if (card.tcgplayer?.prices) {
@@ -890,7 +1387,7 @@
           tcgPriceBlock.className = 'price-block';
           const tcgPriceTitle = document.createElement('div');
           tcgPriceTitle.className = 'price-title';
-          tcgPriceTitle.textContent = `TCGplayer (${priceType.charAt(0).toUpperCase() + priceType.slice(1)})`;
+          tcgPriceTitle.innerHTML = `<i class="fas fa-coins"></i> TCGplayer (${priceType.charAt(0).toUpperCase() + priceType.slice(1)})`;
           tcgPriceBlock.appendChild(tcgPriceTitle);
           const tcgPriceDetail = document.createElement('div');
           tcgPriceDetail.className = 'price-detail';
@@ -920,7 +1417,7 @@
           tcgLink.href = card.tcgplayer.url || 'https://www.tcgplayer.com';
           tcgLink.target = '_blank';
           tcgLink.rel = 'noopener noreferrer';
-          tcgLink.textContent = 'View on TCGplayer';
+          tcgLink.innerHTML = '<i class="fas fa-external-link-alt"></i> View on TCGplayer';
           tcgPriceBlock.appendChild(tcgLink);
 
           pricingSection.appendChild(tcgPriceBlock);
@@ -933,7 +1430,7 @@
         cmPriceBlock.className = 'price-block';
         const cmPriceTitle = document.createElement('div');
         cmPriceTitle.className = 'price-title';
-        cmPriceTitle.textContent = 'Cardmarket';
+        cmPriceTitle.innerHTML = '<i class="fas fa-euro-sign"></i> Cardmarket';
         cmPriceBlock.appendChild(cmPriceTitle);
         const cmPriceDetail = document.createElement('div');
         cmPriceDetail.className = 'price-detail';
@@ -963,7 +1460,7 @@
         cmLink.href = card.cardmarket.url || 'https://www.cardmarket.com';
         cmLink.target = '_blank';
         cmLink.rel = 'noopener noreferrer';
-        cmLink.textContent = 'View on Cardmarket';
+        cmLink.innerHTML = '<i class="fas fa-external-link-alt"></i> View on Cardmarket';
         cmPriceBlock.appendChild(cmLink);
 
         pricingSection.appendChild(cmPriceBlock);
@@ -971,7 +1468,7 @@
       
       if (!card.tcgplayer?.prices && !card.cardmarket?.prices) {
         const noPricing = document.createElement('p');
-        noPricing.textContent = 'No pricing information available for this card.';
+        noPricing.innerHTML = '<i class="fas fa-exclamation-circle"></i> No pricing information available for this card.';
         pricingSection.appendChild(noPricing);
       }
       
@@ -980,7 +1477,7 @@
       const notesSection = document.createElement('div');
       notesSection.className = 'info-section';
       const notesTitle = document.createElement('h3');
-      notesTitle.textContent = 'Personal Notes';
+      notesTitle.innerHTML = '<i class="fas fa-sticky-note"></i> Personal Notes';
       notesSection.appendChild(notesTitle);
       const noteTextarea = document.createElement('textarea');
       noteTextarea.placeholder = "Add your notes about this card here...";
@@ -988,13 +1485,13 @@
       notesSection.appendChild(noteTextarea);
       const saveNoteBtn = document.createElement('button');
       saveNoteBtn.className = 'save-note';
-      saveNoteBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Save Note';
+      saveNoteBtn.innerHTML = '<i class="fas fa-save"></i> Save Note';
       saveNoteBtn.addEventListener('click', () => {
         cardNotes[card.id] = noteTextarea.value;
         saveToLocalStorage(STORAGE_KEY_NOTES, cardNotes);
-        saveNoteBtn.textContent = 'Saved!';
+        saveNoteBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
         setTimeout(() => {
-          saveNoteBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Save Note';
+          saveNoteBtn.innerHTML = '<i class="fas fa-save"></i> Save Note';
         }, 1500);
       });
       notesSection.appendChild(saveNoteBtn);
@@ -1005,6 +1502,26 @@
 
       modal.style.display = 'block';
     };
+
+    // Helper function to get icon for Pokemon type
+    function getTypeIcon(type) {
+      const iconMap = {
+        fire: 'fire',
+        water: 'tint',
+        grass: 'leaf',
+        electric: 'bolt',
+        psychic: 'brain',
+        fighting: 'fist-raised',
+        darkness: 'moon',
+        metal: 'cog',
+        fairy: 'magic',
+        dragon: 'dragon',
+        colorless: 'feather',
+        default: 'certificate'
+      };
+      
+      return iconMap[type] || iconMap.default;
+    }
 
     // Load cards with caching (cache expires after 1 day)
     const loadCards = async () => {
@@ -1042,7 +1559,12 @@
           renderCards();
         } else {
           const cardsContainer = document.getElementById('cards-container');
-          cardsContainer.innerHTML = '<div style="text-align: center; grid-column: 1/-1; padding: 2rem;">Failed to load cards. Please check your internet connection and try again.</div>';
+          cardsContainer.innerHTML = `
+            <div style="text-align: center; grid-column: 1/-1; padding: 3rem;">
+              <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+              <p style="font-size: 1.2rem; color: #e6ebf7; margin-bottom: 0.5rem;">Failed to load cards</p>
+              <p style="color: #a0a9c8;">Please check your internet connection and try again.</p>
+            </div>`;
         }
       } finally {
         loadingIndicator.style.display = 'none';
@@ -1077,6 +1599,7 @@
     document.getElementById('year-input').addEventListener('input', renderCards);
     document.getElementById('foil-checkbox').addEventListener('change', renderCards);
 
+    // Initialize the app
     window.addEventListener('DOMContentLoaded', loadCards);
   </script>
 </body>
