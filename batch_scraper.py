@@ -81,7 +81,7 @@ if __name__ == "__main__":
     pokemon_list = [
         'Charizard', 'Charmander', 'Cubone', 'Psyduck', 'Pikachu',
         'Golem', 'Gastly', 'Haunter', 'Gengar', 'Mew', 'Mewtwo',
-        'Machop', 'Machoke', 'Machamp'
+        'Machop', 'Machoke', 'Machamp', 'Farfetchd'
     ]
     # 'Farfetch\'d' gives an error, need to check why
     batch_scrape_pokemon(pokemon_list)

@@ -41,7 +41,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/cubone/151-Cubone-MEW104.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -103,7 +103,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/cubone/stellar-crown-Cubone-SCR072.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -165,7 +165,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/cubone/jungle-Cubone-JU50.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -227,7 +227,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/cubone/base-set-2-Cubone-B270.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -289,7 +289,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/cubone/expedition-base-set-Cubone-EX103.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -351,7 +351,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/cubone/aquapolis-Cubone-AQ72.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -413,7 +413,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/cubone/ex-team-magma-vs-team-aqua-Cubone-MA40.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -475,7 +475,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/cubone/ex-firered-leafgreen-Cubone-FL60.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -3149,7 +3149,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gastly/evolutions-Gastly-EVO47.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -3211,7 +3211,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gastly/chilling-reign-Gastly-CRE055.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -3273,7 +3273,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gastly/paldean-fates-Gastly-PAF055.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -3335,7 +3335,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gastly/base-set-Gastly-V1-BS50.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -3397,7 +3397,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gastly/fossil-Gastly-FO33.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -3459,7 +3459,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gastly/base-set-2-Gastly-B275.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -3521,7 +3521,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gastly/gym-heroes-Sabrinas-Gastly-GH93.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -3583,7 +3583,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gastly/gym-challenge-Sabrinas-Gastly-GC96.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -7497,7 +7497,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/psyduck/unified-minds-Slowpoke-Psyduck-GX-V1-UNM35.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -7559,7 +7559,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/psyduck/unified-minds-Slowpoke-Psyduck-GX-V3-UNM218.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -7621,7 +7621,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/psyduck/unified-minds-Slowpoke-Psyduck-GX-V4-UNM239.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -7683,7 +7683,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/psyduck/miracle-twin-Slowpoke-Psyduck-GX-V1-sm11011.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -7745,7 +7745,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/psyduck/miracle-twin-Slowpoke-Psyduck-GX-V2-sm11095.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -7807,7 +7807,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/psyduck/miracle-twin-Slowpoke-Psyduck-GX-V3-sm11096.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -7869,7 +7869,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/psyduck/miracle-twin-Slowpoke-Psyduck-GX-V4-sm11107.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -7931,7 +7931,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/psyduck/detective-pikachu-jp-Psyduck-V1-smP2009.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -12093,7 +12093,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/golem/split-earth-Golem-EC4089.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -12155,7 +12155,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/golem/151-Golem-ex-V2-MEW189.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -12217,7 +12217,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/golem/fossil-Golem-FO36.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -12279,7 +12279,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/golem/gym-heroes-Brocks-Golem-GH20.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -12341,7 +12341,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/golem/legendary-collection-Golem-LC24.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -12403,7 +12403,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/golem/expedition-base-set-Golem-EX14.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -12465,7 +12465,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/golem/expedition-base-set-Golem-EX49.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -12527,7 +12527,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/golem/skyridge-Golem-SK148.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -15325,7 +15325,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charmander/base-set-Charmander-V1-BS46.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -15387,7 +15387,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charmander/base-set-Charmander-V2-BS46.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -15449,7 +15449,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charmander/sv-black-star-promos-Charmander-V2-SVP044.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -15511,7 +15511,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charmander/pokemon-card-151-Charmander-V1-sv2a004.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -15573,7 +15573,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charmander/pokemon-card-151-Charmander-V2-sv2a168.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -15635,7 +15635,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charmander/151-Charmander-V3-MEW004.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -15697,7 +15697,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charmander/ruler-of-the-black-flame-Charmander-sv3012.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -15759,7 +15759,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charmander/obsidian-flames-Charmander-V1-OBF026.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -22525,7 +22525,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machop/team-rocket-Machop-TR59.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -22587,7 +22587,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machop/stormfront-Machop-Lv18-STF64.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -22649,7 +22649,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machop/triumphant-Machop-TM67.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -22711,7 +22711,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machop/champions-path-Machop-CPA24.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -22773,7 +22773,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machop/expansion-pack-Machop.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -22835,7 +22835,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machop/rocket-gang-Machop.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -22897,7 +22897,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machop/base-set-Machop-V1-BS52.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -22959,7 +22959,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machop/base-set-2-Machop-B278.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -26067,7 +26067,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/haunter/base-set-Haunter-V1-BS29.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -26129,7 +26129,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/haunter/fossil-Haunter-V1-FO6.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -26191,7 +26191,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/haunter/fossil-Haunter-V2-FO21.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -26253,7 +26253,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/haunter/base-set-2-Haunter-B243.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -26315,7 +26315,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/haunter/gym-heroes-Sabrinas-Haunter-GH58.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -26377,7 +26377,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/haunter/gym-challenge-Sabrinas-Haunter-GC55.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -26439,7 +26439,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/haunter/neo-destiny-Dark-Haunter-NDE36.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -26501,7 +26501,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/haunter/legendary-collection-Haunter-LC46.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -29818,6 +29818,2742 @@ var pokemonData = {
     "count": 61,
     "totalCount": 61
   },
+  "farfetchd": {
+    "data": [
+      {
+        "id": "neo-revelation-Farfetchd-NR43",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "neorevelation",
+          "name": "Neo Revelation",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "43",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/neo-revelation-Farfetchd-NR43.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Neo-Revelation/Farfetchd-NR43",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "evolutions-Farfetchd-EVO68",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "evolutions",
+          "name": "Evolutions",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "68",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/evolutions-Farfetchd-EVO68.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Evolutions/Farfetchd-EVO68",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "twilight-masquerade-Farfetchd-TWM132",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "twilightmasquerade",
+          "name": "Twilight Masquerade",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "132",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/twilight-masquerade-Farfetchd-TWM132.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Twilight-Masquerade/Farfetchd-TWM132",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "base-set-Farfetchd-V1-BS27",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "baseset",
+          "name": "Base Set",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "27",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/base-set-Farfetchd-V1-BS27.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Base-Set/Farfetchd-V1-BS27",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "base-set-2-Farfetchd-B240",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "baseset2",
+          "name": "Base Set 2",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "40",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/base-set-2-Farfetchd-B240.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Base-Set-2/Farfetchd-B240",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.05500000000000001,
+            "lowPrice": 0.05,
+            "trendPrice": 0.06,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.05,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "skyridge-Farfetchd-SK55",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "skyridge",
+          "name": "Skyridge",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "55",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/skyridge-Farfetchd-SK55.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Skyridge/Farfetchd-SK55",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 2.7390000000000003,
+            "lowPrice": 2.49,
+            "trendPrice": 2.988,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 2.49,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "ex-firered-leafgreen-Farfetchd-FL23",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "exfireredleafgreen",
+          "name": "EX FireRed & LeafGreen",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "23",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/ex-firered-leafgreen-Farfetchd-FL23.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/EX-FireRed-LeafGreen/Farfetchd-FL23",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.08800000000000001,
+            "lowPrice": 0.08,
+            "trendPrice": 0.096,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.08,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "ex-emerald-Farfetchd-EM107",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "exemerald",
+          "name": "EX Emerald",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "107",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/ex-emerald-Farfetchd-EM107.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/EX-Emerald/Farfetchd-EM107",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 4.95,
+            "lowPrice": 4.5,
+            "trendPrice": 5.3999999999999995,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 4.5,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "secret-wonders-Farfetchd-Lv26-SW49",
+        "name": "Farfetch'd Lv.26",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "secretwonders",
+          "name": "Secret Wonders",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "49",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/secret-wonders-Farfetchd-Lv26-SW49.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Secret-Wonders/Farfetchd-Lv26-SW49",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.033,
+            "lowPrice": 0.03,
+            "trendPrice": 0.036,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.03,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "stormfront-Farfetchd-Lv29-STF38",
+        "name": "Farfetch'd Lv.29",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "stormfront",
+          "name": "Stormfront",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "38",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/stormfront-Farfetchd-Lv29-STF38.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Stormfront/Farfetchd-Lv29-STF38",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "heartgold-soulsilver-Farfetchd-HS19",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "heartgoldsoulsilver",
+          "name": "HeartGold & SoulSilver",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "19",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/heartgold-soulsilver-Farfetchd-HS19.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/HeartGold-SoulSilver/Farfetchd-HS19",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.05500000000000001,
+            "lowPrice": 0.05,
+            "trendPrice": 0.06,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.05,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "boundaries-crossed-Farfetchd-BCR107",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "boundariescrossed",
+          "name": "Boundaries Crossed",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "107",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/boundaries-crossed-Farfetchd-BCR107.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Boundaries-Crossed/Farfetchd-BCR107",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "xy-kalos-starter-set-Farfetchd-KSS25",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "xykalosstarterset",
+          "name": "XY Kalos Starter Set",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "25",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/xy-kalos-starter-set-Farfetchd-KSS25.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/XY-Kalos-Starter-Set/Farfetchd-KSS25",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.165,
+            "lowPrice": 0.15,
+            "trendPrice": 0.18,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.15,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "team-up-Farfetchd-TEU127",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "teamup",
+          "name": "Team Up",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "127",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/team-up-Farfetchd-TEU127.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Team-Up/Farfetchd-TEU127",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "hidden-fates-Farfetchd-HIF45",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "hiddenfates",
+          "name": "Hidden Fates",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "45",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/hidden-fates-Farfetchd-HIF45.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Hidden-Fates/Farfetchd-HIF45",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "rebel-clash-Galarian-Farfetchd-RCL94",
+        "name": "Galarian Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "rebelclash",
+          "name": "Rebel Clash",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "94",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/rebel-clash-Galarian-Farfetchd-RCL94.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Rebel-Clash/Galarian-Farfetchd-RCL94",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "vmax-rising-Galarian-Farfetchd-s1a42",
+        "name": "Galarian Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "vmaxrising",
+          "name": "VMAX Rising",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "42",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/vmax-rising-Galarian-Farfetchd-s1a42.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/VMAX-Rising/Galarian-Farfetchd-s1a42",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.05500000000000001,
+            "lowPrice": 0.05,
+            "trendPrice": 0.06,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.05,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "shiny-star-v-Galarian-Farfetchd-V1-s4a90",
+        "name": "Galarian Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "shinystarv",
+          "name": "Shiny Star V",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "90",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/shiny-star-v-Galarian-Farfetchd-V1-s4a90.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Shiny-Star-V/Galarian-Farfetchd-V1-s4a90",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "shiny-star-v-Galarian-Farfetchd-V2-s4a262",
+        "name": "Galarian Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "shinystarv",
+          "name": "Shiny Star V",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "262",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/shiny-star-v-Galarian-Farfetchd-V2-s4a262.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Shiny-Star-V/Galarian-Farfetchd-V2-s4a262",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 1.089,
+            "lowPrice": 0.99,
+            "trendPrice": 1.188,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.99,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "shining-fates-Galarian-Farfetchd-V2",
+        "name": "Galarian Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "shiningfates",
+          "name": "Shining Fates",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "SV63",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/shining-fates-Galarian-Farfetchd-V2.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Shining-Fates/Galarian-Farfetchd-V2",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 2.09,
+            "lowPrice": 1.9,
+            "trendPrice": 2.28,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 1.9,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "matchless-fighter-Galarian-Farfetchd",
+        "name": "Galarian Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "matchlessfighters",
+          "name": "Matchless Fighters",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "35",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/matchless-fighter-Galarian-Farfetchd.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Matchless-Fighter/Galarian-Farfetchd",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "pokemon-cardvs-Falkners-Farfetchd",
+        "name": "Falkner's Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "pokmoncardvs",
+          "name": "Pok\u00e9mon Card VS",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "003",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/pokemon-cardvs-Falkners-Farfetchd.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Pokemon-CardVS/Falkners-Farfetchd",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 2.2,
+            "lowPrice": 2.0,
+            "trendPrice": 2.4,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 2.0,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "expansion-pack-Farfetchd",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "expansionpack",
+          "name": "Expansion Pack",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/expansion-pack-Farfetchd.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Expansion-Pack/Farfetchd",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.165,
+            "lowPrice": 0.15,
+            "trendPrice": 0.18,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.15,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "tag-bolt-Farfetchd",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "tagbolt",
+          "name": "Tag Bolt",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "073",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/tag-bolt-Farfetchd.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Tag-Bolt/Farfetchd",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "expansion-pack-20th-anniversary-Farfetchd",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "expansionpack20thanniversary",
+          "name": "Expansion Pack 20th Anniversary",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "066",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/expansion-pack-20th-anniversary-Farfetchd.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Expansion-Pack-20th-Anniversary/Farfetchd",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.099,
+            "lowPrice": 0.09,
+            "trendPrice": 0.108,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.09,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "xy-beginning-set-Farfetchd",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "xybeginningset",
+          "name": "XY Beginning Set",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "025",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/xy-beginning-set-Farfetchd.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/XY-Beginning-Set/Farfetchd",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.33,
+            "lowPrice": 0.3,
+            "trendPrice": 0.36,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.3,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "sun-moon-family-pokemon-card-game-Farfetchd",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "sunmoonfamilypokmoncardgame",
+          "name": "Sun & Moon Family Pok\u00e9mon Card Game",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "034",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/sun-moon-family-pokemon-card-game-Farfetchd.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Sun-Moon-Family-Pokemon-Card-Game/Farfetchd",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.8800000000000001,
+            "lowPrice": 0.8,
+            "trendPrice": 0.96,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.8,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "chilling-reign-Galarian-Farfetchd",
+        "name": "Galarian Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "chillingreign",
+          "name": "Chilling Reign",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "078",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/chilling-reign-Galarian-Farfetchd.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Chilling-Reign/Galarian-Farfetchd",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "national-pokedex-beginning-set-Farfetchd",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "nationalpokdexbeginningset",
+          "name": "National Pok\u00e9dex Beginning Set",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "026",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/national-pokedex-beginning-set-Farfetchd.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/National-Pokedex-Beginning-Set/Farfetchd",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.55,
+            "lowPrice": 0.5,
+            "trendPrice": 0.6,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.5,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "unnumbered-promos-Farfetchd",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "unnumberedpromos",
+          "name": "Unnumbered Promos",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/unnumbered-promos-Farfetchd.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Unnumbered-Promos/Farfetchd",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 1.045,
+            "lowPrice": 0.95,
+            "trendPrice": 1.14,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.95,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "start-deck-100-Galarian-Farfetchd-sI100210",
+        "name": "Galarian Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "startdeck100",
+          "name": "Start Deck 100",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "210",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/start-deck-100-Galarian-Farfetchd-sI100210.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Start-Deck-100/Galarian-Farfetchd-sI100210",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.05500000000000001,
+            "lowPrice": 0.05,
+            "trendPrice": 0.06,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.05,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "star-birth-Farfetchd-s9076",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "starbirth",
+          "name": "Star Birth",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "076",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/star-birth-Farfetchd-s9076.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Star-Birth/Farfetchd-s9076",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "awakening-legends-Farfetchd-AL",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "awakeninglegends",
+          "name": "Awakening Legends",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/awakening-legends-Farfetchd-AL.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Awakening-Legends/Farfetchd-AL",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.07700000000000001,
+            "lowPrice": 0.07,
+            "trendPrice": 0.084,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.07,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "brilliant-stars-Farfetchd-BRS115",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "brilliantstars",
+          "name": "Brilliant Stars",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "115",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/brilliant-stars-Farfetchd-BRS115.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Brilliant-Stars/Farfetchd-BRS115",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "mysterious-mountains-Farfetchd-EC5061",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "mysteriousmountains",
+          "name": "Mysterious Mountains",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "061",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/mysterious-mountains-Farfetchd-EC5061.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Mysterious-Mountains/Farfetchd-EC5061",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 5.5,
+            "lowPrice": 5.0,
+            "trendPrice": 6.0,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 5.0,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "base-set-Farfetchd-V2-BS27",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "baseset",
+          "name": "Base Set",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "27",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/base-set-Farfetchd-V2-BS27.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Base-Set/Farfetchd-V2-BS27",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 2.475,
+            "lowPrice": 2.25,
+            "trendPrice": 2.6999999999999997,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 2.25,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "soulsilver-collection-Farfetchd-L1SS055",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "soulsilvercollection",
+          "name": "SoulSilver Collection",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "055",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/soulsilver-collection-Farfetchd-L1SS055.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/SoulSilver-Collection/Farfetchd-L1SS055",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.539,
+            "lowPrice": 0.49,
+            "trendPrice": 0.588,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.49,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "dialga-half-deck-Farfetchd-Lv29-DHD008",
+        "name": "Farfetch'd Lv.29",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "dialgahalfdeck",
+          "name": "Dialga Half Deck",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "008",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/dialga-half-deck-Farfetchd-Lv29-DHD008.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Dialga-Half-Deck/Farfetchd-Lv29-DHD008",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.11000000000000001,
+            "lowPrice": 0.1,
+            "trendPrice": 0.12,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.1,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "shining-darkness-Farfetchd-Lv26-DP3",
+        "name": "Farfetch'd Lv.26",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "shiningdarkness",
+          "name": "Shining Darkness",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/shining-darkness-Farfetchd-Lv26-DP3.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Shining-Darkness/Farfetchd-Lv26-DP3",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.22000000000000003,
+            "lowPrice": 0.2,
+            "trendPrice": 0.24,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.2,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "pokemon-card-151-Farfetchd-sv2a083",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "pokmoncard151",
+          "name": "Pok\u00e9mon Card 151",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "083",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/pokemon-card-151-Farfetchd-sv2a083.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Pokemon-Card-151/Farfetchd-sv2a083",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "151-Farfetchd-MEW083",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "151",
+          "name": "151",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "083",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/151-Farfetchd-MEW083.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/151/Farfetchd-MEW083",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "mask-of-change-Farfetchd-sv6083",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "maskofchange",
+          "name": "Mask of Change",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "083",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/mask-of-change-Farfetchd-sv6083.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Mask-of-Change/Farfetchd-sv6083",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 0.022000000000000002,
+            "lowPrice": 0.02,
+            "trendPrice": 0.024,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 0.02,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "quick-construction-packs-Farfetchd-pcgGL007",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "quickconstructionpacks",
+          "name": "Quick Construction Packs",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "L007",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/quick-construction-packs-Farfetchd-pcgGL007.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Quick-Construction-Packs/Farfetchd-pcgGL007",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": null,
+            "lowPrice": null,
+            "trendPrice": null,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": null,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      },
+      {
+        "id": "flight-of-legends-Farfetchd-PCG1067",
+        "name": "Farfetch'd",
+        "supertype": "Pok\u00e9mon",
+        "subtypes": [],
+        "hp": "",
+        "types": [],
+        "evolvesTo": [],
+        "attacks": [],
+        "weaknesses": [],
+        "retreatCost": [],
+        "convertedRetreatCost": 0,
+        "set": {
+          "id": "flightoflegends",
+          "name": "Flight of Legends",
+          "series": "",
+          "printedTotal": 0,
+          "total": 0,
+          "legalities": {
+            "unlimited": "Legal"
+          },
+          "releaseDate": "",
+          "updatedAt": "2025/03/14",
+          "images": {
+            "symbol": "",
+            "logo": ""
+          }
+        },
+        "number": "067",
+        "artist": "",
+        "rarity": "",
+        "flavorText": "",
+        "nationalPokedexNumbers": [],
+        "legalities": {
+          "unlimited": "Legal"
+        },
+        "images": {
+          "small": "images/farfetchd/flight-of-legends-Farfetchd-PCG1067.jpg",
+          "large": ""
+        },
+        "cardmarket": {
+          "url": "https://www.cardmarket.com/en/Pokemon/Products/Singles/Flight-of-Legends/Farfetchd-PCG1067",
+          "updatedAt": "2025/03/14",
+          "prices": {
+            "averageSellPrice": 8.690000000000001,
+            "lowPrice": 7.9,
+            "trendPrice": 9.48,
+            "germanProLow": 0.0,
+            "suggestedPrice": 0.0,
+            "reverseHoloSell": 0.0,
+            "reverseHoloLow": 0.0,
+            "reverseHoloTrend": 0.0,
+            "lowPriceExPlus": 7.9,
+            "avg1": 0.0,
+            "avg7": 0.0,
+            "avg30": 0.0,
+            "reverseHoloAvg1": 0.0,
+            "reverseHoloAvg7": 0.0,
+            "reverseHoloAvg30": 0.0
+          }
+        }
+      }
+    ],
+    "page": 1,
+    "pageSize": 44,
+    "count": 44,
+    "totalCount": 44
+  },
   "pikachu": {
     "data": [
       {
@@ -29857,7 +32593,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/pikachu/generations-Pikachu-V1-GEN26.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -29919,7 +32655,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/pikachu/generations-Pikachu-GENRC29.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -29981,7 +32717,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/pikachu/evolutions-Flying-Pikachu-EVO110.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -30043,7 +32779,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/pikachu/evolutions-Surfing-Pikachu-EVO111.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -30105,7 +32841,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/pikachu/sm-black-star-promos-Ashs-Pikachu-SMSM108.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -30167,7 +32903,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/pikachu/sm-black-star-promos-Pikachu-V2-SMSM81.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -30229,7 +32965,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/pikachu/sm-black-star-promos-Detective-Pikachu-SMSM194.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -30291,7 +33027,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/pikachu/unified-minds-Pikachu-UNM56.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -67251,7 +69987,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charizard/shining-fates-Charizard-VMAX.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -67313,7 +70049,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charizard/expansion-pack-Charizard-EXP.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -67375,7 +70111,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charizard/unnumbered-promos-Charizard-V1-UNP.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -67437,7 +70173,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charizard/expansion-pack-20th-anniversary-Charizard-CP6011.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -67499,7 +70235,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charizard/celebrations-Charizard-V1-CELBS-4.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -67561,7 +70297,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charizard/25th-anniversary-edition-Charizard.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -67623,7 +70359,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charizard/celebrations-Charizard-V2.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -67685,7 +70421,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/charizard/evolutions-Charizard-V2-EVO11.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -82201,7 +84937,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gengar/fossil-Gengar-V1-FO5.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -82263,7 +84999,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gengar/gym-challenge-Sabrinas-Gengar-GC29.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -82325,7 +85061,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gengar/neo-destiny-Dark-Gengar-NDE6.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -82387,7 +85123,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gengar/legendary-collection-Gengar-LC11.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -82449,7 +85185,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gengar/expedition-base-set-Gengar-EX48.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -82511,7 +85247,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gengar/team-up-Gengar-Mimikyu-GX-V2-TEU164.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -82573,7 +85309,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gengar/team-up-Gengar-Mimikyu-GX-V3-TEU165.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -82635,7 +85371,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/gengar/team-up-Gengar-Mimikyu-GX-V4-TEU186.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -88719,7 +91455,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mew/unified-minds-Mewtwo-Mew-GX-V3-UNM242.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -88781,7 +91517,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mew/hidden-fates-Mew-V1-HIF32.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -88843,7 +91579,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mew/sm-black-star-promos-Mewtwo-Mew-GX-SM191.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -88905,7 +91641,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mew/evolutions-Mew-V4-EVO53.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -88967,7 +91703,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mew/hidden-fates-Mew-V2.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -89029,7 +91765,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mew/sun-moon-family-pokemon-card-game-Mew.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -89091,7 +91827,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mew/fusion-strike-Mew-V-V1.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -89153,7 +91889,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mew/heatran-vs-regigigas-deck-kit-Mewtwo-LVX-HRDK.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -98213,7 +100949,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mewtwo/sm-black-star-promos-Mewtwo-SM77.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -98275,7 +101011,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mewtwo/pokemon-go-Mewtwo-V-V2-PGO072.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -98337,7 +101073,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mewtwo/mewtwo-lvx-collection-pack-Mewtwo-LVX-PtM006.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -98399,7 +101135,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mewtwo/base-set-Mewtwo-V1-BS10.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -98461,7 +101197,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mewtwo/base-set-2-Mewtwo-B210.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -98523,7 +101259,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mewtwo/gym-challenge-Rockets-Mewtwo-G214.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -98585,7 +101321,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mewtwo/neo-destiny-Shining-Mewtwo-NDE109.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -98647,7 +101383,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/mewtwo/legendary-collection-Mewtwo-V1-LC29.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -110187,7 +112923,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machoke/rocket-gang-Dark-Machoke.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -110249,7 +112985,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machoke/base-set-Machoke-V1-BS34.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -110311,7 +113047,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machoke/base-set-2-Machoke-B249.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -110373,7 +113109,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machoke/team-rocket-Dark-Machoke-TR40.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -110435,7 +113171,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machoke/gym-challenge-Giovannis-Machoke-GC42.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -110497,7 +113233,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machoke/neo-destiny-Light-Machoke-NDE49.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -110559,7 +113295,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machoke/legendary-collection-Machoke-LC51.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -110621,7 +113357,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machoke/expedition-base-set-Machoke-EX85.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -113543,7 +116279,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machamp/team-rocket-Dark-Machamp-TR27.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -113605,7 +116341,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machamp/stormfront-Machamp-LVX-STF98.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -113667,7 +116403,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machamp/astral-radiance-Machamp-VMAX-V1-ASR073.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -113729,7 +116465,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machamp/astral-radiance-Machamp-V-V2-ASR171.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -113791,7 +116527,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machamp/astral-radiance-Machamp-V-V3-ASR172.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -113853,7 +116589,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machamp/151-Machamp-MEW068.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -113915,7 +116651,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machamp/base-set-Machamp-V1-BS8.jpg",
           "large": ""
         },
         "cardmarket": {
@@ -113977,7 +116713,7 @@ var pokemonData = {
           "unlimited": "Legal"
         },
         "images": {
-          "small": "",
+          "small": "images/machamp/team-rocket-Dark-Machamp-TR10.jpg",
           "large": ""
         },
         "cardmarket": {

@@ -73,7 +73,7 @@
                 :data-collection="tab.name.toLowerCase()"
                 @click="selectCollection(tab.name.toLowerCase(), 'pokemon')"
               >
-                <span>{{ tab.name }}</span>
+                <span>{{ tab.displayName }}</span>
                 <span 
                   class="remove-btn" 
                   title="Remove" 
@@ -526,10 +526,13 @@
         QUERY_TYPES: 'queryTypes'
       },
       DEFAULT_POKEMON: [
-        'Charizard', 'Cubone', 'Psyduck', 'Pikachu', 'Farfetch\'d', 
+        'Charizard', 'Cubone', 'Psyduck', 'Pikachu', 'Farfetchd', 
         'Golem', 'Gastly', 'Haunter', 'Gengar', 'Mew', 'Mewtwo', 
         'Machop', 'Machoke', 'Machamp'
       ],
+      POKEMON_DISPLAY_NAMES: {
+        'farfetchd': 'Farfetch\'d'
+      },
       SPECIAL_COLLECTIONS: [], // Trainer galleries omitted as requested
       PRICE_LABELS: {
         tcgplayer: {
@@ -568,6 +571,15 @@
         DEFAULT_IMAGE: 'images/default_image.png' // Default image path - using relative path
       }
     };
+
+    /**
+     * Helper function to convert API names to display names
+     */
+    function getPokemonDisplayName(apiName) {
+      const lowerApiName = apiName.toLowerCase();
+      return CONFIG.POKEMON_DISPLAY_NAMES[lowerApiName] || 
+             apiName.charAt(0).toUpperCase() + apiName.slice(1);
+    }
 
     /**
      * Database and Caching Service
@@ -1481,8 +1493,17 @@
       },
       computed: {
         pokemonTabs() {
-          const customTabObjects = this.customTabs.map(name => ({ name }));
-          return [...this.defaultPokemonTabs, ...customTabObjects];
+          const customTabObjects = this.customTabs.map(name => ({ 
+            name, 
+            displayName: getPokemonDisplayName(name) 
+          }));
+          
+          const defaultTabObjects = this.defaultPokemonTabs.map(tab => ({
+            name: tab.name,
+            displayName: getPokemonDisplayName(tab.name)
+          }));
+          
+          return [...defaultTabObjects, ...customTabObjects];
         },
         filteredCards() {
           const query = this.searchFilters.query.toLowerCase();
@@ -1782,7 +1803,7 @@
         
         // Pokemon Tab Methods
         addNewPokemon() {
-          const pokemonName = this.newPokemonInput.trim();
+          let pokemonName = this.newPokemonInput.trim();
           if (!pokemonName) {
             this.showNotification({
               title: 'Validation Error',
@@ -1792,8 +1813,14 @@
             return;
           }
           
+          // If the user enters Farfetch'd, convert it to Farfetchd for API purposes
+          const apiName = pokemonName.toLowerCase() === 'farfetch\'d' 
+            ? 'farfetchd' 
+            : pokemonName.toLowerCase();
+          
+          // Check if it already exists
           const exists = this.pokemonTabs.some(tab => 
-            tab.name.toLowerCase() === pokemonName.toLowerCase()
+            tab.name.toLowerCase() === apiName.toLowerCase()
           );
           
           if (exists) {
@@ -1805,12 +1832,12 @@
             return;
           }
           
-          this.customTabs.push(pokemonName.toLowerCase());
+          this.customTabs.push(apiName);
           this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.CUSTOM_TABS, this.customTabs);
           
           this.newPokemonInput = '';
           this.changeView('all');
-          this.selectCollection(pokemonName.toLowerCase(), 'pokemon');
+          this.selectCollection(apiName, 'pokemon');
           
           this.showNotification({
             title: 'Pokemon Added',
@@ -1830,17 +1857,18 @@
             return;
           }
           
-          if (confirm(`Remove ${pokemonName} from your collection tabs?`)) {
+          const displayName = getPokemonDisplayName(pokemonName);
+          if (confirm(`Remove ${displayName} from your collection tabs?`)) {
             this.customTabs = this.customTabs.filter(name => name !== pokemonName.toLowerCase());
             this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.CUSTOM_TABS, this.customTabs);
             
             if (this.currentCollection === pokemonName.toLowerCase()) {
-              this.selectCollection('psyduck', 'pokemon'); // Changed to Psyduck
+              this.selectCollection('psyduck', 'pokemon');
             }
             
             this.showNotification({
               title: 'Tab Removed',
-              message: `${pokemonName} has been removed from your collection`,
+              message: `${displayName} has been removed from your collection`,
               type: 'success'
             });
           }
