@@ -1,0 +1,2081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pokemon Collection</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Set LOCAL_DEV to true for local development, false for production -->
+  <script>
+    const LOCAL_DEV = true; // CHANGE THIS TO FALSE WHEN DEPLOYING
+  </script>
+  
+  <!-- Only load local data in development mode -->
+  <script>
+    if (LOCAL_DEV) {
+      document.write('<script src="pokemonData.js"><\/script>');
+      console.log("Running in LOCAL development mode");
+    } else {
+      console.log("Running in PRODUCTION mode");
+    }
+  </script>
+  
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- Loading Indicator -->
+    <div class="loading-indicator" v-if="loading" style="display: flex;">
+      <svg class="spinner" viewBox="0 0 50 50">
+        <circle class="path" cx="25" cy="25" r="20" fill="none" stroke-width="5"></circle>
+      </svg>
+    </div>
+
+    <!-- Offline Indicator -->
+    <div class="offline-indicator" v-if="isOffline">
+      <i class="fas fa-wifi"></i> You're offline - using cached data
+    </div>
+    
+    <!-- Display error message if any -->
+    <div v-if="errorMessage" style="color: red; text-align: center; margin: 1rem;">{{ errorMessage }}</div>
+
+    <header>
+      <div class="header-content">
+        <!-- Static content with v-once to prevent re-rendering -->
+        <h1 v-once>The Pokemon Collection</h1>
+        <!-- Tabs and views -->
+        <div class="tabs-container">
+          <div class="tabs-nav">
+            <button 
+              v-for="view in views" 
+              :key="view.id" 
+              class="tabs-btn" 
+              :class="{ active: currentView === view.id }"
+              @click="changeView(view.id)"
+              :aria-label="view.name"
+            >
+              <i :class="view.icon"></i>
+            </button>
+          </div>
+          <div class="tabs-content">
+            <!-- Pokemon tabs list -->
+            <div class="tabs" id="pokemon-tabs" v-show="currentView === 'all'">
+              <!-- Regular Pokemon Tabs - improved key usage -->
+              <button 
+                v-for="tab in pokemonTabs" 
+                :key="`tab-${tab.name.toLowerCase()}`"
+                class="tab" 
+                :class="{ active: currentCollection === tab.name.toLowerCase() }"
+                :data-collection="tab.name.toLowerCase()"
+                @click="selectCollection(tab.name.toLowerCase(), 'pokemon')"
+              >
+                <span>{{ tab.name }}</span>
+                <span 
+                  class="remove-btn" 
+                  title="Remove" 
+                  @click.stop="handleTabRemoval(tab.name.toLowerCase())"
+                >
+                  <i class="fas fa-times" v-once></i>
+                </span>
+              </button>
+            </div>
+            
+            <!-- Add Pokemon Form -->
+            <div v-show="currentView === 'add'" style="padding: 1rem;">
+              <div style="display: flex; gap: 0.5rem;">
+                <input 
+                  type="text" 
+                  v-model="newPokemonInput" 
+                  placeholder="Enter Pokemon name..." 
+                  style="flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(43,47,69,0.6); color: white;"
+                  @keyup.enter="addNewPokemon"
+                >
+                <button 
+                  @click="addNewPokemon" 
+                  style="background: var(--primary-color); color: white; border: none; border-radius: 4px; padding: 0 1rem; cursor: pointer;"
+                >
+                  <span v-once>Add</span>
+                </button>
+                <button 
+                  @click="changeView('all')" 
+                  style="background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 4px; padding: 0 1rem; cursor: pointer;"
+                >
+                  <span v-once>Cancel</span>
+                </button>
+              </div>
+            </div>
+            
+            <!-- Favorites View -->
+            <div v-show="currentView === 'favorites'" class="collection-view">
+              <div class="view-header">
+                <h3 v-once><i class="fas fa-star"></i> My Favorite Cards</h3>
+              </div>
+              <div class="favorites-container">
+                <div class="empty-state" v-if="!favoriteCardsList.length" v-once>
+                  <i class="fas fa-star"></i>
+                  <h4>No favorites yet</h4>
+                  <p>Star your favorite cards to see them here</p>
+                </div>
+                <card-component 
+                  v-for="card in favoriteCardsList" 
+                  :key="`fav-${card.id}`" 
+                  :card="card" 
+                  @toggle-bought="toggleCardBought"
+                  @toggle-favorite="toggleCardFavorite"
+                  @open-modal="openCardModal"
+                ></card-component>
+              </div>
+            </div>
+            
+            <!-- Custom Collections View -->
+            <div v-show="currentView === 'custom'" class="collection-view">
+              <div class="view-header">
+                <h3 v-once><i class="fas fa-folder"></i> Custom Collections</h3>
+                <button @click="showCollectionForm = true" class="action-btn">
+                  <i class="fas fa-plus" v-once></i><span v-once> New Collection</span>
+                </button>
+              </div>
+              <div v-if="showCollectionForm" class="add-collection-form">
+                <div class="form-group">
+                  <label for="collection-name" v-once>Collection Name</label>
+                  <input type="text" v-model="newCollection.name" placeholder="E.g., Holographic Cards">
+                </div>
+                <div class="form-group">
+                  <label for="collection-description" v-once>Description (Optional)</label>
+                  <textarea v-model="newCollection.description" placeholder="What makes this collection special?"></textarea>
+                </div>
+                <div class="form-group">
+                  <label v-once>Collection Type</label>
+                  <div style="display: flex; gap: 1rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="radio" v-model="newCollection.type" value="manual"> 
+                      <span v-once>Manual (Add cards individually)</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                      <input type="radio" v-model="newCollection.type" value="auto"> 
+                      <span v-once>Auto (Based on filters)</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button @click="showCollectionForm = false" class="form-btn form-btn-secondary" v-once>Cancel</button>
+                  <button @click="saveCollection" class="form-btn form-btn-primary" v-once>Create Collection</button>
+                </div>
+              </div>
+              <div>
+                <div class="empty-state" v-if="!customCollections.length && !showCollectionForm" v-once>
+                  <i class="fas fa-folder-open"></i>
+                  <h4>No custom collections yet</h4>
+                  <p>Create a collection to organize your cards</p>
+                  <button @click="showCollectionForm = true" class="btn-add-items">
+                    <i class="fas fa-plus"></i> Create Collection
+                  </button>
+                </div>
+                <div 
+                  v-for="collection in customCollections" 
+                  :key="`collection-${collection.id}`"
+                  class="custom-collection"
+                  @click="viewCollection(collection.id)"
+                >
+                  <div>
+                    <h4>{{ collection.name }}</h4>
+                    <p>{{ collection.description || "No description" }} • {{ getCollectionCardCount(collection.id) }} cards</p>
+                  </div>
+                  <div class="collection-actions">
+                    <button @click.stop="viewCollection(collection.id)" class="action-btn" title="View Collection">
+                      <i class="fas fa-eye" v-once></i>
+                    </button>
+                    <button @click.stop="editCollection(collection.id)" class="action-btn" title="Edit Collection">
+                      <i class="fas fa-pencil-alt" v-once></i>
+                    </button>
+                    <button @click.stop="deleteCollection(collection.id)" class="action-btn" title="Delete Collection">
+                      <i class="fas fa-trash-alt" v-once></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Data Export/Import Controls -->
+            <div v-show="currentView === 'all'" class="data-actions">
+              <button @click="exportData" class="data-action-btn" v-once>
+                <i class="fas fa-file-export"></i> Export Collection
+              </button>
+              <button @click="showImportDialog = true" class="data-action-btn" v-once>
+                <i class="fas fa-file-import"></i> Import Collection
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Search and Filter Controls -->
+        <div class="controls-wrapper">
+          <div class="controls-container">
+            <div class="controls-header">
+              <h3 v-once><i class="fas fa-sliders-h"></i> Filters & Sorting</h3>
+              <button @click="toggleAdvancedFilters" class="toggle-filters">
+                <span>{{ showAdvancedFilters ? 'Hide Advanced' : 'Show Advanced' }}</span>
+                <i :class="showAdvancedFilters ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+              </button>
+            </div>
+            <div class="search-controls">
+              <div class="control-group">
+                <i class="fas fa-search search-icon" v-once></i>
+                <input 
+                  type="text" 
+                  v-model="searchFilters.query" 
+                  placeholder="Search by name, set, rarity..."
+                />
+              </div>
+              <div class="control-group select-wrapper">
+                <i class="fas fa-filter search-icon"></i>
+                <select v-model="searchFilters.filterValue">
+                  <option value="all">All Cards</option>
+                  <option value="bought">Bought</option>
+                  <option value="notBought">Not Bought</option>
+                  <option value="favorites">Favorites</option>
+                </select>
+              </div>
+              <div class="control-group select-wrapper">
+                <i class="fas fa-sort search-icon"></i>
+                <select v-model="searchFilters.sortValue">
+                  <option value="name">Sort by Name</option>
+                  <option value="set">Sort by Set</option>
+                  <option value="number">Sort by Number</option>
+                  <option value="rarity">Sort by Rarity</option>
+                  <option value="printYear">Sort by Year</option>
+                </select>
+              </div>
+            </div>
+            <div class="checkbox-row">
+              <div class="checkbox-group">
+                <label>
+                  <input type="checkbox" v-model="searchFilters.reverseOrder" /> 
+                  <span v-once>Reverse Order</span>
+                </label>
+              </div>
+              <div class="checkbox-group">
+                <label>
+                  <input type="checkbox" v-model="searchFilters.foilOnly" /> 
+                  <span v-once>Foil Cards Only</span>
+                </label>
+              </div>
+              <button @click="refreshCards" class="refresh-btn">
+                <i class="fas fa-sync-alt" v-once></i><span v-once> Refresh</span>
+              </button>
+            </div>
+            <!-- Advanced Filters -->
+            <div class="advanced-filters" v-show="showAdvancedFilters">
+              <div class="control-group">
+                <i class="fas fa-calendar-alt search-icon" v-once></i>
+                <input type="text" v-model="searchFilters.year" placeholder="Filter by Year" />
+              </div>
+              <div class="control-group">
+                <i class="fas fa-dollar-sign search-icon" v-once></i>
+                <input type="text" v-model.number="searchFilters.priceMin" placeholder="Min Price ($)" />
+              </div>
+              <div class="control-group">
+                <i class="fas fa-dollar-sign search-icon" v-once></i>
+                <input type="text" v-model.number="searchFilters.priceMax" placeholder="Max Price ($)" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Collection Summary -->
+    <div class="collection-summary">
+      <div class="summary-stat">
+        <i class="fas fa-layer-group" v-once></i>
+        <span v-once>Total Cards: </span><span>{{ filteredCards.length }}</span>
+      </div>
+      <div class="summary-stat">
+        <i class="fas fa-shopping-cart" v-once></i>
+        <span v-once>Bought: </span><span>{{ boughtCount }}</span>
+      </div>
+      <div class="summary-stat">
+        <i class="fas fa-star" v-once></i>
+        <span v-once>Favorites: </span><span>{{ favoriteCount }}</span>
+      </div>
+    </div>
+
+    <main>
+      <div class="cards-container">
+        <div v-if="filteredCards.length === 0" style="text-align: center; grid-column: 1 / -1; padding: 4rem 1rem; color: #a0a9c8; font-size: 1.1rem;">
+          <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;" v-once></i><br>
+          <span v-once>No cards found. Try different search criteria.</span>
+        </div>
+        <card-component 
+          v-for="card in filteredCards" 
+          :key="`card-${card.id}`" 
+          :card="card" 
+          @toggle-bought="toggleCardBought"
+          @toggle-favorite="toggleCardFavorite"
+          @open-modal="openCardModal"
+        ></card-component>
+      </div>
+    </main>
+
+    <!-- Modal Component -->
+    <modal-component 
+      v-if="selectedCard" 
+      :card="selectedCard" 
+      :note="cardNoteText" 
+      :note-saved="noteSaved"
+      @close="closeCardModal"
+      @save-note="saveCardNote"
+      @update:note="cardNoteText = $event"
+    ></modal-component>
+
+    <!-- Notification Component -->
+    <notification-component 
+      v-if="notification.visible" 
+      :title="notification.title" 
+      :message="notification.message" 
+      :type="notification.type" 
+      :visible="notification.visible"
+    ></notification-component>
+
+    <!-- Import Dialog -->
+    <import-dialog-component 
+      v-if="showImportDialog"
+      @cancel="showImportDialog = false"
+      @import="processImportedData"
+    ></import-dialog-component>
+  </div>
+
+  <!-- Component Templates -->
+  <!-- Card Component Template -->
+  <template id="card-template">
+    <div class="card" :class="{ bought: isBought }" @click="openModal">
+      <div class="card-image-container">
+        <div v-if="imageLoading" class="card-image-placeholder image-loading" :style="{ width: '100%', height: '150px' }"></div>
+        <img 
+          :src="cardImageSrc" 
+          :alt="card.name" 
+          @load="onImageLoaded" 
+          @error="onImageError"
+          ref="cardImage"
+          class="card-image"
+        >
+      </div>
+      <div class="title">{{ card.name }}</div>
+      <div class="card-badges">
+        <span v-if="card.rarity" class="card-badge">{{ card.rarity }}</span>
+        <span v-if="releaseYear" class="card-badge">{{ releaseYear }}</span>
+      </div>
+      <div class="info">
+        {{ [card.set?.name ? 'Set: ' + card.set.name : '', card.number ? 'No. ' + card.number : ''].filter(Boolean).join(' • ') }}
+      </div>
+      <div class="card-actions">
+        <div class="bought-wrapper">
+          <input 
+            type="checkbox" 
+            :id="'bought-' + card.id" 
+            :checked="isBought"
+            @change="toggleBought"
+            @click.stop
+          >
+          <label :for="'bought-' + card.id" @click.stop v-once>Bought</label>
+        </div>
+        <span 
+          class="favorite-star" 
+          :class="{ favorited: isFavorite }"
+          @click.stop="toggleFavorite"
+          aria-label="Toggle favorite"
+        >
+          <i class="fas fa-star"></i>
+        </span>
+      </div>
+    </div>
+  </template>
+
+  <!-- Modal Component Template -->
+  <template id="modal-template">
+    <div class="modal" role="dialog" aria-modal="true" @click="close" aria-labelledby="modal-title">
+      <div class="modal-content" @click.stop>
+        <span class="close" @click="close" aria-label="Close modal"><i class="fas fa-times" v-once></i></span>
+        <div class="modal-body">
+          <div class="modal-image">
+            <img 
+              :src="modalImageSrc" 
+              :alt="card.name"
+              loading="eager" 
+              fetchpriority="high"
+              @error="onImageError"
+            >
+          </div>
+          <div class="modal-details">
+            <h2 id="modal-title">
+              <i :class="'fas fa-' + getTypeIcon(card.types && card.types[0] ? card.types[0].toLowerCase() : 'default')"></i>
+              {{ card.name }}
+            </h2>
+            <div class="info-section">
+              <h3 v-once><i class="fas fa-info-circle"></i> Card Information</h3>
+              <p>
+                <strong v-once>Number:</strong> {{ card.number || 'N/A' }}<br>
+                <strong v-once>Set:</strong> {{ card.set?.name || 'N/A' }}<br>
+                <strong v-once>Rarity:</strong> {{ card.rarity || 'N/A' }}<br>
+                <strong v-once>Printing Year:</strong> {{ getReleaseYear(card) }}<br>
+                <strong v-once>Types:</strong> {{ (card.types || []).join(', ') || 'N/A' }}<br>
+                <span v-if="card.hp"><strong v-once>HP:</strong> {{ card.hp }}<br></span>
+                <span v-if="card.artist"><strong v-once>Artist:</strong> {{ card.artist }}</span>
+              </p>
+            </div>
+            <div class="info-section">
+              <h3 v-once><i class="fas fa-tag"></i> Pricing Information</h3>
+              <div v-if="card.tcgplayer?.prices" class="price-block">
+                <div class="price-title">
+                  <i class="fas fa-coins" v-once></i>
+                  TCGplayer ({{ Object.keys(card.tcgplayer.prices)[0].charAt(0).toUpperCase() + Object.keys(card.tcgplayer.prices)[0].slice(1) }})
+                </div>
+                <div class="price-detail">
+                  <div class="price-item" v-for="(label, key) in PRICE_LABELS.tcgplayer" :key="`price-tcg-${key}`">
+                    <div class="price-label" v-once>{{ label }}</div>
+                    <div class="price-value">{{ formatPrice(getPriceValue(card, key)) }}</div>
+                  </div>
+                </div>
+                <a :href="card.tcgplayer.url || 'https://www.tcgplayer.com'" target="_blank" rel="noopener noreferrer" class="external-link-btn">
+                  <i class="fas fa-external-link-alt" v-once></i><span v-once> View on TCGplayer</span>
+                </a>
+              </div>
+              <div v-if="card.cardmarket?.prices" class="price-block">
+                <div class="price-title">
+                  <i class="fas fa-euro-sign" v-once></i><span v-once> Cardmarket</span>
+                </div>
+                <div class="price-detail">
+                  <div class="price-item" v-for="(label, key) in PRICE_LABELS.cardmarket" :key="`price-market-${key}`">
+                    <div class="price-label" v-once>{{ label }}</div>
+                    <div class="price-value">{{ formatPrice(card.cardmarket.prices[key]) }}</div>
+                  </div>
+                </div>
+                <a :href="card.cardmarket.url || 'https://www.cardmarket.com'" target="_blank" rel="noopener noreferrer" class="external-link-btn">
+                  <i class="fas fa-external-link-alt" v-once></i><span v-once> View on Cardmarket</span>
+                </a>
+              </div>
+              <p v-if="!card.tcgplayer?.prices && !card.cardmarket?.prices" v-once>
+                <i class="fas fa-exclamation-circle"></i> No pricing information available for this card.
+              </p>
+            </div>
+            <div class="info-section">
+              <h3 v-once><i class="fas fa-sticky-note"></i> Personal Notes</h3>
+              <textarea 
+                :value="note" 
+                @input="$emit('update:note', $event.target.value)" 
+                placeholder="Add your notes about this card here..."
+              ></textarea>
+              <button @click="save" class="save-note">
+                <i class="fas" :class="noteSaved ? 'fa-check' : 'fa-save'"></i>
+                {{ noteSaved ? 'Saved!' : 'Save Note' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Notification Component Template -->
+  <template id="notification-template">
+    <div class="notification" :class="[type, { show: visible }]">
+      <div class="notification-title">
+        <i :class="getIcon()"></i> {{ title }}
+      </div>
+      <div class="notification-message">{{ message }}</div>
+    </div>
+  </template>
+
+  <!-- Import Dialog Template -->
+  <template id="import-dialog-template">
+    <div class="import-dialog" @click="cancel">
+      <div class="import-dialog-content" @click.stop>
+        <h3 v-once><i class="fas fa-file-import"></i> Import Collection Data</h3>
+        <p v-once>Select a JSON file containing your previously exported Pokemon collection data.</p>
+        <div class="import-file-input">
+          <input type="file" ref="fileInput" accept="application/json" @change="handleFileSelect">
+        </div>
+        <div class="import-dialog-actions">
+          <button @click="cancel" class="form-btn form-btn-secondary" v-once>Cancel</button>
+          <button @click="importData" class="form-btn form-btn-primary" :disabled="!selectedFile" v-once>Import</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    /**
+     * Configuration and Constants
+     */
+    const CONFIG = {
+      CACHE_VERSION: 1,
+      CACHE_EXPIRY: 24 * 60 * 60 * 1000, // 24 hours
+      DB_NAME: 'pokemon-collector-local',
+      DB_VERSION: 1,
+      LOCAL_STORAGE_KEYS: {
+        BOUGHT: 'boughtCards',
+        NOTES: 'cardNotes',
+        FAVORITES: 'favoriteCards',
+        CUSTOM_TABS: 'customPokemonTabs',
+        CUSTOM_COLLECTIONS: 'customCollections',
+        COLLECTION_CARDS: 'collectionCards',
+        QUERY_TYPES: 'queryTypes'
+      },
+      DEFAULT_POKEMON: [
+        'Charizard', 'Cubone', 'Psyduck', 'Pikachu', 'Farfetch\'d', 
+        'Golem', 'Gastly', 'Haunter', 'Gengar', 'Mew', 'Mewtwo', 
+        'Machop', 'Machoke', 'Machamp'
+      ],
+      SPECIAL_COLLECTIONS: [], // Trainer galleries omitted as requested
+      PRICE_LABELS: {
+        tcgplayer: {
+          'low': 'Low',
+          'mid': 'Mid',
+          'high': 'High',
+          'market': 'Market'
+        },
+        cardmarket: {
+          'averageSellPrice': 'Avg Sell',
+          'lowPrice': 'Low',
+          'trendPrice': 'Trend',
+          'avg30': '30d Avg'
+        }
+      },
+      TYPE_ICONS: {
+        fire: 'fire',
+        water: 'tint',
+        grass: 'leaf',
+        electric: 'bolt',
+        psychic: 'brain',
+        fighting: 'fist-raised',
+        darkness: 'moon',
+        metal: 'cog',
+        fairy: 'magic',
+        dragon: 'dragon',
+        colorless: 'feather',
+        default: 'certificate'
+      },
+      DEBOUNCE_DELAY: 300,
+      NOTIFICATION_DURATION: 3000,
+      // New configuration for image loading
+      IMAGE_LOADING: {
+        OBSERVER_ROOT_MARGIN: '200px',
+        OBSERVER_THRESHOLD: 0.1,
+        DEFAULT_IMAGE: 'images/default_image.png' // Default image path - using relative path
+      }
+    };
+
+    /**
+     * Database and Caching Service
+     */
+    const DBService = {
+      db: null,
+      connectionPromise: null, // Track the connection promise
+      isConnecting: false,     // Track connection state
+
+      // Initialize IndexedDB with connection management
+      async init() {
+        // Return existing connection if available
+        if (this.db && this.db.transaction) {
+          return this.db;
+        }
+        
+        // Return existing connection promise if already connecting
+        if (this.isConnecting && this.connectionPromise) {
+          return this.connectionPromise;
+        }
+        
+        this.isConnecting = true;
+        
+        this.connectionPromise = new Promise((resolve, reject) => {
+          try {
+            const request = window.indexedDB.open(CONFIG.DB_NAME, CONFIG.DB_VERSION);
+
+            request.onerror = (event) => {
+              console.error('IndexedDB error:', event.target.error);
+              this.isConnecting = false;
+              reject(event.target.error);
+            };
+
+            request.onsuccess = (event) => {
+              this.db = event.target.result;
+              
+              // Handle unexpected connection closures
+              this.db.onclose = () => {
+                console.log('IndexedDB connection closed unexpectedly');
+                this.db = null;
+                this.isConnecting = false;
+              };
+              
+              // Handle version change (another tab/window requested a version change)
+              this.db.onversionchange = (event) => {
+                this.db.close();
+                console.log('IndexedDB version change, connection closed');
+                this.db = null;
+                this.isConnecting = false;
+                alert('Database updated in another window. Please refresh this page.');
+              };
+              
+              this.isConnecting = false;
+              resolve(this.db);
+            };
+
+            request.onupgradeneeded = (event) => {
+              const db = event.target.result;
+              
+              // Create card store
+              if (!db.objectStoreNames.contains('cards')) {
+                const cardStore = db.createObjectStore('cards', { keyPath: 'id' });
+                cardStore.createIndex('collection', 'collection', { unique: false });
+                cardStore.createIndex('lastUpdated', 'lastUpdated', { unique: false });
+              }
+              
+              // Create settings store
+              if (!db.objectStoreNames.contains('settings')) {
+                db.createObjectStore('settings', { keyPath: 'key' });
+              }
+              
+              // Create user data store
+              if (!db.objectStoreNames.contains('userData')) {
+                db.createObjectStore('userData', { keyPath: 'key' });
+              }
+            };
+          } catch (err) {
+            this.isConnecting = false;
+            reject(err);
+          }
+        });
+        
+        return this.connectionPromise;
+      },
+
+      // Safely execute a database operation with retries
+      async executeWithRetry(operation, maxRetries = 3) {
+        let retries = 0;
+        let lastError;
+        
+        while (retries < maxRetries) {
+          try {
+            // Ensure DB is initialized before each attempt
+            await this.init();
+            return await operation();
+          } catch (error) {
+            retries++;
+            lastError = error;
+            console.warn(`Database operation failed (attempt ${retries}/${maxRetries}):`, error);
+            
+            // Reset DB connection if the error is related to closed connection
+            if (
+              error.name === 'InvalidStateError' || 
+              (error.message && error.message.includes('connection is closing'))
+            ) {
+              this.db = null;
+              this.isConnecting = false;
+              await new Promise(resolve => setTimeout(resolve, 300 * retries)); // Increasing backoff
+            }
+          }
+        }
+        
+        throw lastError || new Error('Database operation failed after multiple retries');
+      },
+
+      // Card operations with retry logic
+      async saveCards(collection, cards) {
+        return this.executeWithRetry(async () => {
+          const tx = this.db.transaction('cards', 'readwrite');
+          const store = tx.objectStore('cards');
+          
+          // Add promise-based transaction completion tracking
+          const txComplete = new Promise((resolve, reject) => {
+            tx.oncomplete = resolve;
+            tx.onerror = () => reject(tx.error);
+            tx.onabort = () => reject(new Error('Transaction aborted'));
+          });
+          
+          // First delete old cards for this collection
+          const collectionIndex = store.index('collection');
+          const collectionRequest = collectionIndex.getAllKeys(collection);
+          
+          return new Promise((resolve, reject) => {
+            collectionRequest.onsuccess = async (event) => {
+              try {
+                const existingKeys = event.target.result;
+                
+                // Delete existing cards for this collection
+                for (const key of existingKeys) {
+                  store.delete(key);
+                }
+                
+                // Add new cards
+                const timestamp = Date.now();
+                for (const card of cards) {
+                  card.collection = collection;
+                  card.lastUpdated = timestamp;
+                  store.put(card);
+                }
+                
+                // Save metadata in a new transaction
+                await txComplete;
+                
+                const settingsTx = this.db.transaction('settings', 'readwrite');
+                const settingsStore = settingsTx.objectStore('settings');
+                
+                // Create a promise for settings transaction
+                const settingsTxComplete = new Promise((settingsResolve, settingsReject) => {
+                  settingsTx.oncomplete = settingsResolve;
+                  settingsTx.onerror = () => settingsReject(settingsTx.error);
+                });
+                
+                settingsStore.put({
+                  key: `collection_${collection}`,
+                  timestamp: timestamp,
+                  cardsCount: cards.length
+                });
+                
+                await settingsTxComplete;
+                resolve();
+              } catch (err) {
+                reject(err);
+              }
+            };
+            
+            collectionRequest.onerror = (event) => reject(event.target.error);
+          });
+        });
+      },
+
+      async getCards(collection) {
+        return this.executeWithRetry(async () => {
+          const tx = this.db.transaction('cards', 'readonly');
+          const store = tx.objectStore('cards');
+          const index = store.index('collection');
+          
+          return new Promise((resolve, reject) => {
+            const request = index.getAll(collection);
+            request.onsuccess = (event) => resolve(event.target.result);
+            request.onerror = (event) => reject(event.target.error);
+          });
+        });
+      },
+
+      async getCardMetadata(collection) {
+        return this.executeWithRetry(async () => {
+          const tx = this.db.transaction('settings', 'readonly');
+          const store = tx.objectStore('settings');
+          
+          return new Promise((resolve, reject) => {
+            const request = store.get(`collection_${collection}`);
+            request.onsuccess = (event) => resolve(event.target.result || null);
+            request.onerror = (event) => reject(event.target.error);
+          });
+        });
+      },
+
+      // User data operations with retry logic
+      async saveUserData(key, data) {
+        // Convert any reactive Vue objects to plain objects before saving
+        const plainData = utils.toPlainObject(data);
+        
+        return this.executeWithRetry(async () => {
+          const tx = this.db.transaction('userData', 'readwrite');
+          const store = tx.objectStore('userData');
+          
+          return new Promise((resolve, reject) => {
+            const request = store.put({ key, data: plainData, timestamp: Date.now() });
+            request.onsuccess = () => resolve();
+            request.onerror = (event) => reject(event.target.error);
+            
+            // Add transaction completion handling
+            tx.oncomplete = () => resolve();
+            tx.onerror = () => reject(tx.error);
+          });
+        });
+      },
+
+      async getUserData(key) {
+        return this.executeWithRetry(async () => {
+          const tx = this.db.transaction('userData', 'readonly');
+          const store = tx.objectStore('userData');
+          
+          return new Promise((resolve, reject) => {
+            const request = store.get(key);
+            request.onsuccess = (event) => {
+              const result = event.target.result;
+              resolve(result ? result.data : null);
+            };
+            request.onerror = (event) => reject(event.target.error);
+          });
+        });
+      },
+
+      async getAllUserData() {
+        return this.executeWithRetry(async () => {
+          const tx = this.db.transaction('userData', 'readonly');
+          const store = tx.objectStore('userData');
+          
+          return new Promise((resolve, reject) => {
+            const request = store.getAll();
+            request.onsuccess = (event) => {
+              const result = event.target.result;
+              const dataMap = {};
+              
+              result.forEach(item => {
+                dataMap[item.key] = item.data;
+              });
+              
+              resolve(dataMap);
+            };
+            request.onerror = (event) => reject(event.target.error);
+          });
+        });
+      },
+
+      // Export all data
+      async exportAllData() {
+        return this.executeWithRetry(async () => {
+          const userData = await this.getAllUserData();
+          const cardData = {};
+          
+          // Get unique collections
+          const tx = this.db.transaction('settings', 'readonly');
+          const store = tx.objectStore('settings');
+          
+          return new Promise((resolve, reject) => {
+            const request = store.getAll();
+            request.onsuccess = async (event) => {
+              try {
+                const collections = event.target.result
+                  .filter(item => item.key.startsWith('collection_'))
+                  .map(item => item.key.replace('collection_', ''));
+                
+                // Get cards for each collection
+                for (const collection of collections) {
+                  try {
+                    cardData[collection] = await this.getCards(collection);
+                  } catch (error) {
+                    console.warn(`Error getting cards for collection ${collection}:`, error);
+                    cardData[collection] = []; // Use empty array for failed collections
+                  }
+                }
+                
+                resolve({
+                  version: CONFIG.CACHE_VERSION,
+                  timestamp: Date.now(),
+                  userData,
+                  cardData
+                });
+              } catch (error) {
+                reject(error);
+              }
+            };
+            request.onerror = (event) => reject(event.target.error);
+          });
+        });
+      },
+
+      // Import data
+      async importAllData(data) {
+        if (!data || !data.userData || !data.cardData) {
+          throw new Error('Invalid import data format');
+        }
+        
+        // Import user data
+        const userDataKeys = Object.keys(data.userData);
+        for (const key of userDataKeys) {
+          await this.saveUserData(key, data.userData[key]);
+        }
+        
+        // Import card data
+        const collections = Object.keys(data.cardData);
+        for (const collection of collections) {
+          if (data.cardData[collection].length > 0) {
+            await this.saveCards(collection, data.cardData[collection]);
+          }
+        }
+        
+        return true;
+      },
+
+      // Close and reset database connection (useful for cleanup)
+      closeConnection() {
+        if (this.db) {
+          try {
+            this.db.close();
+            console.log('Database connection closed cleanly');
+          } catch (e) {
+            console.error('Error closing database:', e);
+          }
+          this.db = null;
+          this.isConnecting = false;
+        }
+      }
+    };
+
+    /**
+     * Local API Service with hybrid mode support (local development or server)
+     */
+    const ApiService = {
+      async fetchCards(collectionId, options = {}) {
+        const { forceRefresh = false, queryType = 'pokemon' } = options;
+        
+        // Check cache first if not forcing refresh
+        if (!forceRefresh) {
+          const metadata = await DBService.getCardMetadata(collectionId);
+          if (metadata && Date.now() - metadata.timestamp < CONFIG.CACHE_EXPIRY) {
+            const cachedCards = await DBService.getCards(collectionId);
+            if (cachedCards && cachedCards.length > 0) {
+              return cachedCards;
+            }
+          }
+        }
+        
+        try {
+          // LOCAL DEVELOPMENT MODE
+          if (LOCAL_DEV) {
+            // Check if we have the data in the pokemonData global object
+            if (typeof pokemonData !== 'undefined' && pokemonData[collectionId]) {
+              console.log(`Loading ${collectionId} data from local JS file`);
+              const cards = pokemonData[collectionId].data;
+              
+              // Cache the data
+              await DBService.saveCards(collectionId, cards);
+              
+              return cards;
+            } else {
+              throw new Error(`No data found for ${collectionId} in local data. Check your pokemonData.js file.`);
+            }
+          } 
+          // PRODUCTION/DEPLOYED MODE
+          else {
+            // Use file:// protocol for local JSON files
+            const response = await fetch(`/data/${collectionId.toLowerCase()}.json`);
+            
+            if (!response.ok) {
+              throw new Error(`Failed to load data for ${collectionId} (${response.status})`);
+            }
+            
+            const data = await response.json();
+            
+            // Extract the cards array from the data structure
+            const cards = data.data || data;
+            
+            // Cache the data
+            await DBService.saveCards(collectionId, cards);
+            
+            return cards;
+          }
+        } catch (error) {
+          console.error('Data loading error:', error);
+          
+          // Try to return cached data if available
+          try {
+            const cachedCards = await DBService.getCards(collectionId);
+            if (cachedCards && cachedCards.length > 0) {
+              return cachedCards;
+            }
+          } catch (cacheError) {
+            console.error('Cache retrieval error:', cacheError);
+          }
+          
+          throw new Error(`Failed to load cards: ${error.message}`);
+        }
+      }
+    };
+
+    /**
+     * Utilities
+     */
+    const utils = {
+      // Debounce function
+      debounce(func, wait) {
+        let timeout;
+        return function(...args) {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(this, args), wait);
+        };
+      },
+      
+      // Format price
+      formatPrice(price) {
+        return price ? `$${parseFloat(price).toFixed(2)}` : "N/A";
+      },
+      
+      // Get release year from card
+      getReleaseYear(card) {
+        return card.set && card.set.releaseDate ? card.set.releaseDate.split("/")[0] : "N/A";
+      },
+      
+      // Get price value
+      getPriceValue(card, key) {
+        if (!card.tcgplayer?.prices) return null;
+        const priceType = Object.keys(card.tcgplayer.prices)[0];
+        if (!priceType || !card.tcgplayer.prices[priceType]) return null;
+        return card.tcgplayer.prices[priceType][key];
+      },
+      
+      // Get card type icon
+      getTypeIcon(type) {
+        return CONFIG.TYPE_ICONS[type] || CONFIG.TYPE_ICONS.default;
+      },
+      
+      // Download object as JSON file
+      downloadObjectAsJson(exportObj, exportName) {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj, null, 2));
+        const downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", exportName + ".json");
+        document.body.appendChild(downloadAnchorNode);
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+      },
+      
+      // Calculate card price
+      getCardPrice(card) {
+        let cardPrice = 0;
+        
+        if (card.tcgplayer?.prices) {
+          const priceObj = Object.values(card.tcgplayer.prices)[0];
+          cardPrice = priceObj?.market || priceObj?.mid || 0;
+        } else if (card.cardmarket?.prices) {
+          cardPrice = card.cardmarket.prices.averageSellPrice || 
+                      card.cardmarket.prices.trendPrice || 0;
+        }
+        
+        return cardPrice;
+      },
+      
+      // Convert Vue reactive objects to plain objects
+      toPlainObject(obj) {
+        // Handle non-objects
+        if (obj === null || typeof obj !== 'object') {
+          return obj;
+        }
+        
+        // Use JSON parse/stringify for a deep clone that removes Vue proxies
+        try {
+          return JSON.parse(JSON.stringify(obj));
+        } catch (e) {
+          console.error('Error converting reactive object to plain object:', e);
+          // Fallback to a simple object copy if JSON fails
+          if (Array.isArray(obj)) {
+            return [...obj];
+          }
+          return {...obj};
+        }
+      }
+    };
+
+    /**
+     * Enhanced Lazy Loading Image Observer
+     * Uses both IntersectionObserver and native loading="lazy"
+     */
+    const LazyLoadService = {
+      observer: null,
+      
+      init() {
+        if ('IntersectionObserver' in window) {
+          this.observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                const cardComponent = entry.target.__vue__;
+                if (cardComponent && cardComponent.loadImage) {
+                  cardComponent.loadImage();
+                  observer.unobserve(entry.target);
+                }
+              }
+            });
+          }, {
+            rootMargin: CONFIG.IMAGE_LOADING.OBSERVER_ROOT_MARGIN,
+            threshold: CONFIG.IMAGE_LOADING.OBSERVER_THRESHOLD
+          });
+        }
+      },
+      
+      observe(el, component) {
+        // Only use IntersectionObserver for browsers that don't support native lazy loading
+        // or for components that need extra handling beyond just loading the image
+        if (this.observer) {
+          el.__vue__ = component;
+          this.observer.observe(el);
+        }
+      },
+      
+      unobserve(el) {
+        if (this.observer) {
+          this.observer.unobserve(el);
+        }
+      }
+    };
+
+    /**
+     * Notification Service
+     */
+    const NotificationService = {
+      show(app, options) {
+        const { title, message, type = 'info', duration = CONFIG.NOTIFICATION_DURATION } = options;
+        
+        app.notification = {
+          title,
+          message,
+          type,
+          visible: true
+        };
+        
+        // Clear any existing timeout
+        if (app.notificationTimeout) {
+          clearTimeout(app.notificationTimeout);
+        }
+        
+        // Set a timeout to hide the notification
+        app.notificationTimeout = setTimeout(() => {
+          app.notification.visible = false;
+        }, duration);
+      }
+    };
+
+    /**
+     * Offline Support Service
+     */
+    const OfflineService = {
+      setup(app) {
+        const updateOnlineStatus = () => {
+          app.isOffline = !navigator.onLine;
+          
+          if (!navigator.onLine) {
+            NotificationService.show(app, {
+              title: 'You\'re offline',
+              message: 'Using cached data. Some features may be limited.',
+              type: 'warning',
+              duration: 5000
+            });
+          } else {
+            NotificationService.show(app, {
+              title: 'You\'re back online',
+              message: 'Connected to network',
+              type: 'success',
+              duration: 3000
+            });
+          }
+        };
+        
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        
+        // Initial check
+        app.isOffline = !navigator.onLine;
+      }
+    };
+
+    /**
+     * Component Definitions
+     */
+    
+    // Card Component
+    const CardComponent = {
+      template: '#card-template',
+      props: {
+        card: {
+          type: Object,
+          required: true
+        }
+      },
+      data() {
+        return {
+          imageLoading: true,
+          imageObserved: false
+        };
+      },
+      computed: {
+        isBought() {
+          return this.$root.boughtCards[this.card.id] || false;
+        },
+        isFavorite() {
+          return this.$root.favoriteCards[this.card.id] || false;
+        },
+        releaseYear() {
+          return this.card.set && this.card.set.releaseDate ? this.card.set.releaseDate.split("/")[0] : "";
+        },
+        cardImageSrc() {
+          // Use default image if the image URL is empty or missing
+          if (!this.card.images || !this.card.images.small || this.card.images.small === '') {
+            return CONFIG.IMAGE_LOADING.DEFAULT_IMAGE;
+          }
+          return this.card.images.small;
+        }
+      },
+      mounted() {
+        // Use IntersectionObserver as backup for browsers that don't support native lazy loading
+        this.$nextTick(() => {
+          if (this.$el && this.$refs.cardImage) {
+            // For older browsers, we'll use our IntersectionObserver fallback
+            if (!('loading' in HTMLImageElement.prototype)) {
+              LazyLoadService.observe(this.$el, this);
+            } else {
+              // For browsers with native lazy loading, we can still use the observer
+              // for the loading state management (showing placeholder until loaded)
+              this.imageObserved = true;
+            }
+          }
+        });
+      },
+      beforeUnmount() {
+        if (this.$el && !('loading' in HTMLImageElement.prototype)) {
+          LazyLoadService.unobserve(this.$el);
+        }
+      },
+      methods: {
+        toggleBought(e) {
+          e.stopPropagation();
+          this.$emit('toggle-bought', this.card.id);
+        },
+        toggleFavorite(e) {
+          e.stopPropagation();
+          this.$emit('toggle-favorite', this.card.id);
+        },
+        openModal() {
+          this.$emit('open-modal', this.card);
+        },
+        loadImage() {
+          if (this.imageObserved) return;
+          this.imageObserved = true;
+          
+          // The img element is already in the DOM with the correct src
+          // The onImageLoaded handler will fire when it loads
+        },
+        onImageLoaded() {
+          this.imageLoading = false;
+        },
+        onImageError() {
+          console.log(`Image load error for card: ${this.card.name}. Using default image.`);
+          this.imageLoading = false;
+        }
+      }
+    };
+
+    // Modal Component
+    const ModalComponent = {
+      template: '#modal-template',
+      props: {
+        card: {
+          type: Object,
+          required: true
+        },
+        note: {
+          type: String,
+          default: ''
+        },
+        noteSaved: {
+          type: Boolean,
+          default: false
+        }
+      },
+      data() {
+        return {
+          PRICE_LABELS: CONFIG.PRICE_LABELS
+        };
+      },
+      computed: {
+        modalImageSrc() {
+          // Check if there are valid image URLs in the data
+          if (!this.card.images) {
+            return CONFIG.IMAGE_LOADING.DEFAULT_IMAGE;
+          }
+          
+          // Try to use large image first
+          if (this.card.images.large && this.card.images.large !== '') {
+            return this.card.images.large;
+          }
+          
+          // Fall back to small image
+          if (this.card.images.small && this.card.images.small !== '') {
+            return this.card.images.small;
+          }
+          
+          // If neither image is available, use default
+          return CONFIG.IMAGE_LOADING.DEFAULT_IMAGE;
+        }
+      },
+      mounted() {
+        document.body.style.overflow = 'hidden';
+        window.addEventListener('keydown', this.handleKeyDown);
+      },
+      beforeUnmount() {
+        document.body.style.overflow = 'auto';
+        window.removeEventListener('keydown', this.handleKeyDown);
+      },
+      methods: {
+        close() {
+          this.$emit('close');
+        },
+        save() {
+          this.$emit('save-note');
+        },
+        handleKeyDown(e) {
+          if (e.key === 'Escape') {
+            this.close();
+          }
+        },
+        getTypeIcon(type) {
+          return utils.getTypeIcon(type);
+        },
+        getReleaseYear(card) {
+          return utils.getReleaseYear(card);
+        },
+        formatPrice(price) {
+          return utils.formatPrice(price);
+        },
+        getPriceValue(card, key) {
+          return utils.getPriceValue(card, key);
+        },
+        onImageError() {
+          console.log(`Modal image load error for card: ${this.card.name}. Using default image.`);
+        }
+      }
+    };
+    
+    // Notification Component
+    const NotificationComponent = {
+      template: '#notification-template',
+      props: {
+        title: {
+          type: String,
+          required: true
+        },
+        message: {
+          type: String,
+          required: true
+        },
+        type: {
+          type: String,
+          default: 'info',
+          validator: (value) => ['info', 'success', 'error', 'warning'].includes(value)
+        },
+        visible: {
+          type: Boolean,
+          default: false
+        }
+      },
+      methods: {
+        getIcon() {
+          const icons = {
+            info: 'fas fa-info-circle',
+            success: 'fas fa-check-circle',
+            error: 'fas fa-exclamation-circle',
+            warning: 'fas fa-exclamation-triangle'
+          };
+          return icons[this.type] || icons.info;
+        }
+      }
+    };
+    
+    // Import Dialog Component
+    const ImportDialogComponent = {
+      template: '#import-dialog-template',
+      data() {
+        return {
+          selectedFile: null,
+          importError: null
+        };
+      },
+      methods: {
+        cancel() {
+          this.$emit('cancel');
+        },
+        handleFileSelect(event) {
+          this.selectedFile = event.target.files[0];
+          this.importError = null;
+        },
+        importData() {
+          if (!this.selectedFile) {
+            this.importError = 'Please select a file';
+            return;
+          }
+          
+          const reader = new FileReader();
+          
+          reader.onload = (e) => {
+            try {
+              const jsonData = JSON.parse(e.target.result);
+              this.$emit('import', jsonData);
+              this.$emit('cancel');
+            } catch (error) {
+              this.importError = 'Invalid JSON file';
+              console.error('Error parsing import file:', error);
+            }
+          };
+          
+          reader.onerror = () => {
+            this.importError = 'Error reading file';
+          };
+          
+          reader.readAsText(this.selectedFile);
+        }
+      }
+    };
+
+    // Vue App
+    const app = Vue.createApp({
+      components: {
+        'card-component': CardComponent,
+        'modal-component': ModalComponent,
+        'notification-component': NotificationComponent,
+        'import-dialog-component': ImportDialogComponent
+      },
+      data() {
+        return {
+          loading: false,
+          errorMessage: '',
+          isOffline: false,
+          currentView: 'all',
+          currentCollection: 'psyduck', // Changed default to Psyduck
+          currentQueryType: 'pokemon',
+          allCards: [],
+          boughtCards: {},
+          cardNotes: {},
+          favoriteCards: {},
+          customTabs: [],
+          customCollections: [],
+          collectionCards: {},
+          collectionQueries: {},
+          views: [
+            { id: 'all', name: 'All Cards', icon: 'fas fa-th-large' },
+            { id: 'favorites', name: 'Favorites', icon: 'fas fa-star' },
+            { id: 'custom', name: 'Custom Collections', icon: 'fas fa-folder' },
+            { id: 'add', name: 'Add Pokemon', icon: 'fas fa-plus' }
+          ],
+          showAdvancedFilters: false,
+          showCollectionForm: false,
+          showImportDialog: false,
+          newPokemonInput: '',
+          newCollection: {
+            name: '',
+            description: '',
+            type: 'manual'
+          },
+          selectedCard: null,
+          cardNoteText: '',
+          noteSaved: false,
+          notification: {
+            title: '',
+            message: '',
+            type: 'info',
+            visible: false
+          },
+          searchFilters: {
+            query: '',
+            filterValue: 'all',
+            sortValue: 'printYear',
+            reverseOrder: true,
+            foilOnly: false,
+            year: '',
+            priceMin: '',
+            priceMax: ''
+          },
+          defaultPokemonTabs: CONFIG.DEFAULT_POKEMON.map(name => ({ name })),
+          specialTabs: CONFIG.SPECIAL_COLLECTIONS
+        }
+      },
+      computed: {
+        pokemonTabs() {
+          const customTabObjects = this.customTabs.map(name => ({ name }));
+          return [...this.defaultPokemonTabs, ...customTabObjects];
+        },
+        filteredCards() {
+          const query = this.searchFilters.query.toLowerCase();
+          const filterValue = this.searchFilters.filterValue;
+          const sortValue = this.searchFilters.sortValue;
+          const year = this.searchFilters.year.toLowerCase();
+          const foilOnly = this.searchFilters.foilOnly;
+          const priceMin = parseFloat(this.searchFilters.priceMin) || 0;
+          const priceMax = parseFloat(this.searchFilters.priceMax) || Infinity;
+          
+          let filtered = this.allCards.filter(card => {
+            // Search matching
+            const matchesSearch =
+              (card.name && card.name.toLowerCase().includes(query)) ||
+              (card.set?.name && card.set.name.toLowerCase().includes(query)) ||
+              (card.number && card.number.toString().includes(query)) ||
+              (card.rarity && card.rarity.toLowerCase().includes(query));
+            
+            if (!matchesSearch) return false;
+            
+            // Year filtering
+            const releaseYear = card.set && card.set.releaseDate ? card.set.releaseDate.split("/")[0] : "";
+            if (year && (!releaseYear || !releaseYear.toLowerCase().includes(year))) return false;
+            
+            // Foil filtering
+            if (foilOnly && (!card.rarity || !card.rarity.toLowerCase().includes("holo"))) return false;
+            
+            // Price filtering
+            if (priceMin > 0 || priceMax < Infinity) {
+              let cardPrice = utils.getCardPrice(card);
+              if (cardPrice < priceMin || cardPrice > priceMax) return false;
+            }
+            
+            // Collection status filtering
+            if (filterValue === "bought" && !this.boughtCards[card.id]) return false;
+            if (filterValue === "notBought" && this.boughtCards[card.id]) return false;
+            if (filterValue === "favorites" && !this.favoriteCards[card.id]) return false;
+            
+            return true;
+          });
+          
+          // Sorting
+          filtered.sort((a, b) => {
+            switch (sortValue) {
+              case "name":
+                return a.name.localeCompare(b.name);
+              case "set":
+                return (a.set?.name || "").localeCompare(b.set?.name || "");
+              case "number":
+                return (parseInt(a.number) || 0) - (parseInt(b.number) || 0);
+              case "rarity":
+                return (a.rarity || "").localeCompare(b.rarity || "");
+              case "printYear": {
+                const yearA = parseInt(a.set?.releaseDate ? a.set.releaseDate.split("/")[0] : "0", 10);
+                const yearB = parseInt(b.set?.releaseDate ? b.set.releaseDate.split("/")[0] : "0", 10);
+                return yearA - yearB;
+              }
+              default:
+                return 0;
+            }
+          });
+          
+          if (this.searchFilters.reverseOrder) {
+            filtered.reverse();
+          }
+          
+          return filtered;
+        },
+        favoriteCardsList() {
+          const favoriteIds = Object.keys(this.favoriteCards).filter(id => this.favoriteCards[id]);
+          return this.allCards.filter(card => favoriteIds.includes(card.id));
+        },
+        boughtCount() {
+          return Object.keys(this.boughtCards).filter(id => 
+            this.allCards.some(card => card.id === id) && this.boughtCards[id]
+          ).length;
+        },
+        favoriteCount() {
+          return Object.keys(this.favoriteCards).filter(id => 
+            this.allCards.some(card => card.id === id) && this.favoriteCards[id]
+          ).length;
+        }
+      },
+      methods: {
+        // Data Management Methods
+        async loadFromStorage() {
+          try {
+            // Initialize IndexedDB if not already
+            if (!DBService.db) {
+              await DBService.init();
+            }
+            
+            // Load user data
+            const boughtCards = await DBService.getUserData(CONFIG.LOCAL_STORAGE_KEYS.BOUGHT);
+            const cardNotes = await DBService.getUserData(CONFIG.LOCAL_STORAGE_KEYS.NOTES);
+            const favoriteCards = await DBService.getUserData(CONFIG.LOCAL_STORAGE_KEYS.FAVORITES);
+            const customTabs = await DBService.getUserData(CONFIG.LOCAL_STORAGE_KEYS.CUSTOM_TABS);
+            const customCollections = await DBService.getUserData(CONFIG.LOCAL_STORAGE_KEYS.CUSTOM_COLLECTIONS);
+            const collectionCards = await DBService.getUserData(CONFIG.LOCAL_STORAGE_KEYS.COLLECTION_CARDS);
+            const queryTypes = await DBService.getUserData(CONFIG.LOCAL_STORAGE_KEYS.QUERY_TYPES);
+            
+            // Populate data, falling back to localStorage if needed
+            this.boughtCards = boughtCards || JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEYS.BOUGHT)) || {};
+            this.cardNotes = cardNotes || JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEYS.NOTES)) || {};
+            this.favoriteCards = favoriteCards || JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEYS.FAVORITES)) || {};
+            this.customTabs = customTabs || JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEYS.CUSTOM_TABS)) || [];
+            this.customCollections = customCollections || JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEYS.CUSTOM_COLLECTIONS)) || [];
+            this.collectionCards = collectionCards || JSON.parse(localStorage.getItem(CONFIG.LOCAL_STORAGE_KEYS.COLLECTION_CARDS)) || {};
+            this.collectionQueries = queryTypes || {};
+            
+            // Migrate data from localStorage to IndexedDB if found
+            if (!boughtCards && localStorage.getItem(CONFIG.LOCAL_STORAGE_KEYS.BOUGHT)) {
+              await this.migrateDataToIndexedDB();
+            }
+          } catch (error) {
+            console.error('Error loading from storage:', error);
+            this.showNotification({
+              title: 'Storage Error',
+              message: 'Could not load your collection data. Using default settings.',
+              type: 'error'
+            });
+            
+            // Fallback to empty objects
+            this.boughtCards = {};
+            this.cardNotes = {};
+            this.favoriteCards = {};
+            this.customTabs = [];
+            this.customCollections = [];
+            this.collectionCards = {};
+            this.collectionQueries = {};
+          }
+        },
+        
+        async migrateDataToIndexedDB() {
+          try {
+            // Migrate all localStorage data to IndexedDB
+            const keys = Object.values(CONFIG.LOCAL_STORAGE_KEYS);
+            
+            for (const key of keys) {
+              const data = localStorage.getItem(key);
+              if (data) {
+                await DBService.saveUserData(key, JSON.parse(data));
+              }
+            }
+            
+            this.showNotification({
+              title: 'Data Migrated',
+              message: 'Your collection data has been upgraded to use improved storage.',
+              type: 'success'
+            });
+          } catch (error) {
+            console.error('Error migrating data to IndexedDB:', error);
+          }
+        },
+        
+        async saveToStorage(key, data) {
+          try {
+            // Convert Vue reactive objects to plain objects
+            const plainData = utils.toPlainObject(data);
+            
+            // Save to IndexedDB
+            if (DBService.db) {
+              await DBService.saveUserData(key, plainData);
+            }
+            
+            // Backup to localStorage
+            localStorage.setItem(key, JSON.stringify(plainData));
+          } catch (error) {
+            console.error('Error saving to storage:', error);
+            // Still try localStorage as fallback
+            try {
+              const plainData = utils.toPlainObject(data);
+              localStorage.setItem(key, JSON.stringify(plainData));
+            } catch (e) {
+              console.error('Fatal storage error:', e);
+            }
+          }
+        },
+        
+        async loadCards(forceRefresh = false) {
+          this.loading = true;
+          this.errorMessage = '';
+          
+          try {
+            // Use the ApiService to fetch cards from local files
+            const cards = await ApiService.fetchCards(this.currentCollection, { 
+              forceRefresh
+            });
+            
+            this.allCards = cards;
+            
+            // Clear any previous error
+            this.errorMessage = '';
+          } catch (error) {
+            console.error("Error fetching cards:", error);
+            this.errorMessage = `Failed to load cards: ${error.message}`;
+            
+            this.showNotification({
+              title: 'Loading Error',
+              message: error.message,
+              type: 'error'
+            });
+          } finally {
+            this.loading = false;
+          }
+        },
+        
+        refreshCards() {
+          this.loadCards(true);
+          
+          this.showNotification({
+            title: 'Refreshing Cards',
+            message: 'Getting the latest data for ' + this.currentCollection,
+            type: 'info'
+          });
+        },
+        
+        // Navigation and View Methods
+        changeView(viewId) {
+          this.currentView = viewId;
+        },
+        
+        selectCollection(collectionId, queryType = 'pokemon') {
+          this.currentCollection = collectionId;
+          this.currentQueryType = queryType;
+          this.loadCards();
+        },
+        
+        toggleAdvancedFilters() {
+          this.showAdvancedFilters = !this.showAdvancedFilters;
+        },
+        
+        // Card State Methods
+        async toggleCardBought(cardId) {
+          this.boughtCards[cardId] = !this.boughtCards[cardId];
+          await this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.BOUGHT, this.boughtCards);
+          
+          if (this.boughtCards[cardId]) {
+            this.showNotification({
+              title: 'Card Marked as Bought',
+              message: 'Card has been added to your collection',
+              type: 'success'
+            });
+          }
+        },
+        
+        async toggleCardFavorite(cardId) {
+          try {
+            this.favoriteCards[cardId] = !this.favoriteCards[cardId]; 
+            await this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.FAVORITES, this.favoriteCards);
+            
+            if (this.favoriteCards[cardId]) {
+              this.showNotification({
+                title: 'Card Favorited',
+                message: 'Card has been added to your favorites',
+                type: 'success'
+              });
+            }
+          } catch (error) {
+            console.error('Error toggling favorite status:', error);
+            this.showNotification({
+              title: 'Operation Failed',
+              message: 'Could not update favorite status. Please try again.',
+              type: 'error'
+            });
+          }
+        },
+        
+        // Card Modal Methods
+        openCardModal(card) {
+          this.selectedCard = card;
+          this.cardNoteText = this.cardNotes[card.id] || '';
+          this.noteSaved = false;
+        },
+        
+        closeCardModal() {
+          this.selectedCard = null;
+        },
+        
+        async saveCardNote() {
+          if (!this.selectedCard) return;
+          
+          this.cardNotes[this.selectedCard.id] = this.cardNoteText;
+          await this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.NOTES, this.cardNotes);
+          
+          this.noteSaved = true;
+          setTimeout(() => {
+            this.noteSaved = false;
+          }, 1500);
+          
+          this.showNotification({
+            title: 'Note Saved',
+            message: 'Your note has been saved for this card',
+            type: 'success'
+          });
+        },
+        
+        // Pokemon Tab Methods
+        addNewPokemon() {
+          const pokemonName = this.newPokemonInput.trim();
+          if (!pokemonName) {
+            this.showNotification({
+              title: 'Validation Error',
+              message: 'Please enter a Pokemon name',
+              type: 'error'
+            });
+            return;
+          }
+          
+          const exists = this.pokemonTabs.some(tab => 
+            tab.name.toLowerCase() === pokemonName.toLowerCase()
+          );
+          
+          if (exists) {
+            this.showNotification({
+              title: 'Duplicate Pokemon',
+              message: 'This Pokemon is already in your collection!',
+              type: 'warning'
+            });
+            return;
+          }
+          
+          this.customTabs.push(pokemonName.toLowerCase());
+          this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.CUSTOM_TABS, this.customTabs);
+          
+          this.newPokemonInput = '';
+          this.changeView('all');
+          this.selectCollection(pokemonName.toLowerCase(), 'pokemon');
+          
+          this.showNotification({
+            title: 'Pokemon Added',
+            message: `${pokemonName} has been added to your collection tabs`,
+            type: 'success'
+          });
+        },
+        
+        handleTabRemoval(pokemonName) {
+          const defaultPokemon = this.defaultPokemonTabs.map(tab => tab.name.toLowerCase());
+          if (defaultPokemon.includes(pokemonName.toLowerCase())) {
+            this.showNotification({
+              title: 'Cannot Remove',
+              message: 'Default Pokemon cannot be removed from the collection.',
+              type: 'warning'
+            });
+            return;
+          }
+          
+          if (confirm(`Remove ${pokemonName} from your collection tabs?`)) {
+            this.customTabs = this.customTabs.filter(name => name !== pokemonName.toLowerCase());
+            this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.CUSTOM_TABS, this.customTabs);
+            
+            if (this.currentCollection === pokemonName.toLowerCase()) {
+              this.selectCollection('psyduck', 'pokemon'); // Changed to Psyduck
+            }
+            
+            this.showNotification({
+              title: 'Tab Removed',
+              message: `${pokemonName} has been removed from your collection`,
+              type: 'success'
+            });
+          }
+        },
+        
+        // Collection Management Methods
+        async saveCollection() {
+          if (!this.newCollection.name.trim()) {
+            this.showNotification({
+              title: 'Validation Error',
+              message: 'Please enter a collection name',
+              type: 'error'
+            });
+            return;
+          }
+          
+          const newCollection = {
+            id: "col_" + Date.now(),
+            name: this.newCollection.name.trim(),
+            description: this.newCollection.description.trim(),
+            type: this.newCollection.type,
+            created: Date.now(),
+            lastModified: Date.now()
+          };
+          
+          this.customCollections.push(newCollection);
+          await this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.CUSTOM_COLLECTIONS, this.customCollections);
+          
+          this.collectionCards[newCollection.id] = [];
+          await this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.COLLECTION_CARDS, this.collectionCards);
+          
+          this.showCollectionForm = false;
+          this.newCollection = { name: '', description: '', type: 'manual' };
+          
+          this.showNotification({
+            title: 'Collection Created',
+            message: `"${newCollection.name}" collection has been created`,
+            type: 'success'
+          });
+        },
+        
+        getCollectionCardCount(collectionId) {
+          return this.collectionCards[collectionId] ? this.collectionCards[collectionId].length : 0;
+        },
+        
+        viewCollection(collectionId) {
+          const collection = this.customCollections.find(c => c.id === collectionId);
+          if (!collection) return;
+          
+          this.showNotification({
+            title: 'Collection View',
+            message: `Viewing collection: ${collection.name}`,
+            type: 'info'
+          });
+          
+          // In a real implementation, this would switch to a collection view
+        },
+        
+        editCollection(collectionId) {
+          const collection = this.customCollections.find(c => c.id === collectionId);
+          if (!collection) return;
+          
+          this.showNotification({
+            title: 'Edit Collection',
+            message: `Editing collection: ${collection.name}`,
+            type: 'info'
+          });
+          
+          // In a real implementation, this would open a form to edit the collection
+        },
+        
+        async deleteCollection(collectionId) {
+          const collection = this.customCollections.find(c => c.id === collectionId);
+          if (!collection) return;
+          
+          if (confirm(`Are you sure you want to delete the collection "${collection.name}"?`)) {
+            this.customCollections = this.customCollections.filter(c => c.id !== collectionId);
+            await this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.CUSTOM_COLLECTIONS, this.customCollections);
+            
+            delete this.collectionCards[collectionId];
+            await this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.COLLECTION_CARDS, this.collectionCards);
+            
+            this.showNotification({
+              title: 'Collection Deleted',
+              message: `"${collection.name}" has been deleted`,
+              type: 'success'
+            });
+          }
+        },
+        
+        // Data Export/Import Methods
+        async exportData() {
+          try {
+            // Ensure database is initialized
+            if (!DBService.db) {
+              await DBService.init();
+            }
+            
+            const exportData = await DBService.exportAllData();
+            utils.downloadObjectAsJson(exportData, 'pokemon-collection-export');
+            
+            this.showNotification({
+              title: 'Export Complete',
+              message: 'Your collection data has been exported to a file',
+              type: 'success'
+            });
+          } catch (error) {
+            console.error('Error exporting data:', error);
+            
+            this.showNotification({
+              title: 'Export Failed',
+              message: 'Could not export your collection data: ' + error.message,
+              type: 'error'
+            });
+          }
+        },
+        
+        async processImportedData(data) {
+          try {
+            // Validate import data
+            if (!data || !data.userData || !data.cardData) {
+              throw new Error('Invalid import data format');
+            }
+            
+            // Initialize database if needed
+            if (!DBService.db) {
+              await DBService.init();
+            }
+            
+            // Import the data
+            await DBService.importAllData(data);
+            
+            // Reload data
+            await this.loadFromStorage();
+            
+            // Refresh current collection
+            await this.loadCards();
+            
+            this.showNotification({
+              title: 'Import Complete',
+              message: 'Your collection data has been imported successfully',
+              type: 'success'
+            });
+          } catch (error) {
+            console.error('Error importing data:', error);
+            
+            this.showNotification({
+              title: 'Import Failed',
+              message: 'Could not import your collection data: ' + error.message,
+              type: 'error'
+            });
+          }
+        },
+        
+        // Helper Methods
+        showNotification(options) {
+          NotificationService.show(this, options);
+        }
+      },
+      async mounted() {
+        try {
+          // Initialize IndexedDB
+          await DBService.init();
+          
+          // Initialize lazy loading service
+          LazyLoadService.init();
+          
+          // Setup offline support
+          OfflineService.setup(this);
+          
+          // Load user data from storage
+          await this.loadFromStorage();
+          
+          // Load cards for the current collection
+          await this.loadCards();
+          
+          // Setup query debouncing for search
+          this.debouncedSearch = utils.debounce(() => {
+            // Vue will automatically re-evaluate filteredCards on reactive data changes
+          }, CONFIG.DEBOUNCE_DELAY);
+          
+          this.$watch('searchFilters', this.debouncedSearch, { deep: true });
+          
+          // Set default sort to print year descending
+          this.searchFilters.sortValue = 'printYear';
+          this.searchFilters.reverseOrder = true;
+          
+          // Check if browser supports native lazy loading
+          if (!('loading' in HTMLImageElement.prototype)) {
+            console.log('Browser does not support native lazy loading, using IntersectionObserver fallback');
+          }
+          
+        } catch (error) {
+          console.error('Error during app initialization:', error);
+          this.errorMessage = 'There was a problem initializing the app. Please try reloading.';
+        }
+      },
+      
+      beforeUnmount() {
+        // Clean up any event listeners or resources
+        window.removeEventListener('online', OfflineService.updateOnlineStatus);
+        window.removeEventListener('offline', OfflineService.updateOnlineStatus);
+        
+        // Close DB connection when app unmounts
+        DBService.closeConnection();
+      }
+    });
+    
+    /**
+     * Application Initialization
+     */
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        // Mount the Vue app
+        app.mount('#app');
+        
+        // Add event listener to close the database when the page unloads
+        window.addEventListener('beforeunload', () => {
+          DBService.closeConnection();
+        });
+        
+        // Register service worker for offline support if available and on a supported protocol
+        if ('serviceWorker' in navigator && 
+            (window.location.protocol === 'https:' || 
+             window.location.hostname === 'localhost' ||
+             window.location.hostname === '127.0.0.1')) {
+          
+          navigator.serviceWorker.register('sw.js').catch(error => {
+            console.log('Service worker registration failed:', error);
+          });
+        }
+      } catch (error) {
+        console.error('Application initialization error:', error);
+      }
+    });
+  </script>
+</body>
+</html>
