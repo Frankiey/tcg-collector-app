@@ -1,102 +1,239 @@
-# API Migration Plan
+# API Migration Plan — pokemontcg.io → TCGDex
 
 > Status: **Planning** | Last updated: 2026-03-12
+> See `WORKNOTES.md` for the decision log and `SCRATCHPAD.md` for working analysis.
+
+---
 
 ## Overview
 
-The Pokemon TCG Collector App currently relies on the [Pokemon TCG API](https://pokemontcg.io/) (v2) for card data. This document tracks the migration to a new API.
+The Pokemon TCG Collector App currently relies on the [Pokemon TCG API](https://pokemontcg.io/) (v2).
+We are migrating to [TCGDex](https://tcgdex.dev) — an open-source, no-auth alternative with
+built-in Cardmarket + TCGPlayer pricing, richer card metadata, and no rate-limit concerns.
 
-## Current API: Pokemon TCG API v2
+The new version lives in **`v2/`** so it can be compared against live `index.html` without
+affecting the main branch deployment.
 
-- **Base URL**: `https://api.pokemontcg.io/v2`
-- **Auth**: API key via `X-Api-Key` header
-- **Rate limits**: 1,000 req/day (free tier), 30,000/day (paid)
-- **Docs**: https://docs.pokemontcg.io/
+---
 
-### Endpoints Used
+## API Comparison
 
-| Endpoint | Usage |
+### Current: Pokemon TCG API v2
+
+| Property | Value |
 |----------|-------|
-| `GET /cards?q=name:{pokemon}` | Fetch cards by Pokemon name |
-| `GET /cards/{id}` | Fetch single card detail |
+| Base URL | `https://api.pokemontcg.io/v2` |
+| Auth | `X-Api-Key` header required |
+| Rate limit | 1,000 req/day (free), 30,000 (paid) |
+| Search | `GET /cards?q=name:{pokemon}` → full card objects |
+| Single card | `GET /cards/{id}` |
+| Pricing | TCGPlayer + Cardmarket (embedded in card response) |
 
-### Response Shape (current)
+### New: TCGDex API v2
+
+| Property | Value |
+|----------|-------|
+| Base URL | `https://api.tcgdex.net/v2/en` |
+| Auth | **None** — fully open |
+| Rate limit | Not publicly documented; open-source |
+| GraphQL | `POST https://api.tcgdex.net/v2/graphql` |
+| Card list | `GET /cards?category=Pokemon&name={pokemon}` → **shallow** `[{id, localId, name, image}]` |
+| Full card | `GET /cards/{id}` → full card with pricing |
+| Pricing | `pricing.cardmarket` + `pricing.tcgplayer` (REST only, not in GraphQL) |
+| Images | `https://assets.tcgdex.net/en/{series}/{setId}/{localId}` + `/high.webp` or `/low.webp` |
+
+**Critical: TCGDex REST list returns shallow data only.** Getting full card data (HP, types, rarity,
+variants, pricing) requires either GraphQL (no pricing) or individual `GET /cards/{id}` calls.
+
+---
+
+## Field Mapping
+
+### Card Object
+
+| Field in app | pokemontcg.io | TCGDex REST (`/cards/{id}`) |
+|---|---|---|
+| Card ID | `id` ("base1-4") | `id` ("base1-4") ✅ same |
+| Name | `name` | `name` ✅ same |
+| HP | `hp` (string "120") | `hp` (number 120) — `String()` to normalize |
+| Types | `types[]` (["Fire"]) | `types[]` ✅ same |
+| Set name | `set.name` | `set.name` ✅ same |
+| Set ID | `set.id` | `set.id` ✅ same |
+| Card number | `number` ("4") | `localId` ("4") — rename |
+| Rarity | `rarity` ("Rare Holo") | `rarity` ("Rare Holo") ✅ same values |
+| Category | `supertype` ("Pokémon") | `category` ("Pokemon") — minor rename |
+| Stage/subtype | `subtypes[]` (["Stage 2"]) | `stage` ("Stage2") — array → string |
+| Image small | `images.small` | `image + '/low.webp'` |
+| Image large | `images.large` | `image + '/high.webp'` |
+| Release year | `set.releaseDate` | **Not in card object** — must fetch set separately or drop |
+| TCGPlayer price | `tcgplayer.prices.{type}.market` | `pricing.tcgplayer.{type}.marketPrice` (REST only) |
+| TCGPlayer URL | `tcgplayer.url` | Not provided — construct from product ID |
+| CM avg price | `cardmarket.prices.averageSellPrice` | `pricing.cardmarket.avg` (REST only) |
+| CM trend price | `cardmarket.prices.trendPrice` | `pricing.cardmarket.trend` (REST only) |
+| CM URL | `cardmarket.url` | Not provided — construct from `pricing.cardmarket.idProduct` |
+| Foil variant | (in rarity name) | `variants.holo` boolean |
+| 1st Edition | (in rarity name) | `variants.firstEdition` boolean |
+
+### Response Wrapper
+
+| | pokemontcg.io | TCGDex |
+|---|---|---|
+| List endpoint wrapper | `{ data: [...], page, pageSize, count }` | Flat `[...]` array |
+| List item richness | Full card objects | Shallow `{id, localId, name, image}` only |
+| Full card richness | Full with pricing | Full with pricing (REST `/cards/{id}`) |
+
+---
+
+## Fetch Strategy (Chosen Approach)
+
+**Problem:** TCGDex list endpoints return shallow objects; pricing only exists on individual card REST calls.
+
+**Chosen strategy: Two-stage GraphQL + lazy REST**
+
+```
+Stage 1 (on tab select):
+  GraphQL → get all cards for a Pokemon
+  Returns: id, name, image, localId, rarity, hp, types, stage, set{id,name}, variants{holo,firstEdition}
+  → enough to render the card grid
+  → cache in IndexedDB (no pricing yet)
+
+Stage 2 (on modal open):
+  REST GET /cards/{id}
+  Returns: full card including pricing.cardmarket + pricing.tcgplayer
+  → merge pricing into cached card
+  → update IndexedDB entry
+```
+
+**GraphQL query used (Stage 1):**
+```graphql
+{
+  cards(
+    filters: { name: "Charizard" }
+    pagination: { page: 1, itemsPerPage: 250 }
+  ) {
+    id name image localId rarity hp types stage
+    set { id name }
+    variants { holo firstEdition }
+  }
+}
+```
+
+**Rationale:** Avoids N+1 upfront requests (no burst of 50+ calls). Pricing is only needed
+when a user opens a card detail modal, so lazy-loading it is acceptable UX.
+
+---
+
+## Internal Card Schema (v2 normalized shape)
+
+Both APIs map to this internal shape so templates and utils only read from this:
 
 ```json
 {
-  "data": [
-    {
-      "id": "base1-4",
-      "name": "Charizard",
-      "supertype": "Pokémon",
-      "subtypes": ["Stage 2"],
-      "hp": "120",
-      "types": ["Fire"],
-      "set": { "id": "base1", "name": "Base", "series": "Base" },
-      "number": "4",
-      "rarity": "Rare Holo",
-      "images": {
-        "small": "https://images.pokemontcg.io/base1/4.png",
-        "large": "https://images.pokemontcg.io/base1/4_hires.png"
-      },
-      "tcgplayer": {
-        "url": "https://...",
-        "prices": { "holofoil": { "market": 350.00 } }
-      },
-      "cardmarket": {
-        "url": "https://...",
-        "prices": { "averageSellPrice": 280.00 }
-      }
-    }
-  ],
-  "page": 1,
-  "pageSize": 250,
-  "count": 42,
-  "totalCount": 42
+  "id": "base1-4",
+  "name": "Charizard",
+  "hp": "120",
+  "types": ["Fire"],
+  "rarity": "Rare Holo",
+  "category": "Pokemon",
+  "stage": "Stage2",
+  "localId": "4",
+  "number": "4",
+  "set": {
+    "id": "base1",
+    "name": "Base Set",
+    "releaseDate": null
+  },
+  "images": {
+    "small": "https://assets.tcgdex.net/en/base/base1/4/low.webp",
+    "large": "https://assets.tcgdex.net/en/base/base1/4/high.webp"
+  },
+  "variants": {
+    "holo": true,
+    "firstEdition": false
+  },
+  "pricing": {
+    "loaded": false,
+    "tcgplayer": null,
+    "cardmarket": null
+  }
 }
 ```
+
+> `images.small` / `images.large` kept intentionally — templates use these paths and will need
+> zero template changes. The mapper constructs them from the TCGDex `image` base URL.
+> `number` aliased from `localId` for same reason.
 
 ---
 
 ## Migration Phases
 
+### Phase 0: Setup & Folder Structure ⬜
+> Create isolated v2/ workspace; no changes to production index.html
+
+- [x] Create `v2/` folder with skeleton files
+- [ ] Copy `index.html` → `v2/index.html` as starting point
+- [ ] Copy `styles.css` → `v2/styles.css` (or symlink)
+- [ ] Copy `sw.js` → `v2/sw.js` (bump CACHE_NAME to `pokemon-tcgdex-v1`)
+- [ ] Create `v2/README.md` explaining this is the TCGDex migration branch
+
 ### Phase 1: Abstraction Layer ⬜
-> Isolate all API calls behind a clean interface so the new API can be swapped in
+> Isolate all API-touching code behind ApiService + mapCard()
 
-- [ ] Extract API calls into a dedicated `ApiService` object in `index.html`
-- [ ] Define a `mapCardResponse(rawCard)` function that normalizes API responses
-- [ ] Create an internal card schema that both old and new APIs map to
-- [ ] Ensure all components read from the internal schema, not raw API fields
-- [ ] Write defensive field access (optional chaining) for price/image fields
+- [ ] Extract `CONFIG.API_BASE_URL` to point to TCGDex
+- [ ] Add `CONFIG.TCGDEX_GRAPHQL_URL` and `CONFIG.TCGDEX_REST_URL`
+- [ ] Create `mapCard(rawCard)` function that normalizes TCGDex response → internal schema
+- [ ] Create `mapCardPricing(restCard)` to merge pricing from individual REST fetch
+- [ ] Rewrite `ApiService.fetchCards()` to use GraphQL
+- [ ] Add `ApiService.fetchCardDetail(id)` for lazy pricing load (REST)
+- [ ] Ensure all templates read `card.images.small`, `card.number` (aliased) — no template changes needed
 
-### Phase 2: New API Integration ⬜
-> Implement the new API client alongside the old one
+### Phase 2: Template Audit ⬜
+> Verify templates work with mapped data; fix any field mismatches
 
-- [ ] Document new API's base URL, auth, rate limits, and response format
-- [ ] Implement `ApiService.fetchCardsNew()` using new API
-- [ ] Write `mapCardResponseNew(rawCard)` for the new API's response shape
-- [ ] Add a `CONFIG.useNewApi` feature flag to toggle between APIs
-- [ ] Test both API paths side by side
+- [ ] Audit `card.images.small` usage → check mapper produces this
+- [ ] Audit `card.number` usage → check `localId` alias is set
+- [ ] Audit `card.tcgplayer?.prices` → update to `card.pricing?.tcgplayer`
+- [ ] Audit `card.cardmarket?.prices` → update to `card.pricing?.cardmarket`
+- [ ] Audit `utils.getCardPrice()` → update price paths
+- [ ] Audit `utils.getPriceValue()` → update price paths
+- [ ] Audit foil filter: `card.rarity.toLowerCase().includes("holo")` → consider using `card.variants.holo`
+- [ ] Audit `set.releaseDate` usage (release year filter) → decide: drop or fetch separately
 
-### Phase 3: Data Migration ⬜
-> Handle cached data and offline fallback data
+### Phase 3: Lazy Pricing + UX ⬜
+> Implement Stage 2 pricing fetch on modal open
 
-- [ ] Write IndexedDB migration logic for cached cards with new schema
-- [ ] Update `concat_pokemon_data.py` to output the new card shape
-- [ ] Regenerate `pokemonData.js` with new format
-- [ ] Update Python scrapers if the data source changes
-- [ ] Handle mixed old/new format data in IndexedDB gracefully
+- [ ] On `openModal(card)`: if `!card.pricing?.loaded`, call `ApiService.fetchCardDetail(card.id)`
+- [ ] Merge pricing into card and re-render modal reactively
+- [ ] Show loading state in modal price section while fetching
+- [ ] Cache enriched card (with pricing) back to IndexedDB
+- [ ] Handle errors gracefully (show "Price unavailable")
 
-### Phase 4: Cutover & Cleanup ⬜
-> Switch fully to the new API and remove old code
+### Phase 4: Python Scraper Update ⬜
+> Update/retire Python pipeline; regenerate pokemonData.js
 
-- [ ] Set `CONFIG.useNewApi = true` as default
-- [ ] Remove old API client code and mapping functions
-- [ ] Bump `CACHE_NAME` in `sw.js` to invalidate old caches
-- [ ] Clear old IndexedDB cached data on version upgrade
-- [ ] Update all documentation (ARCHITECTURE.md, CLAUDE.md, skills)
-- [ ] Test offline fallback chain end-to-end
-- [ ] Remove feature flag
+- [ ] Evaluate: TCGDex has Cardmarket pricing — can we retire `pokemon_scraper.py`?
+- [ ] Update `concat_pokemon_data.py` to output new internal schema format
+- [ ] Regenerate `v2/pokemonData.js` with new shape
+- [ ] Verify offline fallback works with new data shape
+
+### Phase 5: IndexedDB Migration ⬜
+> Handle schema change for cached card data
+
+- [ ] Bump `CONFIG.DB_VERSION` in v2
+- [ ] Add migration in `DBService.init()` `onupgradeneeded`: clear old `cards` store
+  (user data in `userData` store is unaffected — card IDs are the same!)
+- [ ] Bump `CACHE_NAME` in `sw.js` to bust PWA cache
+
+### Phase 6: QA & Cutover ⬜
+> Compare v2 vs v1 side-by-side; promote when ready
+
+- [ ] Test v2 at `localhost:8000/v2/`
+- [ ] Verify all existing user data (favorites, notes, bought) still loads
+- [ ] Verify offline fallback works
+- [ ] Verify price display in modals
+- [ ] Remove feature flags
+- [ ] Copy `v2/index.html` → root `index.html` (or update deployment pipeline)
+- [ ] Update `ARCHITECTURE.md` to reflect new API
 
 ---
 
@@ -104,24 +241,58 @@ The Pokemon TCG Collector App currently relies on the [Pokemon TCG API](https://
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|------------|
-| New API has different rate limits | Medium | High | Check limits early; implement request batching |
-| Card IDs differ between APIs | High | High | Build ID mapping; migrate user data (favorites, notes) |
-| Missing price data in new API | Medium | Medium | Keep Cardmarket scraping as supplement |
-| IndexedDB cache has old-format data | Certain | Medium | Version check + migration in DBService.init() |
-| Offline users have stale pokemonData.js | Low | Low | SW cache bump forces re-download |
+| GraphQL pricing not available | **Confirmed** | Medium | Use lazy REST fetch on modal open |
+| Card IDs differ between APIs | **Low** (same format!) | High | Verified: `base1-4` works in both — user data safe |
+| Missing cards in TCGDex | Low-Medium | Medium | Fallback to pokemonData.js; monitor |
+| `set.releaseDate` not in card | **Confirmed** | Low | Drop year filter OR separate set fetch |
+| TCGDex image CDN reliability | Unknown | Medium | Cache images via SW; lazy-load fallback |
+| Cardmarket URL construction | **Confirmed** | Low | Build from `idProduct`: `https://www.cardmarket.com/en/Pokemon/Products/Singles?idProduct={id}` |
+| N+1 pricing requests on modal | Accepted | Low | Lazy-load; each user typically opens a few cards |
+| IndexedDB old-format data | Certain | Medium | DB version bump + store clear in onupgradeneeded |
+| SW stale cache serves old index.html | Certain | Medium | Bump CACHE_NAME in sw.js |
+
+---
 
 ## Decision Log
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
 | 2026-03-12 | Created migration plan | Need structured approach for API swap |
-| | | |
+| 2026-03-12 | Target API: TCGDex | Open-source, no auth, built-in CM+TCGPlayer pricing, same card ID format |
+| 2026-03-12 | Fetch strategy: GraphQL list + lazy REST pricing | Avoids N+1 burst; pricing only needed on modal open |
+| 2026-03-12 | Keep `images.small`/`images.large` in internal schema | Avoids template changes; mapper constructs from TCGDex base URL |
+| 2026-03-12 | Keep `card.number` as alias of `localId` | Same reason — zero template breakage |
+| 2026-03-12 | User data (favorites, notes, bought) needs NO migration | Card IDs (`base1-4`) are identical between APIs |
+| 2026-03-12 | New version in `v2/` folder | GitOps constraint — main branch = live; compare side-by-side |
+| 2026-03-12 | Python scraper evaluation deferred | TCGDex has CM pricing built-in; scraper may be retirable in Phase 4 |
 
 ---
 
 ## Notes
 
-- The current `CONFIG` object in `index.html` holds the API base URL and key
-- All API-touching code is in the Vue app methods section of `index.html`
-- The Python scraping pipeline is independent and can migrate separately
-- User data (favorites, notes, collections) currently references card IDs — if IDs change, user data needs migration too
+### Image URL Construction (TCGDex)
+```js
+// TCGDex image field: "https://assets.tcgdex.net/en/base/base1/4"
+// (no extension — append quality suffix)
+const imageSmall = card.image + '/low.webp';
+const imageLarge = card.image + '/high.webp';
+// Some cards have no image field → fallback to placeholder
+```
+
+### Cardmarket URL Construction (TCGDex)
+```js
+// TCGDex provides idProduct in pricing.cardmarket.idProduct
+const cmUrl = `https://www.cardmarket.com/en/Pokemon/Products/Singles?idProduct=${card.pricing.cardmarket.idProduct}`;
+```
+
+### TCGPlayer URL (TCGDex)
+```js
+// TCGDex does NOT provide a TCGPlayer URL
+// Use the product ID to construct if needed:
+const tcgUrl = `https://www.tcgplayer.com/product/${card.pricing.tcgplayer.holofoil?.productId}`;
+```
+
+### Foil Filter Update
+The current filter `card.rarity.toLowerCase().includes("holo")` still works because
+TCGDex uses "Rare Holo" as a rarity value. However, in v2 we can also use the
+more reliable `card.variants.holo === true` check.
