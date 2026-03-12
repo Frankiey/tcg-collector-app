@@ -229,6 +229,7 @@
                   <option value="set">Sort by Set</option>
                   <option value="number">Sort by Number</option>
                   <option value="rarity">Sort by Rarity</option>
+                  <option value="printYear">Sort by Year</option>
                 </select>
               </div>
             </div>
@@ -331,14 +332,21 @@
   <template id="card-template">
     <div class="card" :class="{ bought: isBought }" @click="openModal">
       <div class="card-image-container">
-        <div v-if="imageLoading" class="card-image-placeholder image-loading" :style="{ width: '100%', height: '150px' }"></div>
+        <div v-if="imageLoading && card.images.small" class="card-image-placeholder image-loading" :style="{ width: '100%', height: '150px' }"></div>
         <img
+          v-if="card.images.small"
           :src="card.images.small"
           :alt="card.name"
           @load="onImageLoaded"
+          @error="onImageLoaded"
           ref="cardImage"
           class="card-image"
         >
+        <div
+          v-if="!card.images.small"
+          class="card-image-placeholder"
+          :style="{ width: '100%', height: '150px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#a0a9c8', fontSize: '0.75rem' }"
+        ><i class="fas fa-image"></i></div>
       </div>
       <div class="title">{{ card.name }}</div>
       <div class="card-badges">
@@ -379,11 +387,17 @@
         <div class="modal-body">
           <div class="modal-image">
             <img
+              v-if="card.images.large || card.images.small"
               :src="card.images.large || card.images.small"
               :alt="card.name"
               loading="eager"
               fetchpriority="high"
+              @error="$event.target.style.display='none'; $event.target.nextElementSibling.style.display='flex'"
             >
+            <div
+              class="card-image-placeholder"
+              :style="{ display: (card.images.large || card.images.small) ? 'none' : 'flex', width: '100%', minHeight: '250px', alignItems: 'center', justifyContent: 'center', color: '#a0a9c8', fontSize: '0.9rem' }"
+            ><i class="fas fa-image" style="margin-right:0.5rem"></i> No image available</div>
           </div>
           <div class="modal-details">
             <h2 id="modal-title">
@@ -395,6 +409,7 @@
               <p>
                 <strong v-once>Number:</strong> {{ card.number || 'N/A' }}<br>
                 <strong v-once>Set:</strong> {{ card.set?.name || 'N/A' }}<br>
+                <span v-if="card.set && card.set.releaseDate"><strong v-once>Released:</strong> {{ card.set.releaseDate }}<br></span>
                 <strong v-once>Rarity:</strong> {{ card.rarity || 'N/A' }}<br>
                 <strong v-once>Types:</strong> {{ (card.types || []).join(', ') || 'N/A' }}<br>
                 <span v-if="card.hp"><strong v-once>HP:</strong> {{ card.hp }}<br></span>
@@ -434,7 +449,7 @@
                   </div>
                 </div>
                 <a
-                  :href="card.pricing.cardmarket.idProduct ? 'https://www.cardmarket.com/en/Pokemon/Products/Singles?idProduct=' + card.pricing.cardmarket.idProduct : 'https://www.cardmarket.com'"
+                  :href="cardmarketUrl(card)"
                   target="_blank"
                   rel="noopener noreferrer"
                   class="external-link-btn"
@@ -576,7 +591,7 @@
         set: raw.set ? {
           id: raw.set.id,
           name: raw.set.name,
-          releaseDate: null // TCGDex does not include releaseDate on card objects
+          releaseDate: null // populated later by ApiService._enrichReleaseDates()
         } : null,
         images: {
           small: raw.image ? raw.image + '/low.webp' : '',
@@ -916,6 +931,38 @@
      * API Service — TCGDex GraphQL + lazy REST pricing
      */
     const ApiService = {
+      // Cache of setId → { releaseDate, serieId }
+      _setCache: {},
+
+      // Fetch set details (releaseDate + serie) for a single set, cached per session
+      async _fetchSetDetails(setId) {
+        if (this._setCache[setId] !== undefined) return;
+        try {
+          const res = await fetch(`${CONFIG.TCGDEX_REST_URL}/sets/${setId}`);
+          if (!res.ok) { this._setCache[setId] = {}; return; }
+          const data = await res.json();
+          this._setCache[setId] = {
+            releaseDate: data.releaseDate || null,
+            serieId: data.serie?.id || null
+          };
+        } catch {
+          this._setCache[setId] = {};
+        }
+      },
+
+      // Fetch set details for all unique sets in a card list, then patch cards
+      async _enrichSetDetails(cards) {
+        const uniqueSetIds = [...new Set(cards.map(c => c.set?.id).filter(Boolean))];
+        await Promise.all(uniqueSetIds.map(id => this._fetchSetDetails(id)));
+        cards.forEach(card => {
+          if (card.set?.id) {
+            const info = this._setCache[card.set.id] || {};
+            card.set.releaseDate = info.releaseDate || null;
+            card.set.serieId = info.serieId || null;
+          }
+        });
+      },
+
       // Capitalize first letter of Pokemon name for TCGDex (case-sensitive)
       _formatPokemonName(name) {
         if (!name) return name;
@@ -983,10 +1030,17 @@
           const rawCards = json.data?.cards || [];
           const mappedCards = rawCards.map(mapCard);
 
-          // Cache without pricing (pricing lazy-loaded on modal open)
-          await DBService.saveCards(collectionId, mappedCards);
+          // Enrich with set details (releaseDate + serieId) in parallel
+          await this._enrichSetDetails(mappedCards);
 
-          return mappedCards;
+          // Exclude Pokémon TCG Pocket cards — serie id 'tcgp' covers all Pocket sets (A*, B*, P-A, etc.)
+          const EXCLUDED_SERIES = new Set(['tcgp']);
+          const physicalCards = mappedCards.filter(c => !EXCLUDED_SERIES.has(c.set?.serieId));
+
+          // Cache without pricing (pricing lazy-loaded on modal open)
+          await DBService.saveCards(collectionId, physicalCards);
+
+          return physicalCards;
         } catch (error) {
           console.error('API Error:', error);
 
@@ -1035,9 +1089,9 @@
         return price != null && price !== undefined ? `$${parseFloat(price).toFixed(2)}` : "N/A";
       },
 
-      // TCGDex does not include releaseDate on card objects
       getReleaseYear(card) {
-        return card.set && card.set.releaseDate ? card.set.releaseDate.split("/")[0] : "N/A";
+        // TCGDex releaseDate format: "YYYY-MM-DD"
+        return card.set && card.set.releaseDate ? card.set.releaseDate.split("-")[0] : "N/A";
       },
 
       // Get a TCGPlayer price value from the first pricing type
@@ -1204,6 +1258,10 @@
         }
       },
       mounted() {
+        if (!this.card.images.small) {
+          this.imageLoading = false;
+          return;
+        }
         this.$nextTick(() => {
           if (this.$el && this.$refs.cardImage) {
             if (!('loading' in HTMLImageElement.prototype)) {
@@ -1291,6 +1349,18 @@
         },
         getPriceValue(card, key) {
           return utils.getPriceValue(card, key);
+        },
+        cardmarketUrl(card) {
+          const idProduct = card.pricing?.cardmarket?.idProduct;
+          if (!idProduct) return 'https://www.cardmarket.com/en/Pokemon/Products/Singles';
+          const slug = str => str
+            .replace(/[&]/g, '')
+            .replace(/[^\w\s-]/g, '')
+            .trim()
+            .replace(/\s+/g, '-');
+          const setSlug = card.set?.name ? slug(card.set.name) : 'Pokemon';
+          const cardSlug = card.name ? slug(card.name) : 'Card';
+          return `https://www.cardmarket.com/en/Pokemon/Products/Singles/${setSlug}/${cardSlug}?idProduct=${idProduct}`;
         }
       }
     };
@@ -1417,7 +1487,7 @@
           searchFilters: {
             query: '',
             filterValue: 'all',
-            sortValue: 'name',
+            sortValue: 'printYear',
             reverseOrder: false,
             foilOnly: false,
             priceMin: '',
@@ -1478,6 +1548,11 @@
                 return (parseInt(a.number) || 0) - (parseInt(b.number) || 0);
               case 'rarity':
                 return (a.rarity || '').localeCompare(b.rarity || '');
+              case 'printYear': {
+                const yearA = parseInt(a.set?.releaseDate || '0', 10);
+                const yearB = parseInt(b.set?.releaseDate || '0', 10);
+                return yearB - yearA; // newest first by default
+              }
               default:
                 return 0;
             }
