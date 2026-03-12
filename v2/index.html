@@ -400,21 +400,49 @@
             ><i class="fas fa-image" style="margin-right:0.5rem"></i> No image available</div>
           </div>
           <div class="modal-details">
-            <h2 id="modal-title">
-              <i :class="'fas fa-' + getTypeIcon(card.types && card.types[0] ? card.types[0].toLowerCase() : 'default')"></i>
-              {{ card.name }}
-            </h2>
+            <h2 id="modal-title">{{ card.name }}</h2>
             <div class="info-section">
-              <h3 v-once><i class="fas fa-info-circle"></i> Card Information</h3>
-              <p>
-                <strong v-once>Number:</strong> {{ card.number || 'N/A' }}<br>
-                <strong v-once>Set:</strong> {{ card.set?.name || 'N/A' }}<br>
-                <span v-if="card.set && card.set.releaseDate"><strong v-once>Released:</strong> {{ card.set.releaseDate }}<br></span>
-                <strong v-once>Rarity:</strong> {{ card.rarity || 'N/A' }}<br>
-                <strong v-once>Types:</strong> {{ (card.types || []).join(', ') || 'N/A' }}<br>
-                <span v-if="card.hp"><strong v-once>HP:</strong> {{ card.hp }}<br></span>
-                <span v-if="card.stage"><strong v-once>Stage:</strong> {{ card.stage }}<br></span>
-                <span v-if="card.variants && card.variants.firstEdition"><strong v-once>Edition:</strong> 1st Edition<br></span>
+              <h3 v-once><i class="fas fa-layer-group"></i> Set Details</h3>
+              <div class="card-info-grid">
+                <div class="card-info-row">
+                  <span class="card-info-label" v-once>Set</span>
+                  <span class="card-info-value">{{ card.set?.name || 'N/A' }}</span>
+                </div>
+                <div class="card-info-row">
+                  <span class="card-info-label" v-once>Set Code</span>
+                  <span class="card-info-value card-info-mono">{{ card.set?.id || 'N/A' }}</span>
+                </div>
+                <div class="card-info-row">
+                  <span class="card-info-label" v-once>Card ID</span>
+                  <span class="card-info-value card-info-mono">{{ card.id || 'N/A' }}</span>
+                </div>
+                <div class="card-info-row">
+                  <span class="card-info-label" v-once>Number</span>
+                  <span class="card-info-value">#{{ card.number || 'N/A' }}</span>
+                </div>
+                <div class="card-info-row" v-if="card.set && card.set.releaseDate">
+                  <span class="card-info-label" v-once>Released</span>
+                  <span class="card-info-value">{{ card.set.releaseDate }}</span>
+                </div>
+                <div class="card-info-row">
+                  <span class="card-info-label" v-once>Rarity</span>
+                  <span class="card-info-value">{{ card.rarity || 'N/A' }}</span>
+                </div>
+                <div class="card-info-row" v-if="card.illustrator">
+                  <span class="card-info-label" v-once>Artist</span>
+                  <span class="card-info-value">{{ card.illustrator }}</span>
+                </div>
+              </div>
+              <!-- Variant badges -->
+              <div class="variant-badges" v-if="card.variants">
+                <span class="variant-badge" v-if="card.variants.firstEdition">1st Edition</span>
+                <span class="variant-badge" v-if="card.variants.holo">Holo</span>
+                <span class="variant-badge" v-if="card.variants.reverse">Reverse Holo</span>
+                <span class="variant-badge" v-if="card.variants.promo">Promo</span>
+              </div>
+              <!-- Pokédex description -->
+              <p class="card-pokedex-desc" v-if="card.description">
+                <i class="fas fa-book-open" style="margin-right:0.4rem;opacity:0.6"></i>{{ card.description }}
               </p>
             </div>
             <div class="info-section">
@@ -571,6 +599,30 @@
       IMAGE_LOADING: {
         OBSERVER_ROOT_MARGIN: '200px',
         OBSERVER_THRESHOLD: 0.1
+      },
+      // Cardmarket set abbreviation map: TCGDex set ID → Cardmarket URL set code.
+      // TCG Pocket main sets (a1, a2 …) match their set ID capitalized, so those are
+      // handled automatically. Only add entries where TCGDex ID ≠ Cardmarket code.
+      // Extend this list whenever you encounter a set that links incorrectly.
+      CM_SET_CODE: {
+        // TCG Pocket special sets
+        'me01': 'MEW',
+        'me02': 'PFL',
+        // Classic Base-era
+        'base1':  'BS',
+        'base2':  'JU',
+        'base3':  'FO',
+        'base4':  'TR',
+        'base5':  'BS2',
+        'base6':  'LC',
+        // Gen 2
+        'gym1':   'G1',
+        'gym2':   'G2',
+        'neo1':   'N1',
+        'neo2':   'N2',
+        'neo3':   'N3',
+        'neo4':   'N4',
+        // Add more as needed
       }
     };
 
@@ -597,7 +649,9 @@
           small: raw.image ? raw.image + '/low.webp' : '',
           large: raw.image ? raw.image + '/high.webp' : ''
         },
-        variants: raw.variants || { holo: false, firstEdition: false },
+        variants: raw.variants || { holo: false, firstEdition: false, reverse: false, promo: false },
+        illustrator: raw.illustrator || null,
+        description: raw.description || null,
         pricing: {
           loaded: false,
           tcgplayer: null,
@@ -1069,7 +1123,11 @@
         }
 
         const card = await response.json();
-        return card.pricing || null;
+        return {
+          pricing: card.pricing || null,
+          illustrator: card.illustrator || null,
+          description: card.description || null
+        };
       }
     };
 
@@ -1351,16 +1409,24 @@
           return utils.getPriceValue(card, key);
         },
         cardmarketUrl(card) {
-          const idProduct = card.pricing?.cardmarket?.idProduct;
-          if (!idProduct) return 'https://www.cardmarket.com/en/Pokemon/Products/Singles';
-          const slug = str => str
-            .replace(/[&]/g, '')
-            .replace(/[^\w\s-]/g, '')
-            .trim()
-            .replace(/\s+/g, '-');
-          const setSlug = card.set?.name ? slug(card.set.name) : 'Pokemon';
-          const cardSlug = card.name ? slug(card.name) : 'Card';
-          return `https://www.cardmarket.com/en/Pokemon/Products/Singles/${setSlug}/${cardSlug}?idProduct=${idProduct}`;
+          const setId = card.set?.id;
+          const number = card.number;
+
+          // Resolve Cardmarket set code: explicit map first, then capitalise set ID as fallback
+          // (covers TCG Pocket main sets automatically: a1→A1, a2→A2, a1a→A1a, etc.)
+          const setCode = setId
+            ? (CONFIG.CM_SET_CODE[setId] || (setId.charAt(0).toUpperCase() + setId.slice(1)))
+            : null;
+
+          if (card.name && setCode && number) {
+            // Zero-pad card number to 3 digits (Cardmarket format: PFL 013, A1 006, etc.)
+            const paddedNumber = String(number).padStart(3, '0');
+            // Search URL: reliable regardless of V# disambiguation on product pages
+            const searchString = encodeURIComponent(`${card.name} (${setCode} ${paddedNumber})`);
+            return `https://www.cardmarket.com/en/Pokemon/Products/Search?category=-1&searchString=${searchString}&searchMode=v2`;
+          }
+
+          return 'https://www.cardmarket.com/en/Pokemon/Products/Singles';
         }
       }
     };
@@ -1754,31 +1820,35 @@
           this.cardNoteText = this.cardNotes[card.id] || '';
           this.noteSaved = false;
 
-          // Lazy-load pricing if not already fetched
+          // Lazy-load pricing + extra detail if not already fetched
           if (!card.pricing || !card.pricing.loaded) {
             try {
-              const pricingData = await ApiService.fetchCardDetail(card.id);
+              const detail = await ApiService.fetchCardDetail(card.id);
 
               // Update the card in allCards (Vue 3 reactivity propagates to selectedCard)
               const idx = this.allCards.findIndex(c => c.id === card.id);
               if (idx !== -1) {
                 this.allCards[idx].pricing = {
                   loaded: true,
-                  tcgplayer: pricingData?.tcgplayer || null,
-                  cardmarket: pricingData?.cardmarket || null
+                  tcgplayer: detail.pricing?.tcgplayer || null,
+                  cardmarket: detail.pricing?.cardmarket || null
                 };
+                if (detail.illustrator) this.allCards[idx].illustrator = detail.illustrator;
+                if (detail.description) this.allCards[idx].description = detail.description;
               }
 
               // Also update selectedCard in case it's not the same reference
               if (this.selectedCard && this.selectedCard.id === card.id) {
                 this.selectedCard.pricing = {
                   loaded: true,
-                  tcgplayer: pricingData?.tcgplayer || null,
-                  cardmarket: pricingData?.cardmarket || null
+                  tcgplayer: detail.pricing?.tcgplayer || null,
+                  cardmarket: detail.pricing?.cardmarket || null
                 };
+                if (detail.illustrator) this.selectedCard.illustrator = detail.illustrator;
+                if (detail.description) this.selectedCard.description = detail.description;
               }
             } catch (error) {
-              console.error('Error fetching card pricing:', error);
+              console.error('Error fetching card detail:', error);
               // Mark as loaded with no pricing so loading spinner goes away
               const idx = this.allCards.findIndex(c => c.id === card.id);
               if (idx !== -1) {

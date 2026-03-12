@@ -1179,6 +1179,79 @@ Just replace your entire styles.css file with this one!
     color: #e6ebf7;
   }
   
+  /* Card info grid (collector detail rows) */
+  .card-info-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .card-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .card-info-row:last-child {
+    border-bottom: none;
+  }
+
+  .card-info-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #7a82a8;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .card-info-value {
+    font-size: 0.9rem;
+    color: #e6ebf7;
+    text-align: right;
+  }
+
+  .card-info-mono {
+    font-family: 'Courier New', monospace;
+    font-size: 0.82rem;
+    color: var(--secondary-color);
+  }
+
+  /* Variant pills */
+  .variant-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .variant-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    background: rgba(58, 103, 207, 0.15);
+    border: 1px solid rgba(58, 103, 207, 0.4);
+    color: var(--secondary-color);
+  }
+
+  /* Pokedex description */
+  .card-pokedex-desc {
+    font-size: 0.85rem;
+    color: #8a91b8;
+    line-height: 1.6;
+    font-style: italic;
+    margin: 0;
+    padding-top: 0.5rem;
+  }
+
   .modal .price-block {
     margin-bottom: 1rem;
   }
