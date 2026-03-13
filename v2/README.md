@@ -34,7 +34,12 @@ See [`../MIGRATION.md`](../MIGRATION.md) for the full plan, field mapping, and p
 
 | File | Status | Notes |
 |------|--------|-------|
-| `index.html` | 🚧 In progress | Copy of root index.html + TCGDex API layer |
-| `styles.css` | ✅ Shared | Symlink or copy from root — no CSS changes expected |
-| `sw.js` | 🚧 In progress | CACHE_NAME bumped to `pokemon-tcgdex-v1` |
-| `pokemonData.js` | ⬜ Pending | Will be regenerated with new schema in Phase 4 |
+| `index.html` | ✅ Done | Thin HTML + Vue templates only (~556 lines) |
+| `styles.css` | ✅ Done | Copied from root — self-contained |
+| `sw.js` | ✅ Done | CACHE_NAME bumped to `pokemon-tcgdex-v2`, precaches JS modules |
+| `js/config.js` | ✅ Done | Central CONFIG object (API URLs, defaults, mappings) |
+| `js/db.js` | ✅ Done | DBService — IndexedDB wrapper with retry + fallback |
+| `js/api.js` | ✅ Done | ApiService — TCGDex GraphQL + REST, mapCard() |
+| `js/utils.js` | ✅ Done | Utilities, LazyLoadService, NotificationService, OfflineService |
+| `js/components.js` | ✅ Done | Vue 3 component definitions (Card, Modal, Notification, ImportDialog) |
+| `js/app.js` | ✅ Done | Vue 3 app entry point — state, methods, mount |
