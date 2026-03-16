@@ -7,7 +7,7 @@
  * App state overview:
  *   allCards          — currently displayed card list (fetched from API / cache)
  *   boughtCards       — { [cardId]: boolean } persisted in IndexedDB
- *   favoriteCards     — { [cardId]: boolean } persisted in IndexedDB
+ *   favoriteCards     — { [cardId]: cardObject } persisted in IndexedDB
  *   cardNotes         — { [cardId]: string }  persisted in IndexedDB
  *   customTabs        — string[] of extra Pokemon names added by user
  *   customCollections — user-created collection objects
@@ -160,8 +160,7 @@ const app = createApp({
     },
 
     favoriteCardsList() {
-      const ids = Object.keys(this.favoriteCards).filter(id => this.favoriteCards[id]);
-      return this.allCards.filter(card => ids.includes(card.id));
+      return Object.values(this.favoriteCards).filter(v => v && typeof v === 'object');
     },
 
     boughtCount() {
@@ -171,9 +170,7 @@ const app = createApp({
     },
 
     favoriteCount() {
-      return Object.keys(this.favoriteCards).filter(id =>
-        this.allCards.some(card => card.id === id) && this.favoriteCards[id]
-      ).length;
+      return Object.keys(this.favoriteCards).filter(id => this.favoriteCards[id]).length;
     }
   },
 
@@ -277,6 +274,17 @@ const app = createApp({
           queryType: this.currentQueryType
         });
         this.allCards = cards;
+        // Lazy-migrate old boolean favorites to full card objects
+        let migrated = false;
+        cards.forEach(card => {
+          if (this.favoriteCards[card.id] === true) {
+            this.favoriteCards[card.id] = card;
+            migrated = true;
+          }
+        });
+        if (migrated) {
+          await this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.FAVORITES, this.favoriteCards);
+        }
       } catch (error) {
         console.error('Error fetching cards:', error);
         this.errorMessage = navigator.onLine
@@ -332,9 +340,14 @@ const app = createApp({
       }
     },
 
-    async toggleCardFavorite(cardId) {
+    async toggleCardFavorite(card) {
+      const cardId = card.id;
       try {
-        this.favoriteCards[cardId] = !this.favoriteCards[cardId];
+        if (this.favoriteCards[cardId]) {
+          delete this.favoriteCards[cardId];
+        } else {
+          this.favoriteCards[cardId] = card;
+        }
         await this.saveToStorage(CONFIG.LOCAL_STORAGE_KEYS.FAVORITES, this.favoriteCards);
 
         if (this.favoriteCards[cardId]) {

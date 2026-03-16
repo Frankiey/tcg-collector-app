@@ -69,7 +69,7 @@ export const CardComponent = {
     },
     toggleFavorite(e) {
       e.stopPropagation();
-      this.$emit('toggle-favorite', this.card.id);
+      this.$emit('toggle-favorite', this.card);
     },
     openModal() {
       this.$emit('open-modal', this.card);

@@ -28,246 +28,128 @@
     <div v-if="errorMessage" style="color: red; text-align: center; margin: 1rem;">{{ errorMessage }}</div>
 
     <header>
-      <div class="header-content">
-        <h1 v-once>The Pokemon Collection</h1>
-        <div class="tabs-container">
-          <div class="tabs-nav">
-            <button
-              v-for="view in views"
-              :key="view.id"
-              class="tabs-btn"
-              :class="{ active: currentView === view.id }"
-              @click="changeView(view.id)"
-              :aria-label="view.name"
-            >
-              <i :class="view.icon"></i>
-            </button>
-          </div>
-          <div class="tabs-content">
-            <!-- Pokemon tabs list -->
-            <div class="tabs" id="pokemon-tabs" v-show="currentView === 'all'">
-              <!-- Regular Pokemon Tabs -->
-              <button
-                v-for="tab in pokemonTabs"
-                :key="`tab-${tab.name.toLowerCase()}`"
-                class="tab"
-                :class="{ active: currentCollection === tab.name.toLowerCase() }"
-                :data-collection="tab.name.toLowerCase()"
-                @click="selectCollection(tab.name.toLowerCase(), 'pokemon')"
-              >
-                <span>{{ tab.name }}</span>
-                <span
-                  class="remove-btn"
-                  title="Remove"
-                  @click.stop="handleTabRemoval(tab.name.toLowerCase())"
-                >
-                  <i class="fas fa-times" v-once></i>
-                </span>
-              </button>
-            </div>
-
-            <!-- Add Pokemon Form -->
-            <div v-show="currentView === 'add'" style="padding: 1rem;">
-              <div style="display: flex; gap: 0.5rem;">
-                <input
-                  type="text"
-                  v-model="newPokemonInput"
-                  placeholder="Enter Pokemon name..."
-                  style="flex: 1; padding: 0.5rem; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); background: rgba(43,47,69,0.6); color: white;"
-                  @keyup.enter="addNewPokemon"
-                >
-                <button
-                  @click="addNewPokemon"
-                  style="background: var(--primary-color); color: white; border: none; border-radius: 4px; padding: 0 1rem; cursor: pointer;"
-                >
-                  <span v-once>Add</span>
-                </button>
-                <button
-                  @click="changeView('all')"
-                  style="background: rgba(255,255,255,0.1); color: white; border: none; border-radius: 4px; padding: 0 1rem; cursor: pointer;"
-                >
-                  <span v-once>Cancel</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Favorites View -->
-            <div v-show="currentView === 'favorites'" class="collection-view">
-              <div class="view-header">
-                <h3 v-once><i class="fas fa-star"></i> My Favorite Cards</h3>
-              </div>
-              <div class="favorites-container">
-                <div class="empty-state" v-if="!favoriteCardsList.length" v-once>
-                  <i class="fas fa-star"></i>
-                  <h4>No favorites yet</h4>
-                  <p>Star your favorite cards to see them here</p>
-                </div>
-                <card-component
-                  v-for="card in favoriteCardsList"
-                  :key="`fav-${card.id}`"
-                  :card="card"
-                  @toggle-bought="toggleCardBought"
-                  @toggle-favorite="toggleCardFavorite"
-                  @open-modal="openCardModal"
-                ></card-component>
-              </div>
-            </div>
-
-            <!-- Custom Collections View -->
-            <div v-show="currentView === 'custom'" class="collection-view">
-              <div class="view-header">
-                <h3 v-once><i class="fas fa-folder"></i> Custom Collections</h3>
-                <button @click="showCollectionForm = true" class="action-btn">
-                  <i class="fas fa-plus" v-once></i><span v-once> New Collection</span>
-                </button>
-              </div>
-              <div v-if="showCollectionForm" class="add-collection-form">
-                <div class="form-group">
-                  <label for="collection-name" v-once>Collection Name</label>
-                  <input type="text" v-model="newCollection.name" placeholder="E.g., Holographic Cards">
-                </div>
-                <div class="form-group">
-                  <label for="collection-description" v-once>Description (Optional)</label>
-                  <textarea v-model="newCollection.description" placeholder="What makes this collection special?"></textarea>
-                </div>
-                <div class="form-group">
-                  <label v-once>Collection Type</label>
-                  <div style="display: flex; gap: 1rem;">
-                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                      <input type="radio" v-model="newCollection.type" value="manual">
-                      <span v-once>Manual (Add cards individually)</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-                      <input type="radio" v-model="newCollection.type" value="auto">
-                      <span v-once>Auto (Based on filters)</span>
-                    </label>
-                  </div>
-                </div>
-                <div class="form-actions">
-                  <button @click="showCollectionForm = false" class="form-btn form-btn-secondary" v-once>Cancel</button>
-                  <button @click="saveCollection" class="form-btn form-btn-primary" v-once>Create Collection</button>
-                </div>
-              </div>
-              <div>
-                <div class="empty-state" v-if="!customCollections.length && !showCollectionForm" v-once>
-                  <i class="fas fa-folder-open"></i>
-                  <h4>No custom collections yet</h4>
-                  <p>Create a collection to organize your cards</p>
-                  <button @click="showCollectionForm = true" class="btn-add-items">
-                    <i class="fas fa-plus"></i> Create Collection
-                  </button>
-                </div>
-                <div
-                  v-for="collection in customCollections"
-                  :key="`collection-${collection.id}`"
-                  class="custom-collection"
-                  @click="viewCollection(collection.id)"
-                >
-                  <div>
-                    <h4>{{ collection.name }}</h4>
-                    <p>{{ collection.description || "No description" }} • {{ getCollectionCardCount(collection.id) }} cards</p>
-                  </div>
-                  <div class="collection-actions">
-                    <button @click.stop="viewCollection(collection.id)" class="action-btn" title="View Collection">
-                      <i class="fas fa-eye" v-once></i>
-                    </button>
-                    <button @click.stop="editCollection(collection.id)" class="action-btn" title="Edit Collection">
-                      <i class="fas fa-pencil-alt" v-once></i>
-                    </button>
-                    <button @click.stop="deleteCollection(collection.id)" class="action-btn" title="Delete Collection">
-                      <i class="fas fa-trash-alt" v-once></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Data Export/Import Controls -->
-            <div v-show="currentView === 'all'" class="data-actions">
-              <button @click="exportData" class="data-action-btn" v-once>
-                <i class="fas fa-file-export"></i> Export Collection
-              </button>
-              <button @click="showImportDialog = true" class="data-action-btn" v-once>
-                <i class="fas fa-file-import"></i> Import Collection
-              </button>
-            </div>
-          </div>
+      <!-- Top bar: brand + view navigation -->
+      <div class="topbar">
+        <div class="brand">
+          <svg class="brand-pokeball" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/>
+          </svg>
+          <h1 v-once>Pokémon Collection</h1>
         </div>
+        <nav class="view-nav" role="navigation" aria-label="Main navigation">
+          <button
+            v-for="view in views.filter(v => v.id !== 'add')"
+            :key="view.id"
+            class="nav-btn"
+            :class="{ active: currentView === view.id }"
+            @click="changeView(view.id)"
+            :title="view.name"
+          >
+            <i :class="view.icon"></i>
+            <span class="nav-btn-label">{{ view.name }}</span>
+          </button>
+          <div class="nav-divider" v-once></div>
+          <button @click="exportData" class="nav-btn" title="Export Collection">
+            <i class="fas fa-file-export" v-once></i>
+          </button>
+          <button @click="showImportDialog = true" class="nav-btn" title="Import Collection">
+            <i class="fas fa-file-import" v-once></i>
+          </button>
+        </nav>
+      </div>
 
-        <!-- Search and Filter Controls -->
-        <div class="controls-wrapper">
-          <div class="controls-container">
-            <div class="controls-header">
-              <h3 v-once><i class="fas fa-sliders-h"></i> Filters & Sorting</h3>
-              <button @click="toggleAdvancedFilters" class="toggle-filters">
-                <span>{{ showAdvancedFilters ? 'Hide Advanced' : 'Show Advanced' }}</span>
-                <i :class="showAdvancedFilters ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
-              </button>
-            </div>
-            <div class="search-controls">
-              <div class="control-group">
-                <i class="fas fa-search search-icon" v-once></i>
-                <input
-                  type="text"
-                  v-model="searchFilters.query"
-                  placeholder="Search by name, set, rarity..."
-                />
-              </div>
-              <div class="control-group select-wrapper">
-                <i class="fas fa-filter search-icon"></i>
-                <select v-model="searchFilters.filterValue">
-                  <option value="all">All Cards</option>
-                  <option value="bought">Bought</option>
-                  <option value="notBought">Not Bought</option>
-                  <option value="favorites">Favorites</option>
-                </select>
-              </div>
-              <div class="control-group select-wrapper">
-                <i class="fas fa-sort search-icon"></i>
-                <select v-model="searchFilters.sortValue">
-                  <option value="name">Sort by Name</option>
-                  <option value="set">Sort by Set</option>
-                  <option value="number">Sort by Number</option>
-                  <option value="rarity">Sort by Rarity</option>
-                  <option value="printYear">Sort by Year</option>
-                </select>
-              </div>
-            </div>
-            <div class="checkbox-row">
-              <div class="checkbox-group">
-                <label>
-                  <input type="checkbox" v-model="searchFilters.reverseOrder" />
-                  <span v-once>Reverse Order</span>
-                </label>
-              </div>
-              <div class="checkbox-group">
-                <label>
-                  <input type="checkbox" v-model="searchFilters.foilOnly" />
-                  <span v-once>Foil Cards Only</span>
-                </label>
-              </div>
-              <button @click="refreshCards" class="refresh-btn">
-                <i class="fas fa-sync-alt" v-once></i><span v-once> Refresh</span>
-              </button>
-            </div>
-            <!-- Advanced Filters -->
-            <div class="advanced-filters" v-show="showAdvancedFilters">
-              <div class="control-group">
-                <i class="fas fa-dollar-sign search-icon" v-once></i>
-                <input type="text" v-model.number="searchFilters.priceMin" placeholder="Min Price ($)" />
-              </div>
-              <div class="control-group">
-                <i class="fas fa-dollar-sign search-icon" v-once></i>
-                <input type="text" v-model.number="searchFilters.priceMax" placeholder="Max Price ($)" />
-              </div>
-            </div>
-          </div>
+      <!-- Pokemon tabs bar (all view only) -->
+      <div class="pokemon-tabs-bar" v-show="currentView === 'all'">
+        <div class="tabs" id="pokemon-tabs">
+          <button
+            v-for="tab in pokemonTabs"
+            :key="`tab-${tab.name.toLowerCase()}`"
+            class="tab"
+            :class="{ active: currentCollection === tab.name.toLowerCase() }"
+            :data-collection="tab.name.toLowerCase()"
+            @click="selectCollection(tab.name.toLowerCase(), 'pokemon')"
+          >
+            <span>{{ tab.name }}</span>
+            <span class="remove-btn" title="Remove" @click.stop="handleTabRemoval(tab.name.toLowerCase())">
+              <i class="fas fa-times" v-once></i>
+            </span>
+          </button>
+        </div>
+        <button class="add-tab-btn" @click="changeView('add')" title="Add Pokemon">
+          <i class="fas fa-plus" v-once></i>
+        </button>
+      </div>
+
+      <!-- Add Pokemon form (inline, shown when add view) -->
+      <div v-show="currentView === 'add'" class="add-pokemon-bar">
+        <i class="fas fa-search add-bar-icon" v-once></i>
+        <input
+          type="text"
+          v-model="newPokemonInput"
+          placeholder="Enter Pokemon name…"
+          class="add-pokemon-input"
+          @keyup.enter="addNewPokemon"
+        >
+        <button @click="addNewPokemon" class="add-pokemon-submit" v-once>Add</button>
+        <button @click="changeView('all')" class="add-pokemon-cancel" v-once>Cancel</button>
+      </div>
+
+      <!-- Filter bar (all view only) -->
+      <div class="filter-bar" v-show="currentView === 'all'">
+        <div class="filter-search">
+          <i class="fas fa-search" v-once></i>
+          <input type="text" v-model="searchFilters.query" placeholder="Search cards…" />
+        </div>
+        <div class="filter-select-wrap">
+          <select v-model="searchFilters.filterValue">
+            <option value="all">All Cards</option>
+            <option value="bought">Bought</option>
+            <option value="notBought">Not Bought</option>
+            <option value="favorites">Favorites</option>
+          </select>
+        </div>
+        <div class="filter-select-wrap">
+          <select v-model="searchFilters.sortValue">
+            <option value="name">Name ↕</option>
+            <option value="set">Set ↕</option>
+            <option value="number">No. ↕</option>
+            <option value="rarity">Rarity ↕</option>
+            <option value="printYear">Year ↕</option>
+          </select>
+        </div>
+        <label class="filter-check" title="Foil cards only">
+          <input type="checkbox" v-model="searchFilters.foilOnly" />
+          <span v-once>Foil</span>
+        </label>
+        <label class="filter-check" title="Reverse sort order">
+          <input type="checkbox" v-model="searchFilters.reverseOrder" />
+          <span v-once>Rev.</span>
+        </label>
+        <button @click="refreshCards" class="filter-icon-btn" title="Refresh cards">
+          <i class="fas fa-sync-alt" v-once></i>
+        </button>
+        <button @click="toggleAdvancedFilters" class="filter-icon-btn" :class="{ active: showAdvancedFilters }" title="Advanced filters">
+          <i class="fas fa-sliders-h" v-once></i>
+        </button>
+      </div>
+
+      <!-- Advanced price filters (collapsible) -->
+      <div class="advanced-filters-bar" v-show="showAdvancedFilters && currentView === 'all'">
+        <div class="filter-search adv-filter">
+          <i class="fas fa-dollar-sign" v-once></i>
+          <input type="text" v-model.number="searchFilters.priceMin" placeholder="Min price" />
+        </div>
+        <div class="filter-search adv-filter">
+          <i class="fas fa-dollar-sign" v-once></i>
+          <input type="text" v-model.number="searchFilters.priceMax" placeholder="Max price" />
         </div>
       </div>
     </header>
 
     <!-- Collection Summary -->
-    <div class="collection-summary">
+    <div class="collection-summary" v-show="currentView === 'all'">
       <div class="summary-stat">
         <i class="fas fa-layer-group" v-once></i>
         <span v-once>Total Cards: </span><span>{{ filteredCards.length }}</span>
@@ -283,7 +165,97 @@
     </div>
 
     <main>
-      <div class="cards-container">
+      <!-- Favorites View -->
+      <div v-if="currentView === 'favorites'" class="section-view">
+        <div class="section-view-header">
+          <h2><i class="fas fa-star"></i> My Favorites</h2>
+        </div>
+        <div class="cards-container">
+          <div class="empty-state full-empty" v-if="!favoriteCardsList.length">
+            <i class="fas fa-star"></i>
+            <h4>No favorites yet</h4>
+            <p>Star your favorite cards to see them here</p>
+          </div>
+          <card-component
+            v-for="card in favoriteCardsList"
+            :key="`fav-${card.id}`"
+            :card="card"
+            @toggle-bought="toggleCardBought"
+            @toggle-favorite="toggleCardFavorite"
+            @open-modal="openCardModal"
+          ></card-component>
+        </div>
+      </div>
+
+      <!-- Custom Collections View -->
+      <div v-else-if="currentView === 'custom'" class="section-view">
+        <div class="section-view-header">
+          <h2><i class="fas fa-folder"></i> Custom Collections</h2>
+          <button @click="showCollectionForm = true" class="action-btn">
+            <i class="fas fa-plus" v-once></i><span v-once> New Collection</span>
+          </button>
+        </div>
+        <div v-if="showCollectionForm" class="add-collection-form">
+          <div class="form-group">
+            <label v-once>Collection Name</label>
+            <input type="text" v-model="newCollection.name" placeholder="E.g., Holographic Cards">
+          </div>
+          <div class="form-group">
+            <label v-once>Description (Optional)</label>
+            <textarea v-model="newCollection.description" placeholder="What makes this collection special?"></textarea>
+          </div>
+          <div class="form-group">
+            <label v-once>Collection Type</label>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <input type="radio" v-model="newCollection.type" value="manual">
+                <span v-once>Manual (add cards individually)</span>
+              </label>
+              <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <input type="radio" v-model="newCollection.type" value="auto">
+                <span v-once>Auto (based on filters)</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click="showCollectionForm = false" class="form-btn form-btn-secondary" v-once>Cancel</button>
+            <button @click="saveCollection" class="form-btn form-btn-primary" v-once>Create Collection</button>
+          </div>
+        </div>
+        <div class="empty-state full-empty" v-if="!customCollections.length && !showCollectionForm">
+          <i class="fas fa-folder-open"></i>
+          <h4>No custom collections yet</h4>
+          <p>Create a collection to organize your cards</p>
+          <button @click="showCollectionForm = true" class="btn-add-items">
+            <i class="fas fa-plus"></i> Create Collection
+          </button>
+        </div>
+        <div
+          v-for="collection in customCollections"
+          :key="`collection-${collection.id}`"
+          class="custom-collection"
+          @click="viewCollection(collection.id)"
+        >
+          <div>
+            <h4>{{ collection.name }}</h4>
+            <p>{{ collection.description || "No description" }} • {{ getCollectionCardCount(collection.id) }} cards</p>
+          </div>
+          <div class="collection-actions">
+            <button @click.stop="viewCollection(collection.id)" class="action-btn" title="View Collection">
+              <i class="fas fa-eye" v-once></i>
+            </button>
+            <button @click.stop="editCollection(collection.id)" class="action-btn" title="Edit Collection">
+              <i class="fas fa-pencil-alt" v-once></i>
+            </button>
+            <button @click.stop="deleteCollection(collection.id)" class="action-btn" title="Delete Collection">
+              <i class="fas fa-trash-alt" v-once></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- All Cards View -->
+      <div v-else class="cards-container">
         <div v-if="filteredCards.length === 0 && !loading" style="text-align: center; grid-column: 1 / -1; padding: 4rem 1rem; color: #a0a9c8; font-size: 1.1rem;">
           <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;" v-once></i><br>
           <span v-once>No cards found. Try different search criteria.</span>
