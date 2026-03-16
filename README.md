@@ -142,9 +142,6 @@ tcg-collector-app/
 │   ├── utils.js        # Utilities: LazyLoad, Notifications, Offline detection
 │   └── components.js   # Vue components: Card, Modal, Notification, ImportDialog
 │
-├── pokemonData.js      # ⚠️ Generated offline fallback data (~122K lines, never edit by hand)
-├── data/               # Per-Pokémon JSON files
-└── images/             # Locally cached card images
 ```
 
 ---
@@ -186,7 +183,6 @@ Pull requests welcome. A few things to know before diving in:
 
 - **No build step** — keep it that way. No bundlers, no package managers.
 - **ES modules only** — all JS goes in `js/*.js` files with `import`/`export`.
-- **Don't edit `pokemonData.js`** — it's a generated offline data blob.
 - **Bump `CACHE_NAME`** in `sw.js` after changing any cached asset.
 - Read [ARCHITECTURE.md](ARCHITECTURE.md) before making structural changes.
 

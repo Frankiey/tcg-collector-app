@@ -10,7 +10,7 @@ This is a **no-build-step** Vue 3 PWA with **modular ES modules**. Everything ru
 2. **No package manager** — No npm, yarn, pnpm. Dependencies come from CDNs
 3. **ES modules** — The app uses `<script type="module">` and `import`/`export` in `js/*.js`
 4. **Modular architecture** — Logic split across `js/` modules, NOT a single-file app
-5. **Offline-first** — Service Worker + IndexedDB + pokemonData.js fallback chain
+5. **Offline-first** — Service Worker + IndexedDB cache
 6. **TCGDex API** — GraphQL for card lists, REST for pricing (lazy on modal open)
 
 ## Code Style
@@ -18,14 +18,13 @@ This is a **no-build-step** Vue 3 PWA with **modular ES modules**. Everything ru
 - **JavaScript**: ES6+, no TypeScript, 2-space indent, ES module imports
 - **CSS**: BEM-ish naming, CSS custom properties for theming, glassmorphism aesthetic
 - **HTML**: Vue 3 template syntax with `v-once` on static content
-- **Python**: PEP 8, 4-space indent, used only for data generation scripts
 
 ## When Making Changes
 
 ### Before editing
 - Read `ARCHITECTURE.md` for system design context and module dependency tree
 - Read `MIGRATION.md` before touching any API-related code
-- Understand the storage fallback chain: IndexedDB → localStorage → pokemonData.js
+- Understand the storage fallback chain: IndexedDB → localStorage
 
 ### When editing `index.html`
 - This is the HTML shell (~560 lines) — templates and mount point only
@@ -50,10 +49,6 @@ This is a **no-build-step** Vue 3 PWA with **modular ES modules**. Everything ru
 - Bump `CACHE_NAME` version when changing any cached asset
 - Keep the precache list up to date — it includes all `js/*.js` modules
 
-### When editing Python scripts
-- These generate data files — never edit `pokemonData.js` by hand
-- Pipeline: scrape → `/data/*.json` → `concat_pokemon_data.py` → `pokemonData.js`
-
 ## File Roles
 
 | File | Edit? | Notes |
@@ -67,7 +62,6 @@ This is a **no-build-step** Vue 3 PWA with **modular ES modules**. Everything ru
 | `js/components.js` | Yes | Vue component definitions |
 | `styles.css` | Yes | All styles — follow CSS variable conventions |
 | `sw.js` | Rarely | Bump cache version after asset changes |
-| `pokemonData.js` | Never | Generated file — use `concat_pokemon_data.py` |
 | `ARCHITECTURE.md` | Update | Keep in sync with structural changes |
 | `MIGRATION.md` | Update | Track migration decisions |
 

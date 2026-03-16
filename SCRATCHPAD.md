@@ -252,10 +252,7 @@ card.cardmarket.url              →  card.pricing.cardmarket.url
    for some cards. Is the REST result wrong, or is it a different variant?
    The `variants.holo: true` field is the reliable signal — use that for foil filter.
 
-5. **Can we retire the Python Cardmarket scraper?**
-   TCGDex includes live Cardmarket pricing. Check if the data quality / freshness is
-   comparable to what the scraper was producing. If yes, retire `pokemon_scraper.py`
-   and `batch_scraper.py`. Keep `concat_pokemon_data.py` (updated for new schema).
+5. ~~**Can we retire the Python Cardmarket scraper?**~~ ✅ **Resolved (2026-03-16)** — Scrapers and all offline data pipeline removed. TCGDex API + CDN is the sole data source.
 
 6. **GraphQL `hp: null` for some cards**
    Confirmed — handle with `raw.hp != null ? String(raw.hp) : null` in mapper.

@@ -20,9 +20,6 @@ localStorage
     ├── tcg_notes          → JSON string
     ├── tcg_collections    → JSON string
     └── tcg_bought         → JSON string
-        │
-        ▼ (offline fallback for card data)
-pokemonData.js             → Static generated data blob
 ```
 
 ## DBService (in index.html)
@@ -38,11 +35,10 @@ The `DBService` object handles all storage:
 
 ## Rules
 
-- **Never skip the fallback chain** — Always support IndexedDB → localStorage → pokemonData.js
+- **Never skip the fallback chain** — Always support IndexedDB → localStorage
 - **Cache TTL is 24 hours** — Don't change without updating the cache invalidation logic
 - **Auto-migration** — On first load, localStorage data migrates to IndexedDB. Don't break this path.
-- **Schema changes need migration** — If you change the IndexedDB store structure, write migration logic in `DBService.init()`
-- **Keep pokemonData.js generated** — Never edit by hand. Use `concat_pokemon_data.py`.
+- **Schema changes need migration** — If you change the IndexedDB store structure, write migration logic in `DBService.init()`.
 
 ## Data shapes
 

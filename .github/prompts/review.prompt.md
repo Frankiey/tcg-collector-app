@@ -9,8 +9,7 @@ Review with these project-specific criteria:
 ## Must check
 - [ ] No build step introduced (no npm, webpack, vite, etc.)
 - [ ] No ES module `import`/`export` statements added
-- [ ] `pokemonData.js` not edited by hand
-- [ ] Offline fallback chain preserved (IndexedDB → localStorage → pokemonData.js)
+- [ ] Storage fallback chain preserved (IndexedDB → localStorage)
 - [ ] CSS uses variables from `:root`, no hardcoded colors
 - [ ] `v-once` used on static content in Vue templates
 - [ ] No Vuex/Pinia — state stays on root Vue instance

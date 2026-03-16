@@ -12,7 +12,7 @@ Pokémon TCG Collector App — A Vue 3 PWA for browsing, collecting, and trackin
 
 - **Frontend**: Vue 3 (via CDN, no build step), ES modules, CSS3 with glassmorphism
 - **API**: TCGDex (`api.tcgdex.net/v2`) — GraphQL for card lists, REST for pricing
-- **Storage**: IndexedDB (primary), localStorage (fallback), pokemonData.js (offline fallback)
+- **Storage**: IndexedDB (primary), localStorage (fallback)
 - **Offline**: Service Worker (`sw.js`) for PWA caching
 - **Docs**: `ARCHITECTURE.md` (system design), `MIGRATION.md` (migration decisions)
 
@@ -42,9 +42,6 @@ See `ARCHITECTURE.md` for the full system architecture, data flow diagrams, and 
 | `js/db.js` | DBService — IndexedDB with retry logic (~340 lines) |
 | `js/utils.js` | Utilities, LazyLoad, Notification, Offline services (~190 lines) |
 | `js/components.js` | Vue components — Card, Modal, Notification, ImportDialog (~235 lines) |
-| `pokemonData.js` | Generated offline data blob (~122K lines, never edit) |
-| `/data/` | JSON files per Pokemon species |
-| `/images/` | Downloaded card images |
 
 ### Module Dependencies
 
@@ -64,7 +61,7 @@ app.js
 3. Tab select → `ApiService.fetchCards()` fires GraphQL query to TCGDex
 4. Results mapped via `mapCard()` to internal schema, cached in IndexedDB (24h TTL)
 5. Modal open → `ApiService.fetchCardDetail(id)` fires REST call for pricing (lazy)
-6. Offline fallback chain: IndexedDB cache → pokemonData.js
+6. Offline: stale IndexedDB cache served if present, error shown otherwise
 
 ### Vue App State
 
@@ -84,7 +81,7 @@ app.js
 - **Template IDs** — Vue components use `template: '#card-template'` registration
 - **Two-stage fetch** — GraphQL for lists, lazy REST for pricing on modal open
 - **Debounced inputs** — Search uses 300ms debounce
-- **Graceful degradation** — IndexedDB → localStorage → pokemonData.js fallback chain
+- **Graceful degradation** — IndexedDB → localStorage fallback chain
 - **CSS variables** — All theming via `:root` custom properties in `styles.css`
 - **`v-once`** — Used on static content to reduce Vue reactivity overhead
 
@@ -93,7 +90,7 @@ app.js
 ### DO
 - Read `ARCHITECTURE.md` before making structural changes
 - Read `MIGRATION.md` before touching API-related code
-- Preserve the offline-first architecture (SW + IndexedDB + pokemonData fallback)
+- Preserve the offline-first architecture (SW + IndexedDB cache)
 - Keep the no-build-step constraint — no bundlers, no npm, no node_modules
 - Use Vue 3 CDN patterns (no SFC, no `.vue` files)
 - Use ES module `import`/`export` in `js/*.js` files
@@ -105,7 +102,6 @@ app.js
 ### DON'T
 - Don't introduce a build step or package manager without explicit approval
 - Don't merge JS modules back into `index.html` — keep modular structure
-- Don't modify `pokemonData.js` by hand — it's a generated offline data blob
 - Don't remove the localStorage fallback — some users may have old browsers
 - Don't change the IndexedDB schema without a migration plan
 - Don't add API calls outside `js/api.js` — keep API layer centralized

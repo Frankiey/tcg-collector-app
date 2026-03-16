@@ -122,7 +122,6 @@ v2/
 ├── index.html    (the new app — modified copy of root index.html)
 ├── styles.css    (copy or symlink from root — CSS unchanged)
 ├── sw.js         (CACHE_NAME → 'pokemon-tcgdex-v1')
-└── pokemonData.js (regenerated in Phase 4)
 ```
 
 **Deployment path:** When v2 is ready, copy `v2/index.html` → root `index.html`
@@ -143,20 +142,15 @@ The `userData` store is untouched. DBService version bump + `deleteObjectStore('
 
 ---
 
-### Decision 006 — Python scraper evaluation deferred
-**Date:** 2026-03-12
+### Decision 006 — Python scrapers retired
+**Date:** 2026-03-16
 
 **Context:** The Python scrapers (`pokemon_scraper.py`, `batch_scraper.py`) were built to
 extract Cardmarket pricing because the old API lacked it. TCGDex has live CM pricing built-in.
 
-**Decision:** Evaluate in Phase 4. If TCGDex CM pricing is sufficient, retire the scrapers.
-Keep `concat_pokemon_data.py` (updated) for offline pokemonData.js generation.
-Keep `download_pokemon_images.py` as-is (still useful for local image caching).
-
-**Questions to answer in Phase 4:**
-- Is TCGDex CM data as fresh as what the scraper produced?
-- Does the scraper provide data for cards TCGDex doesn't cover?
-- Is the offline pokemonData.js still needed once TCGDex works offline via SW?
+**Decision:** Scrapers, `concat_pokemon_data.py`, `download_pokemon_images.py`, `pokemonData.js`,
+`/data/`, `/images/`, and all related logs removed. All card data and images now come exclusively
+from the TCGDex API and CDN. No local data bundle exists.
 
 ---
 

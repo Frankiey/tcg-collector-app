@@ -14,7 +14,7 @@ You are helping with a major API migration for the Pokemon TCG Collector App.
 
 ## Key principles
 
-- **Never break the offline fallback chain**: IndexedDB → localStorage → pokemonData.js
+- **Never break the storage fallback chain**: IndexedDB → localStorage
 - **Keep API calls behind the CONFIG interface** so they can be swapped cleanly
 - **Separate response mapping from rendering** — map API responses to an internal card shape
 - **Preserve backward compatibility** with cached IndexedDB data during transition

@@ -10,7 +10,7 @@ applyTo: "**/*.{html,css,js}"
 - No build step, no npm, no bundlers — static files only
 - Vue 3 via CDN (`<script>` tags, no SFC, no `.vue` files)
 - All app logic in `index.html`, all styles in `styles.css`
-- Offline-first: Service Worker + IndexedDB + pokemonData.js fallback
+- Offline-first: Service Worker + IndexedDB cache
 
 ## Before editing
 
