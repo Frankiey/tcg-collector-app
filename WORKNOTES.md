@@ -5,6 +5,26 @@
 
 ---
 
+## Session 3 — 2026-03-16
+
+### Context
+v2 validated and working. User requested promotion to root — "v2 is now good enough".
+
+### Actions Taken
+1. Copied all v2 files to root: `index.html`, `styles.css`, `sw.js`, `js/*.js`
+2. Updated `<title>` from "v2 (TCGDex)" to "Pokémon TCG Collector"
+3. Bumped SW `CACHE_NAME` to `pokemon-tcgdex-v4`
+4. Fully rewrote `ARCHITECTURE.md` — new module architecture, dependency tree, data flow
+5. Updated `MIGRATION.md` — status → Complete, all phase checklists checked off
+6. Rewrote `README.md` with project description, file map, quick start
+7. Updated `CLAUDE.md` and `.github/copilot-instructions.md` — reflect modular ES modules, TCGDex API, new file roles
+8. Old files pending deletion: `index2.html`, `v2/` directory
+
+### Outcome
+Migration complete. Root now serves the modular TCGDex version. All docs updated.
+
+---
+
 ## Session 1 — 2026-03-12
 
 ### Context

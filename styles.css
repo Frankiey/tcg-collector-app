@@ -95,155 +95,347 @@ Just replace your entire styles.css file with this one!
   /* 3. Header Styles */
   header {
     background: var(--header-bg);
-    padding: 2.5rem 1rem 2rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-    position: relative;
-    overflow: hidden;
+    padding: 0.6rem 1.25rem 0;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 100;
   }
-  
-  header::before {
-    content: '';
-    position: absolute;
-    top: -100px; right: -100px;
-    width: 300px; height: 300px;
-    border-radius: 50%;
-    border: 30px solid rgba(255, 82, 82, 0.15);
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 60%);
-    z-index: 0;
+
+  /* Top bar: brand + nav */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.6rem;
   }
-  
-  .header-content { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; }
-  
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    flex-shrink: 0;
+  }
+
+  .brand-pokeball {
+    color: #ff5252;
+    flex-shrink: 0;
+  }
+
   h1 {
-    margin: 0 0 1.5rem;
-    font-size: 3rem;
-    text-align: center;
-    background: linear-gradient(90deg, #ff5252, #ff7b79, #ff5252);
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, #ff5252, #ff7b79);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    position: relative;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    text-shadow: 0 5px 15px rgba(255, 82, 82, 0.2);
+    letter-spacing: -0.2px;
+    white-space: nowrap;
   }
-  
-  h1::after {
-    content: '';
-    position: absolute;
-    bottom: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 4px;
-    background: linear-gradient(90deg, #ff5252, rgba(255, 82, 82, 0.5));
-    border-radius: 2px;
-  }
-  
-  /* 4. Tabs Component */
-  .tabs-container {
-    margin: 0 auto 1.5rem;
-    max-width: 1000px;
-    padding: 0 1rem;
-  }
-  
-  .tabs-nav {
+
+  .view-nav {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    overflow-x: auto;
-    padding-bottom: 0.5rem;
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) rgba(255, 255, 255, 0.1);
+    gap: 0.2rem;
   }
-  
-  .tabs-nav::-webkit-scrollbar {
-    height: 5px;
-  }
-  
-  .tabs-nav::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-  }
-  
-  .tabs-nav::-webkit-scrollbar-thumb {
-    background-color: var(--primary-color);
-    border-radius: 10px;
-  }
-  
-  .tabs-btn {
+
+  .nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
     background: none;
     border: none;
     color: rgba(255, 255, 255, 0.6);
-    padding: 0.5rem;
-    border-radius: 4px;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
     cursor: pointer;
+    font-size: 0.875rem;
+    font-family: inherit;
     transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    white-space: nowrap;
   }
-  
-  .tabs-btn:hover {
+
+  .nav-btn:hover {
     background: rgba(255, 255, 255, 0.1);
     color: white;
   }
-  
-  .tabs-btn.active {
-    background: var(--primary-color);
-    color: white;
+
+  .nav-btn.active {
+    background: rgba(255, 82, 82, 0.18);
+    color: #ff7070;
   }
-  
-  .tabs-content {
-    position: relative;
-    background: rgba(30, 33, 48, 0.6);
-    border-radius: 8px;
-    padding: 0.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+
+  .nav-btn-label {
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 580px) {
+    .nav-btn-label { display: none; }
+    .nav-btn { padding: 0.4rem 0.5rem; }
+  }
+
+  .nav-divider {
+    width: 1px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.14);
+    margin: 0 0.2rem;
+    flex-shrink: 0;
+  }
+
+  /* 4. Pokemon Tabs Bar */
+  .pokemon-tabs-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 0.55rem 0 0.55rem;
   }
   
   .tabs {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    max-height: 170px;
-    overflow-y: auto;
+    gap: 0.4rem;
+    flex: 1;
+    overflow-x: auto;
     scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) rgba(255, 255, 255, 0.1);
+    scrollbar-color: var(--primary-color) rgba(255, 255, 255, 0.05);
+    padding-bottom: 2px;
   }
-  
-  .tabs::-webkit-scrollbar {
-    width: 5px;
+
+  .tabs::-webkit-scrollbar { height: 3px; }
+  .tabs::-webkit-scrollbar-track { background: transparent; }
+  .tabs::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 10px; }
+
+  .add-tab-btn {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px dashed rgba(255, 255, 255, 0.22);
+    color: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    transition: all 0.2s;
   }
-  
-  .tabs::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
+
+  .add-tab-btn:hover {
+    background: rgba(255, 82, 82, 0.15);
+    border-color: #ff5252;
+    color: #ff5252;
   }
-  
-  .tabs::-webkit-scrollbar-thumb {
-    background-color: var(--primary-color);
-    border-radius: 10px;
+
+  /* Add Pokemon bar */
+  .add-pokemon-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 0.55rem 0;
   }
+
+  .add-bar-icon {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+
+  .add-pokemon-input {
+    flex: 1;
+    height: 34px;
+    padding: 0 0.75rem;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    color: white;
+    font-size: 0.875rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .add-pokemon-input:focus { border-color: var(--primary-color); }
+  .add-pokemon-input::placeholder { color: rgba(255, 255, 255, 0.3); }
+
+  .add-pokemon-submit {
+    height: 34px;
+    padding: 0 0.9rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+    font-family: inherit;
+    transition: opacity 0.2s;
+  }
+
+  .add-pokemon-submit:hover { opacity: 0.85; }
+
+  .add-pokemon-cancel {
+    height: 34px;
+    padding: 0 0.75rem;
+    background: rgba(255, 255, 255, 0.07);
+    color: rgba(255, 255, 255, 0.65);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: inherit;
+    transition: background 0.2s;
+  }
+
+  .add-pokemon-cancel:hover { background: rgba(255, 255, 255, 0.13); }
+
+  /* Filter bar */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 0.55rem 0 0.65rem;
+  }
+
+  .filter-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 150px;
+  }
+
+  .filter-search > i {
+    position: absolute;
+    left: 9px;
+    color: rgba(255, 255, 255, 0.32);
+    font-size: 0.78rem;
+    pointer-events: none;
+  }
+
+  .filter-search input {
+    width: 100%;
+    height: 34px;
+    padding: 0 0.75rem 0 2rem;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: white;
+    font-size: 0.85rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+  }
+
+  .filter-search input:focus { border-color: var(--primary-color); }
+  .filter-search input::placeholder { color: rgba(255, 255, 255, 0.28); }
+
+  .filter-select-wrap select {
+    height: 34px;
+    padding: 0 0.5rem;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.82rem;
+    font-family: inherit;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+  }
+
+  .filter-select-wrap select:focus { border-color: var(--primary-color); }
+
+  .filter-check {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .filter-icon-btn {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    font-size: 0.82rem;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .filter-icon-btn:hover { background: rgba(255, 255, 255, 0.14); color: white; }
+  .filter-icon-btn.active { background: rgba(255, 82, 82, 0.18); color: #ff7070; border-color: rgba(255, 82, 82, 0.3); }
+
+  /* Advanced filters bar */
+  .advanced-filters-bar {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    padding: 0 0 0.65rem;
+  }
+
+  .adv-filter { min-width: 130px; max-width: 180px; }
+
+  /* Section views (favorites, collections) in main */
+  .section-view {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
+
+  .section-view-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .section-view-header h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #e6ebf7;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .full-empty { grid-column: 1 / -1; }
   
   .tab {
     background: rgba(58, 63, 92, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--font-color);
-    padding: 0.6rem 1rem;
-    border-radius: 6px;
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.2s;
     font-weight: 500;
-    font-size: 0.9rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-    backdrop-filter: blur(5px);
+    font-size: 0.82rem;
+    white-space: nowrap;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     position: relative;
   }
   
@@ -290,8 +482,8 @@ Just replace your entire styles.css file with this one!
   }
   
   .tab:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+    background: rgba(80, 86, 120, 0.7);
+    border-color: rgba(255, 255, 255, 0.2);
   }
   
   .tab:hover::before {
@@ -300,8 +492,7 @@ Just replace your entire styles.css file with this one!
   
   .tab.active {
     background: var(--primary-color);
-    box-shadow: 0 4px 12px rgba(255, 82, 82, 0.4);
-    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(255, 82, 82, 0.35);
     border-color: rgba(255, 255, 255, 0.2);
   }
   
@@ -327,246 +518,6 @@ Just replace your entire styles.css file with this one!
     box-shadow: 0 4px 12px rgba(141, 110, 99, 0.4);
   }
   
-  /* 5. Controls & Filters - Fixed Layout */
-  .controls-wrapper {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 1rem;
-  }
-  
-  .controls-container {
-    background: rgba(21, 23, 34, 0.5);
-    border-radius: 12px;
-    padding: 1.5rem; /* Increased padding */
-    margin-bottom: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  }
-  
-  .controls-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 0.8rem;
-  }
-  
-  .controls-header h3 {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #e6ebf7;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .toggle-filters {
-    background: none;
-    border: none;
-    color: #a0a9c8;
-    font-size: 0.9rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: color 0.2s;
-    padding: 0.5rem;
-    border-radius: 4px;
-  }
-  
-  .toggle-filters:hover {
-    color: white;
-    background: rgba(255, 255, 255, 0.1);
-  }
-  
-  /* Fixed search controls grid layout */
-  .search-controls {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem; /* Increased gap */
-    margin-bottom: 1.5rem;
-  }
-  
-  @media (min-width: 650px) {
-    .search-controls {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-  
-  @media (min-width: 940px) {
-    .search-controls {
-      grid-template-columns: minmax(260px, 1.5fr) minmax(160px, 1fr) minmax(160px, 1fr);
-    }
-  }
-  
-  .control-group {
-    position: relative;
-  }
-  
-  .search-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #8c91b6;
-    font-size: 0.9rem;
-    pointer-events: none;
-  }
-  
-  .search-controls input,
-  .search-controls select,
-  .advanced-filters input {
-    box-sizing: border-box; /* Explicitly set box-sizing */
-    width: 100%;
-    height: 48px;
-    padding: 0.75rem 1rem 0.75rem 2.2rem;
-    margin: 0; /* Reset margins */
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    font-size: 0.9rem;
-    background: rgba(43, 47, 69, 0.6);
-    color: var(--font-color);
-    transition: all 0.3s;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .search-controls select {
-    appearance: none;
-    padding-right: 2.2rem;
-    cursor: pointer;
-    background: rgba(43, 47, 69, 0.6);
-  }
-  
-  .select-wrapper {
-    position: relative;
-  }
-  
-  .select-wrapper::after {
-    content: '\f107';
-    font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #8c91b6;
-    pointer-events: none;
-    font-size: 1rem;
-  }
-  
-  .search-controls input:focus,
-  .search-controls select:focus,
-  .advanced-filters input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(255, 82, 82, 0.15);
-  }
-  
-  .checkbox-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between; /* Better spacing */
-    gap: 1rem;
-    margin-top: 1.2rem;
-    padding-top: 1rem;
-    border-top: 1px dashed rgba(255, 255, 255, 0.1);
-  }
-  
-  .checkbox-group {
-    display: flex;
-    align-items: center;
-  }
-  
-  .checkbox-group label {
-    color: #b8bedC;
-    display: flex;
-    align-items: center;
-    font-size: 0.9rem;
-    cursor: pointer;
-  }
-  
-  .checkbox-group input[type="checkbox"] {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 1.1rem;
-    height: 1.1rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 4px;
-    margin-right: 0.5rem;
-    display: grid;
-    place-content: center;
-    transition: all 0.2s;
-    cursor: pointer;
-    background: rgba(43, 47, 69, 0.6);
-  }
-  
-  .checkbox-group input[type="checkbox"]::before {
-    content: "";
-    width: 0.65rem;
-    height: 0.65rem;
-    transform: scale(0);
-    transition: 120ms transform ease-in-out;
-    box-shadow: inset 1em 1em var(--primary-color);
-    transform-origin: center;
-    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
-  }
-  
-  .checkbox-group input[type="checkbox"]:checked {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-  }
-  
-  .checkbox-group input[type="checkbox"]:checked::before {
-    transform: scale(1);
-  }
-  
-  /* Advanced Filters */
-  .advanced-filters {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.2rem;
-    padding-top: 1.2rem;
-    border-top: 1px dashed rgba(255, 255, 255, 0.1);
-  }
-  
-  /* Refresh Button */
-  .refresh-btn {
-    display: flex;
-    padding: 0.75rem 1.8rem;
-    background: linear-gradient(135deg, var(--secondary-color), #2c52b3);
-    border: none;
-    border-radius: 8px;
-    color: white;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s;
-    font-size: 0.95rem;
-    margin: 1.5rem auto 0.5rem;
-    box-shadow: 0 4px 10px rgba(58, 103, 207, 0.3);
-    align-items: center;
-    justify-content: center;
-    width: fit-content;
-  }
-  
-  .refresh-btn:hover {
-    background: linear-gradient(135deg, #4c7be3, #3354a7);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(58, 103, 207, 0.4);
-  }
-  
-  .refresh-btn:active {
-    transform: translateY(1px);
-  }
-  
-  .refresh-btn i {
-    margin-right: 0.5rem;
-  }
-  
   /* Collection Summary */
   .collection-summary {
     background: rgba(29, 32, 47, 0.7);
@@ -577,7 +528,7 @@ Just replace your entire styles.css file with this one!
     text-align: center;
     color: #b8bedC;
     font-size: 1rem;
-    margin: 0 auto 2rem;
+    margin: 0.75rem auto 1.25rem;
     max-width: 1000px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -1580,61 +1531,50 @@ Just replace your entire styles.css file with this one!
   }
   
   @media (max-width: 768px) {
-    h1 {
-      font-size: 2.2rem;
-    }
-    
     .modal .modal-content {
       padding: 2rem 1.5rem;
       margin: 10% auto;
       width: 95%;
     }
-    
-    .tab {
-      padding: 0.6rem 1rem;
-      font-size: 0.9rem;
-    }
   }
-  
+
   @media (max-width: 480px) {
     .card {
       padding: 1rem;
     }
-    
-    h1 {
-      font-size: 1.8rem;
-    }
-    
+
     header {
-      padding: 2rem 1rem 1.5rem;
+      padding: 0.5rem 0.75rem 0;
     }
-    
+
+    .filter-bar {
+      gap: 0.4rem;
+    }
+
+    .filter-search {
+      min-width: 120px;
+    }
+
     .cards-container {
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 1.2rem;
     }
-    
+
     .card-badge {
       font-size: 0.7rem;
       padding: 0.2rem 0.6rem;
     }
-    
+
     .card .title {
       font-size: 1.1rem;
     }
-    
+
     .modal h2 {
       font-size: 1.6rem;
     }
-    
-    .checkbox-row {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.8rem;
-    }
-    
-    .refresh-btn {
-      margin-top: 1.2rem;
+
+    .section-view {
+      padding: 1rem 0.75rem;
       width: 100%; /* Full width on small screens */
     }
   }

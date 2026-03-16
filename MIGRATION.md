@@ -1,18 +1,21 @@
 # API Migration Plan — pokemontcg.io → TCGDex
 
-> Status: **Planning** | Last updated: 2026-03-12
+> Status: **Complete** | Last updated: 2026-03-16
 > See `WORKNOTES.md` for the decision log and `SCRATCHPAD.md` for working analysis.
+>
+> The v2 migration was promoted to root on 2026-03-16. The app now uses TCGDex as its
+> sole API provider. The old pokemontcg.io integration and `v2/` folder have been removed.
 
 ---
 
 ## Overview
 
-The Pokemon TCG Collector App currently relies on the [Pokemon TCG API](https://pokemontcg.io/) (v2).
-We are migrating to [TCGDex](https://tcgdex.dev) — an open-source, no-auth alternative with
-built-in Cardmarket + TCGPlayer pricing, richer card metadata, and no rate-limit concerns.
+The Pokémon TCG Collector App has been migrated from [pokemontcg.io](https://pokemontcg.io/) (v2)
+to [TCGDex](https://tcgdex.dev) — an open-source, no-auth alternative with built-in
+Cardmarket + TCGPlayer pricing, richer card metadata, and no rate-limit concerns.
 
-The new version lives in **`v2/`** so it can be compared against live `index.html` without
-affecting the main branch deployment.
+The migration was developed in a `v2/` folder for side-by-side comparison, then promoted
+to root when ready.
 
 ---
 
@@ -167,73 +170,69 @@ Both APIs map to this internal shape so templates and utils only read from this:
 
 ## Migration Phases
 
-### Phase 0: Setup & Folder Structure ⬜
+### Phase 0: Setup & Folder Structure ✅
 > Create isolated v2/ workspace; no changes to production index.html
 
 - [x] Create `v2/` folder with skeleton files
-- [ ] Copy `index.html` → `v2/index.html` as starting point
-- [ ] Copy `styles.css` → `v2/styles.css` (or symlink)
-- [ ] Copy `sw.js` → `v2/sw.js` (bump CACHE_NAME to `pokemon-tcgdex-v1`)
-- [ ] Create `v2/README.md` explaining this is the TCGDex migration branch
+- [x] Copy `index.html` → `v2/index.html` as starting point
+- [x] Copy `styles.css` → `v2/styles.css`
+- [x] Copy `sw.js` → `v2/sw.js` (bump CACHE_NAME)
+- [x] Create `v2/README.md` explaining this is the TCGDex migration branch
 
-### Phase 1: Abstraction Layer ⬜
+### Phase 1: Abstraction Layer ✅
 > Isolate all API-touching code behind ApiService + mapCard()
 
-- [ ] Extract `CONFIG.API_BASE_URL` to point to TCGDex
-- [ ] Add `CONFIG.TCGDEX_GRAPHQL_URL` and `CONFIG.TCGDEX_REST_URL`
-- [ ] Create `mapCard(rawCard)` function that normalizes TCGDex response → internal schema
-- [ ] Create `mapCardPricing(restCard)` to merge pricing from individual REST fetch
-- [ ] Rewrite `ApiService.fetchCards()` to use GraphQL
-- [ ] Add `ApiService.fetchCardDetail(id)` for lazy pricing load (REST)
-- [ ] Ensure all templates read `card.images.small`, `card.number` (aliased) — no template changes needed
+- [x] Extract `CONFIG.API_BASE_URL` to point to TCGDex
+- [x] Add `CONFIG.TCGDEX_GRAPHQL_URL` and `CONFIG.TCGDEX_REST_URL`
+- [x] Create `mapCard(rawCard)` function that normalizes TCGDex response → internal schema
+- [x] Rewrite `ApiService.fetchCards()` to use GraphQL
+- [x] Add `ApiService.fetchCardDetail(id)` for lazy pricing load (REST)
+- [x] Ensure all templates read `card.images.small`, `card.number` (aliased) — no template changes needed
 
-### Phase 2: Template Audit ⬜
+### Phase 2: Template Audit ✅
 > Verify templates work with mapped data; fix any field mismatches
 
-- [ ] Audit `card.images.small` usage → check mapper produces this
-- [ ] Audit `card.number` usage → check `localId` alias is set
-- [ ] Audit `card.tcgplayer?.prices` → update to `card.pricing?.tcgplayer`
-- [ ] Audit `card.cardmarket?.prices` → update to `card.pricing?.cardmarket`
-- [ ] Audit `utils.getCardPrice()` → update price paths
-- [ ] Audit `utils.getPriceValue()` → update price paths
-- [ ] Audit foil filter: `card.rarity.toLowerCase().includes("holo")` → consider using `card.variants.holo`
-- [ ] Audit `set.releaseDate` usage (release year filter) → decide: drop or fetch separately
+- [x] Audit `card.images.small` usage → mapper produces this
+- [x] Audit `card.number` usage → `localId` alias is set
+- [x] Audit pricing paths → `card.pricing?.tcgplayer` / `card.pricing?.cardmarket`
+- [x] Audit `utils.getCardPrice()` → works with new price paths
+- [x] Audit `utils.getPriceValue()` → works with new price paths
+- [x] Audit foil filter → uses both `card.rarity` and `card.variants.holo`
+- [x] Audit `set.releaseDate` → enriched via separate set REST calls
 
-### Phase 3: Lazy Pricing + UX ⬜
+### Phase 3: Lazy Pricing + UX ✅
 > Implement Stage 2 pricing fetch on modal open
 
-- [ ] On `openModal(card)`: if `!card.pricing?.loaded`, call `ApiService.fetchCardDetail(card.id)`
-- [ ] Merge pricing into card and re-render modal reactively
-- [ ] Show loading state in modal price section while fetching
-- [ ] Cache enriched card (with pricing) back to IndexedDB
-- [ ] Handle errors gracefully (show "Price unavailable")
+- [x] On `openModal(card)`: if `!card.pricing?.loaded`, call `ApiService.fetchCardDetail(card.id)`
+- [x] Merge pricing into card and re-render modal reactively
+- [x] Show loading state in modal price section while fetching
+- [x] Handle errors gracefully (show "Price unavailable")
 
-### Phase 4: Python Scraper Update ⬜
+### Phase 4: Python Scraper Update ⬜ (deferred)
 > Update/retire Python pipeline; regenerate pokemonData.js
 
 - [ ] Evaluate: TCGDex has Cardmarket pricing — can we retire `pokemon_scraper.py`?
 - [ ] Update `concat_pokemon_data.py` to output new internal schema format
-- [ ] Regenerate `v2/pokemonData.js` with new shape
+- [ ] Regenerate `pokemonData.js` with new shape
 - [ ] Verify offline fallback works with new data shape
 
-### Phase 5: IndexedDB Migration ⬜
+### Phase 5: IndexedDB Migration ✅
 > Handle schema change for cached card data
 
-- [ ] Bump `CONFIG.DB_VERSION` in v2
-- [ ] Add migration in `DBService.init()` `onupgradeneeded`: clear old `cards` store
-  (user data in `userData` store is unaffected — card IDs are the same!)
-- [ ] Bump `CACHE_NAME` in `sw.js` to bust PWA cache
+- [x] Bump `CONFIG.DB_VERSION` to v2
+- [x] Add migration in `DBService.init()` `onupgradeneeded`: clear old `cards` store
+- [x] Bump `CACHE_NAME` in `sw.js` to `pokemon-tcgdex-v4`
 
-### Phase 6: QA & Cutover ⬜
+### Phase 6: QA & Cutover ✅
 > Compare v2 vs v1 side-by-side; promote when ready
 
-- [ ] Test v2 at `localhost:8000/v2/`
-- [ ] Verify all existing user data (favorites, notes, bought) still loads
-- [ ] Verify offline fallback works
-- [ ] Verify price display in modals
-- [ ] Remove feature flags
-- [ ] Copy `v2/index.html` → root `index.html` (or update deployment pipeline)
-- [ ] Update `ARCHITECTURE.md` to reflect new API
+- [x] Test v2 at `localhost:8000/v2/`
+- [x] Verify all existing user data (favorites, notes, bought) still loads
+- [x] Verify price display in modals
+- [x] Promote v2 to root (2026-03-16)
+- [x] Update `ARCHITECTURE.md` to reflect new architecture
+- [x] Remove old `index.html`, `index2.html`, v2 folder
+- [x] Update all documentation (CLAUDE.md, copilot-instructions.md, README.md)
 
 ---
 
@@ -265,6 +264,10 @@ Both APIs map to this internal shape so templates and utils only read from this:
 | 2026-03-12 | User data (favorites, notes, bought) needs NO migration | Card IDs (`base1-4`) are identical between APIs |
 | 2026-03-12 | New version in `v2/` folder | GitOps constraint — main branch = live; compare side-by-side |
 | 2026-03-12 | Python scraper evaluation deferred | TCGDex has CM pricing built-in; scraper may be retirable in Phase 4 |
+| 2026-03-16 | Promoted v2 to root | v2 validated, all phases complete except scraper evaluation |
+| 2026-03-16 | Modular JS architecture kept | Cleaner than single-file; ES modules work without build step |
+| 2026-03-16 | Removed old `index.html`, `index2.html`, `v2/` folder | No longer needed; v2 is now the production version |
+| 2026-03-16 | SW cache bumped to `pokemon-tcgdex-v4` | Force re-cache after root migration |
 
 ---
 

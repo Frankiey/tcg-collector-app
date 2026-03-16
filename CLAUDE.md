@@ -4,29 +4,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Pokemon TCG Collector App — A Vue 3 single-page PWA for collecting and managing Pokemon Trading Card Game cards. Users can browse cards, track purchases, add favorites, take notes, and manage custom collections.
+Pokémon TCG Collector App — A Vue 3 PWA for browsing, collecting, and tracking Pokémon TCG cards. Users can browse cards by Pokémon, track purchases, add favorites, take notes, and manage custom collections.
 
-**Status**: Preparing for a major API migration. See `MIGRATION.md` for the plan.
+**Status**: TCGDex migration complete. See `MIGRATION.md` for the decision log.
 
 ## Technology Stack
 
-- **Frontend**: Vue 3 (via CDN, no build step), vanilla JavaScript, CSS3 with glassmorphism
-- **Data**: Pokemon TCG API (api.pokemontcg.io/v2), IndexedDB for persistence, localStorage fallback
-- **Offline**: Service Worker (sw.js) for PWA capabilities
+- **Frontend**: Vue 3 (via CDN, no build step), ES modules, CSS3 with glassmorphism
+- **API**: TCGDex (`api.tcgdex.net/v2`) — GraphQL for card lists, REST for pricing
+- **Storage**: IndexedDB (primary), localStorage (fallback), pokemonData.js (offline fallback)
+- **Offline**: Service Worker (`sw.js`) for PWA caching
 - **Data Generation**: Python scripts for web scraping Cardmarket.com
-- **Docs**: `ARCHITECTURE.md` (system design), `MIGRATION.md` (API migration plan)
+- **Docs**: `ARCHITECTURE.md` (system design), `MIGRATION.md` (migration decisions)
 
 ## Development
 
-**No build step required** — Static site runs directly in browser.
+**No build step required** — Static site with ES modules.
 
 ```bash
-# Option 1: Open directly
-open index.html
-
-# Option 2: Local server (recommended for testing)
 python3 -m http.server 8000
-# Visit http://localhost:8000/index.html
+# Visit http://localhost:8000
 ```
 
 ### Python Scripts (Data Generation)
@@ -42,26 +39,44 @@ Python dependencies: `selenium`, `webdriver-manager`, `beautifulsoup4`, `request
 
 ## Architecture
 
-See `ARCHITECTURE.md` for the full system architecture, data flow diagrams, and component breakdown.
+See `ARCHITECTURE.md` for the full system architecture, data flow diagrams, and module dependency tree.
 
 ### Key Files
 
 | File | Purpose |
 |------|---------|
-| `index.html` | Main Vue 3 app (~2050 lines, live version) |
-| `index2.html` | Experimental/development version |
-| `styles.css` | All styling with CSS variables (~1570 lines) |
-| `sw.js` | Service Worker for offline caching |
-| `pokemonData.js` | Generated offline data blob (~122K lines) |
+| `index.html` | HTML shell with Vue templates (~560 lines) |
+| `styles.css` | All CSS — variables, glassmorphism, responsive (~1580 lines) |
+| `sw.js` | Service Worker — precaches all JS modules |
+| `js/app.js` | Vue 3 app entry — state, computed, methods, lifecycle (~615 lines) |
+| `js/config.js` | CONFIG object — API URLs, DB version, defaults (~90 lines) |
+| `js/api.js` | ApiService — TCGDex GraphQL + REST (~190 lines) |
+| `js/db.js` | DBService — IndexedDB with retry logic (~340 lines) |
+| `js/utils.js` | Utilities, LazyLoad, Notification, Offline services (~190 lines) |
+| `js/components.js` | Vue components — Card, Modal, Notification, ImportDialog (~235 lines) |
+| `pokemonData.js` | Generated offline data blob (~122K lines, never edit) |
 | `/data/` | JSON files per Pokemon species |
 | `/images/` | Downloaded card images |
 
-### Core Services (all in index.html)
+### Module Dependencies
 
-- **DBService** — IndexedDB wrapper with connection pooling, retry logic, and localStorage fallback
-- **LazyLoadService** — IntersectionObserver for efficient image loading
-- **OfflineService** — PWA offline detection and graceful degradation
-- **Utils** — Debounce, price formatting, type icons, JSON export helpers
+```
+app.js
+├── config.js      (CONFIG)
+├── api.js          (ApiService) ← uses CONFIG
+├── db.js           (DBService) ← uses CONFIG
+├── utils.js        (utils, LazyLoadService, NotificationService, OfflineService)
+└── components.js   (Card, Modal, Notification, ImportDialog)
+```
+
+### Data Flow
+
+1. `app.js` imports all modules, creates Vue 3 app
+2. On mount: DBService opens IndexedDB, loads user data (favorites, notes, collections)
+3. Tab select → `ApiService.fetchCards()` fires GraphQL query to TCGDex
+4. Results mapped via `mapCard()` to internal schema, cached in IndexedDB (24h TTL)
+5. Modal open → `ApiService.fetchCardDetail(id)` fires REST call for pricing (lazy)
+6. Offline fallback chain: IndexedDB cache → pokemonData.js
 
 ### Vue App State
 
@@ -73,29 +88,17 @@ See `ARCHITECTURE.md` for the full system architecture, data flow diagrams, and 
 | `cardNotes` | Object | IndexedDB | User notes per card |
 | `customCollections` | Array | IndexedDB | User-created collections |
 
-### Storage Strategy
-
-- **IndexedDB** (primary): `cards` store (24h TTL cache), `settings`, `userData`
-- **localStorage** (fallback): Auto-migrates to IndexedDB on first load
-- **pokemonData.js** (offline fallback): Used when API is unreachable
-
-### Data Flow
-
-1. App loads `CONFIG` and connects to IndexedDB
-2. User data (favorites, notes, collections) loaded from storage
-3. Pokemon tab selection triggers API query to Pokemon TCG API
-4. Results cached in IndexedDB; falls back to `pokemonData.js` when offline
-
 ## Code Patterns & Conventions
 
-- **No build step** — Everything runs from static files via CDN imports
-- **Single-file architecture** — All Vue logic, templates, and components live in `index.html`
-- **Configuration-driven** — Centralized `CONFIG` object for API keys, URLs, settings
-- **Template IDs** — Vue components use `template: '#card-template'` style registration
-- **Debounced inputs** — Search uses 300ms debounce for performance
+- **No build step** — Static files via CDN, ES modules with `<script type="module">`
+- **Modular architecture** — Logic split across `js/*.js` modules (not single-file)
+- **Configuration-driven** — Centralized `CONFIG` object in `js/config.js`
+- **Template IDs** — Vue components use `template: '#card-template'` registration
+- **Two-stage fetch** — GraphQL for lists, lazy REST for pricing on modal open
+- **Debounced inputs** — Search uses 300ms debounce
 - **Graceful degradation** — IndexedDB → localStorage → pokemonData.js fallback chain
 - **CSS variables** — All theming via `:root` custom properties in `styles.css`
-- **`v-once`** — Used extensively on static content to reduce Vue reactivity overhead
+- **`v-once`** — Used on static content to reduce Vue reactivity overhead
 
 ## Rules for AI Agents
 
@@ -105,26 +108,16 @@ See `ARCHITECTURE.md` for the full system architecture, data flow diagrams, and 
 - Preserve the offline-first architecture (SW + IndexedDB + pokemonData fallback)
 - Keep the no-build-step constraint — no bundlers, no npm, no node_modules
 - Use Vue 3 CDN patterns (no SFC, no `.vue` files)
+- Use ES module `import`/`export` in `js/*.js` files
 - Test changes with `python3 -m http.server 8000`
 - Update `ARCHITECTURE.md` when you change the system structure
 - Bump `CACHE_NAME` version in `sw.js` after changing cached assets
+- Update the SW precache list when adding new JS modules
 
 ### DON'T
 - Don't introduce a build step or package manager without explicit approval
-- Don't split `index.html` into modules (no ES module support without build step)
+- Don't merge JS modules back into `index.html` — keep modular structure
 - Don't modify `pokemonData.js` by hand — it's generated by `concat_pokemon_data.py`
 - Don't remove the localStorage fallback — some users may have old browsers
 - Don't change the IndexedDB schema without a migration plan
-- Don't use `index2.html` as the production file — it's experimental
-
-### API Migration Context
-A major API migration is planned. When working on API-related code:
-1. Isolate API calls behind a clear interface so they can be swapped
-2. Keep response mapping logic separate from display logic
-3. Document any assumptions about the API response shape
-4. Consider backward compatibility with cached data in IndexedDB
-
-- Configuration-driven via centralized CONFIG object
-- Vue 3 with template IDs for component templates (`#card-template`, `#modal-template`, etc.)
-- Debounced search (300ms) for performance
-- Graceful degradation: IndexedDB → localStorage → local file fallback
+- Don't add API calls outside `js/api.js` — keep API layer centralized

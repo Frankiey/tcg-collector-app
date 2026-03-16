@@ -1,12 +1,16 @@
-const CACHE_NAME = 'tcg-collector-cache-v1';
+const CACHE_NAME = 'pokemon-tcgdex-v4';
 const BASE_PATH = self.location.pathname.replace(/[^/]+$/, '');
 
 const PRECACHE_URLS = [
   './',
   'index.html',
   'styles.css',
-  'pokemonData.js',
-  'index2.html',
+  'js/app.js',
+  'js/config.js',
+  'js/db.js',
+  'js/api.js',
+  'js/utils.js',
+  'js/components.js',
 ].map((path) => new URL(path, self.location.origin + BASE_PATH).toString());
 
 self.addEventListener('install', (event) => {
