@@ -158,7 +158,17 @@ const ApiService = {
       }
 
       const rawCards = json.data?.cards || [];
-      const mappedCards = rawCards.map(mapCard);
+
+      // TCGDex name filter is a substring match — "Mew" also returns "Mewtwo".
+      // Keep only cards whose name is an exact match or a variant with a space suffix
+      // (e.g. "Mew ex", "Mew V", "Mew VMAX") to exclude partial-prefix false positives.
+      const searchNameLower = pokemonName.toLowerCase();
+      const exactCards = rawCards.filter(c => {
+        const n = (c.name || '').toLowerCase();
+        return n === searchNameLower || n.startsWith(searchNameLower + ' ');
+      });
+
+      const mappedCards = exactCards.map(mapCard);
 
       // Enrich with releaseDate + serieId in parallel
       await this._enrichSetDetails(mappedCards);
