@@ -121,7 +121,6 @@ IndexedDB (primary)
 | Offline | Service Worker — cache-first strategy |
 | Fonts & Icons | Google Fonts (Poppins) + Font Awesome 6 |
 | Styling | CSS3 with custom properties, glassmorphism |
-| Data Pipeline | Python (Selenium + BeautifulSoup) for offline data generation |
 
 **Why no build step?** The app is intentionally dependency-free. No webpack, no Vite, no node_modules. This makes it trivially deployable to any static host (GitHub Pages, Netlify, Cloudflare Pages) and easy to contribute to without toolchain setup.
 
@@ -144,39 +143,9 @@ tcg-collector-app/
 │   └── components.js   # Vue components: Card, Modal, Notification, ImportDialog
 │
 ├── pokemonData.js      # ⚠️ Generated offline fallback data (~122K lines, never edit by hand)
-├── data/               # Per-Pokémon JSON files (output from scraper scripts)
-├── images/             # Locally cached card images
-│
-├── pokemon_scraper.py          # Scrape a single Pokémon's cards from Cardmarket
-├── batch_scraper.py            # Batch scrape multiple Pokémon
-├── concat_pokemon_data.py      # Merge data/*.json → pokemonData.js
-└── download_pokemon_images.py  # Download card images locally
+├── data/               # Per-Pokémon JSON files
+└── images/             # Locally cached card images
 ```
-
----
-
-## Data Pipeline (Optional)
-
-The app fetches live data from TCGDex by default. The Python scripts are for generating an **offline-first data bundle** (`pokemonData.js`) — useful if you want a fully self-contained version with no API dependency.
-
-```bash
-# Install Python dependencies
-pip install selenium webdriver-manager beautifulsoup4 requests
-
-# Scrape a single Pokémon
-python3 pokemon_scraper.py
-
-# Batch scrape multiple Pokémon
-python3 batch_scraper.py
-
-# Regenerate pokemonData.js from scraped data
-python3 concat_pokemon_data.py
-
-# Download card images locally
-python3 download_pokemon_images.py
-```
-
-> Note: web scraping targets Cardmarket for historical price data. Use responsibly and respect their ToS.
 
 ---
 
@@ -217,7 +186,7 @@ Pull requests welcome. A few things to know before diving in:
 
 - **No build step** — keep it that way. No bundlers, no package managers.
 - **ES modules only** — all JS goes in `js/*.js` files with `import`/`export`.
-- **Don't edit `pokemonData.js`** — it's generated. Run `concat_pokemon_data.py` to regenerate.
+- **Don't edit `pokemonData.js`** — it's a generated offline data blob.
 - **Bump `CACHE_NAME`** in `sw.js` after changing any cached asset.
 - Read [ARCHITECTURE.md](ARCHITECTURE.md) before making structural changes.
 

@@ -28,6 +28,8 @@
 │  ┌───────┴─────────────────────────────────────┴─────────┐  │
 │  │                  Storage Layer                        │  │
 │  │  IndexedDB (primary) → localStorage (fallback)       │  │
+│  │  User data: favorites, notes, collections, bought    │  │
+│  │  API cache: card lists (24h TTL per Pokemon tab)     │  │
 │  └───────────────────────────────────────────────────────┘  │
 └──────────────────────┬──────────────────────────────────────┘
                        │
@@ -55,24 +57,6 @@
 | `js/db.js` | ~340 | DBService — IndexedDB wrapper with retry + localStorage fallback |
 | `js/utils.js` | ~190 | Utilities, LazyLoadService, NotificationService, OfflineService |
 | `js/components.js` | ~235 | Vue 3 component definitions (Card, Modal, Notification, ImportDialog) |
-
-### Data & Tooling
-
-| File | Purpose |
-|------|---------|
-| `pokemonData.js` | Generated offline data blob (~122K lines) — used as fallback |
-| `/data/*.json` | Per-Pokemon JSON files from scraper |
-| `/images/` | Locally cached card images |
-
-### Python Scripts
-
-| Script | Purpose |
-|--------|---------|
-| `pokemon_scraper.py` | Scrape a single Pokemon's cards from Cardmarket |
-| `batch_scraper.py` | Batch-run scraper for multiple Pokemon |
-| `concat_pokemon_data.py` | Merge `/data/*.json` → `pokemonData.js` |
-| `download_pokemon_images.py` | Download card images to `/images/` |
-| `fix_missing_images.py` | Re-download failed/missing images |
 
 ### Documentation
 
@@ -203,10 +187,11 @@ User selects Pokemon tab
   └──────┬───────┘     └──────────────┘
          │ offline / error
          ▼
-  ┌──────────────┐
-  │ Serve stale  │
-  │ cache (IDB)  │
-  └──────────────┘
+  ┌──────────────────┐
+  │ Serve stale IDB  │
+  │ cache if present │
+  │ else show error  │
+  └──────────────────┘
 ```
 
 ### Pricing (Stage 2)
@@ -284,9 +269,11 @@ All components and templates read from this normalized shape:
 ## Offline Strategy
 
 1. **Service Worker** (`sw.js`) precaches HTML, CSS, and all JS modules
-2. **IndexedDB** caches API responses per collection with 24h TTL
-3. **Stale cache** served when offline (no TTL check)
+2. **IndexedDB** caches TCGDex API responses per Pokemon tab with 24h TTL
+3. **Stale cache** served when offline (TTL check skipped, uses last known data)
 4. **OfflineService** detects connectivity and adjusts UI with toast notifications
+
+> There is no local data bundle or bundled images — all card data and images come from the TCGDex API and CDN. The app requires at least one online visit per Pokemon tab to populate the cache.
 
 ---
 
@@ -306,6 +293,4 @@ Fallback chain: IndexedDB → localStorage (auto-migrated on first load)
 
 - No automated tests — manual testing only
 - CSS has some inline styles in HTML templates
-- `pokemonData.js` is 122K lines (generated, not minified) — may be retired
-- Python scrapers may be retired now that TCGDex has built-in Cardmarket pricing
 - Custom collections view/edit not fully implemented (placeholder notifications)
