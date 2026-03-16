@@ -109,6 +109,14 @@ export const ModalComponent = {
       PRICE_LABELS: CONFIG.PRICE_LABELS
     };
   },
+  computed: {
+    isFavorite() {
+      return !!this.$root.favoriteCards[this.card.id];
+    },
+    isBought() {
+      return !!this.$root.boughtCards[this.card.id];
+    }
+  },
   mounted() {
     document.body.style.overflow = 'hidden';
     window.addEventListener('keydown', this.handleKeyDown);
@@ -120,6 +128,12 @@ export const ModalComponent = {
   methods: {
     close() {
       this.$emit('close');
+    },
+    toggleFavorite() {
+      this.$root.toggleCardFavorite(this.card);
+    },
+    toggleBought() {
+      this.$root.toggleCardBought(this.card.id);
     },
     save() {
       this.$emit('save-note');

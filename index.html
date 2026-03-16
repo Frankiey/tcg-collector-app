@@ -370,9 +370,66 @@
               class="card-image-placeholder"
               :style="{ display: (card.images.large || card.images.small) ? 'none' : 'flex', width: '100%', minHeight: '250px', alignItems: 'center', justifyContent: 'center', color: '#a0a9c8', fontSize: '0.9rem' }"
             ><i class="fas fa-image" style="margin-right:0.5rem"></i> No image available</div>
+            <!-- Compact pricing panel below image -->
+            <div class="info-section modal-price-panel">
+              <h3 v-once><i class="fas fa-tag"></i> Pricing</h3>
+
+              <div v-if="card.pricing && card.pricing.tcgplayer" class="price-block">
+                <div class="price-source-label"><i class="fas fa-coins" v-once></i> TCGplayer</div>
+                <div class="price-detail">
+                  <div class="price-item" v-for="(label, key) in PRICE_LABELS.tcgplayer" :key="`price-tcg-${key}`">
+                    <span class="price-label">{{ label }}</span>
+                    <span class="price-value">{{ formatPrice(getPriceValue(card, key)) }}</span>
+                  </div>
+                </div>
+                <a href="https://www.tcgplayer.com" target="_blank" rel="noopener noreferrer" class="external-link-btn">
+                  <i class="fas fa-external-link-alt" v-once></i><span v-once> TCGplayer</span>
+                </a>
+              </div>
+
+              <div v-if="card.pricing && card.pricing.cardmarket" class="price-block">
+                <div class="price-source-label"><i class="fas fa-euro-sign" v-once></i> Cardmarket</div>
+                <div class="price-detail">
+                  <div class="price-item" v-for="(label, key) in PRICE_LABELS.cardmarket" :key="`price-market-${key}`">
+                    <span class="price-label">{{ label }}</span>
+                    <span class="price-value">{{ formatPrice(card.pricing.cardmarket[key]) }}</span>
+                  </div>
+                </div>
+                <a :href="cardmarketUrl(card)" target="_blank" rel="noopener noreferrer" class="external-link-btn">
+                  <i class="fas fa-external-link-alt" v-once></i><span v-once> Cardmarket</span>
+                </a>
+              </div>
+
+              <div v-if="card.pricing && !card.pricing.loaded" class="price-loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading prices…
+              </div>
+              <p v-if="card.pricing && card.pricing.loaded && !card.pricing.tcgplayer && !card.pricing.cardmarket" class="price-unavailable">
+                <i class="fas fa-exclamation-circle"></i> No pricing available.
+              </p>
+            </div>
           </div>
           <div class="modal-details">
             <h2 id="modal-title">{{ card.name }}</h2>
+            <div class="modal-hero-actions">
+              <button
+                class="modal-action-btn modal-action-fav"
+                :class="{ active: isFavorite }"
+                @click="toggleFavorite"
+                :aria-label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
+              >
+                <i class="fas fa-star"></i>
+                <span>{{ isFavorite ? 'Favorited' : 'Favorite' }}</span>
+              </button>
+              <button
+                class="modal-action-btn modal-action-owned"
+                :class="{ active: isBought }"
+                @click="toggleBought"
+                :aria-label="isBought ? 'Mark as not owned' : 'Mark as owned'"
+              >
+                <i class="fas" :class="isBought ? 'fa-check-circle' : 'fa-circle'"></i>
+                <span>{{ isBought ? 'Owned' : 'Not Owned' }}</span>
+              </button>
+            </div>
             <div class="info-section">
               <h3 v-once><i class="fas fa-layer-group"></i> Set Details</h3>
               <div class="card-info-grid">
@@ -415,57 +472,6 @@
               <!-- Pokédex description -->
               <p class="card-pokedex-desc" v-if="card.description">
                 <i class="fas fa-book-open" style="margin-right:0.4rem;opacity:0.6"></i>{{ card.description }}
-              </p>
-            </div>
-            <div class="info-section">
-              <h3 v-once><i class="fas fa-tag"></i> Pricing Information</h3>
-
-              <!-- TCGPlayer pricing block -->
-              <div v-if="card.pricing && card.pricing.tcgplayer" class="price-block">
-                <div class="price-title">
-                  <i class="fas fa-coins" v-once></i>
-                  TCGplayer ({{ Object.keys(card.pricing.tcgplayer)[0] ? (Object.keys(card.pricing.tcgplayer)[0].charAt(0).toUpperCase() + Object.keys(card.pricing.tcgplayer)[0].slice(1)) : 'Normal' }})
-                </div>
-                <div class="price-detail">
-                  <div class="price-item" v-for="(label, key) in PRICE_LABELS.tcgplayer" :key="`price-tcg-${key}`">
-                    <div class="price-label" v-once>{{ label }}</div>
-                    <div class="price-value">{{ formatPrice(getPriceValue(card, key)) }}</div>
-                  </div>
-                </div>
-                <a href="https://www.tcgplayer.com" target="_blank" rel="noopener noreferrer" class="external-link-btn">
-                  <i class="fas fa-external-link-alt" v-once></i><span v-once> View on TCGplayer</span>
-                </a>
-              </div>
-
-              <!-- Cardmarket pricing block -->
-              <div v-if="card.pricing && card.pricing.cardmarket" class="price-block">
-                <div class="price-title">
-                  <i class="fas fa-euro-sign" v-once></i><span v-once> Cardmarket</span>
-                </div>
-                <div class="price-detail">
-                  <div class="price-item" v-for="(label, key) in PRICE_LABELS.cardmarket" :key="`price-market-${key}`">
-                    <div class="price-label" v-once>{{ label }}</div>
-                    <div class="price-value">{{ formatPrice(card.pricing.cardmarket[key]) }}</div>
-                  </div>
-                </div>
-                <a
-                  :href="cardmarketUrl(card)"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="external-link-btn"
-                >
-                  <i class="fas fa-external-link-alt" v-once></i><span v-once> View on Cardmarket</span>
-                </a>
-              </div>
-
-              <!-- Loading state -->
-              <div v-if="card.pricing && !card.pricing.loaded" style="text-align: center; padding: 1rem; color: #a0a9c8;">
-                <i class="fas fa-spinner fa-spin"></i> Loading prices...
-              </div>
-
-              <!-- No pricing available after load -->
-              <p v-if="card.pricing && card.pricing.loaded && !card.pricing.tcgplayer && !card.pricing.cardmarket">
-                <i class="fas fa-exclamation-circle"></i> No pricing information available for this card.
               </p>
             </div>
             <div class="info-section">
