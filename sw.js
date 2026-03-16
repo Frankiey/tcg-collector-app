@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pokemon-tcgdex-v5';
+const CACHE_NAME = 'pokemon-tcgdex-v6';
 const BASE_PATH = self.location.pathname.replace(/[^/]+$/, '');
 
 const PRECACHE_URLS = [

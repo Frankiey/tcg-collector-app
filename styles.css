@@ -1626,7 +1626,38 @@ Just replace your entire styles.css file with this one!
 
   @media (max-width: 480px) {
     .card {
-      padding: 1rem;
+      padding: 0.6rem;
+    }
+
+    .card-image-container {
+      padding-bottom: 0.5rem;
+      padding-top: 0.25rem;
+      min-height: 120px;
+    }
+
+    .card .title {
+      font-size: 0.95rem;
+      margin: 0.5rem 0 0.25rem;
+    }
+
+    .card .info {
+      font-size: 0.75rem;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+
+    .card-badges {
+      gap: 0.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-badge {
+      font-size: 0.65rem;
+      padding: 0.15rem 0.5rem;
+    }
+
+    .card-actions {
+      padding-top: 0.5rem;
     }
 
     header {
@@ -1642,17 +1673,24 @@ Just replace your entire styles.css file with this one!
     }
 
     .cards-container {
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 1.2rem;
+      grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+      gap: 0.75rem;
     }
 
-    .card-badge {
-      font-size: 0.7rem;
-      padding: 0.2rem 0.6rem;
+    .collection-summary {
+      padding: 0.6rem 0.75rem;
+      gap: 0.75rem;
+      margin: 0.5rem auto 0.75rem;
+      font-size: 0.85rem;
     }
 
-    .card .title {
+    .summary-stat {
+      margin: 0;
+    }
+
+    .summary-stat i {
       font-size: 1.1rem;
+      margin-right: 0.3rem;
     }
 
     .modal h2 {
